@@ -35,8 +35,8 @@ dependencies:
   # For pdf manipulations.
   pdf_manipulator: ^0.5.9
 
-  # For draggable gridview.
-  reorderable_grid_view: ^2.2.5
+  
+  reorderables:
 
   # For getting device path like temporary directory path.
   path_provider: ^2.0.11
