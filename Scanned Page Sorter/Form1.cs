@@ -1,8 +1,15 @@
-﻿using System;
+﻿using iText.IO.Image;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Xobject;
+using iText.Layout;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +19,8 @@ namespace Scanned_Page_Sorter
 {
     public partial class pageSorterForm : Form
     {
+        private string pdfFile;
+        private string imageFolder;
         public pageSorterForm()
         {
             InitializeComponent();
@@ -115,9 +124,38 @@ namespace Scanned_Page_Sorter
             list.InsertionMark.Index = -1;
         }
 
+        private class ListViewIndexComparer : System.Collections.IComparer
+        {
+            public int Compare(object x, object y)
+            {
+                return ((ListViewItem)x).Index - ((ListViewItem)y).Index;
+            }
+        }
+
+ 
+
+        private void openMenuItem_Click(object sender, EventArgs e)
+        {
+            // open a file dialog to select a pdf file.
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "PDF Files|*.pdf";
+            openFileDialog.Title = "Select a PDF File";
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                // load the pdf file to the inList
+                pdfFile = openFileDialog.FileName;
+                                extractImages(pdfFile);
+                this.Text = System.IO.Path.GetFileName(pdfFile);
+            }
+        }
+
+
         private void loadImages(string inputFolder)
         {
             // loads images from input folder to image list, and then from imageList to inList
+            thumbnailImageList.Images.Clear();
+            inList.Items.Clear();
+            outList.Items.Clear();
             inList.LargeImageList = thumbnailImageList;
             outList.LargeImageList = thumbnailImageList;
             string[] files = System.IO.Directory.GetFiles(inputFolder);
@@ -128,11 +166,99 @@ namespace Scanned_Page_Sorter
                 inList.Items.Add(file, thumbnailImageList.Images.Count - 1);
             }
         }
-        private class ListViewIndexComparer : System.Collections.IComparer
+
+
+        private void extractImages(string pdfFile)
         {
-            public int Compare(object x, object y)
+            // extract images from pdf file to input folder, and then load images to inList
+            string inputFolder = "../../images/";
+            System.IO.Directory.CreateDirectory(inputFolder);
+            string pdfFileName = System.IO.Path.GetFileNameWithoutExtension(pdfFile);
+            imageFolder = inputFolder + pdfFileName + "/";
+            // empty the output folder if it already exists else create it
+            if (System.IO.Directory.Exists(imageFolder))
             {
-                return ((ListViewItem)x).Index - ((ListViewItem)y).Index;
+                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(imageFolder);
+                foreach (System.IO.FileInfo file in di.GetFiles())
+                {
+                    file.Delete();
+                }
+            }
+            else
+            {
+                System.IO.Directory.CreateDirectory(imageFolder);
+            }
+            extractImageFromPDF (pdfFile, imageFolder);
+            loadImages(imageFolder);
+        }
+
+        public void extractImageFromPDF(string sourcePdf, string outputFolder)
+        {
+            PdfReader reader = new PdfReader(sourcePdf);
+
+            try
+            {
+                PdfDocument document = new PdfDocument(reader);
+                for (int i = 1; i <= document.GetNumberOfPages(); i++)
+                {
+                    PdfPage page = document.GetPage(i);
+                    PdfResources resources = page.GetResources();
+                    PdfDictionary xObjects = resources.GetResource(PdfName.XObject);
+                    if (xObjects == null)
+                    {
+                        continue;
+                    }
+                    foreach (PdfName key in xObjects.KeySet())
+                    {
+                        PdfStream stream = (PdfStream)xObjects.GetAsStream(key);
+                        PdfImageXObject image = new PdfImageXObject(stream);
+                        using (MemoryStream ms = new MemoryStream(image.GetImageBytes()))
+                        {
+                            Image img = Image.FromStream(ms);
+                            img.Save(outputFolder + i + ".jpg", ImageFormat.Jpeg);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void exitMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            saveImagesToPDF (thumbnailImageList.Images,  outList, pdfFile  );
+        }
+        // Inside the saveImagesToPDF method
+        private void saveImagesToPDF(ImageList.ImageCollection images, ListView listView, string inputPdf)
+        {
+            string outputPdf = System.IO.Path.GetDirectoryName(inputPdf) + "/" + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + "_sorted.pdf";
+            using (PdfWriter writer = new PdfWriter(outputPdf))
+            {
+                using (PdfDocument pdf = new PdfDocument(writer))
+                {
+                    Document doc = new Document(pdf); // Create a Document instance
+                    foreach (ListViewItem item in listView.Items)
+                    {
+                        Image img = images[item.ImageIndex];
+                        string imageFilePath = imageFolder+ "/"+ ( item.Index+1) + ".jpg";
+                        ImageData imageData = ImageDataFactory.Create(imageFilePath);
+                        iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
+
+                        doc.Add(image);
+                    }
+                }
             }
         }
     }
