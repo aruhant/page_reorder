@@ -28,7 +28,6 @@ namespace Scanned_Page_Sorter
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
-            loadImages(inputFolder: "../../images/");
             enableReorderOnList(inList);
             enableReorderOnList(outList);
         }
@@ -152,7 +151,8 @@ namespace Scanned_Page_Sorter
 
         private void loadImages(string inputFolder)
         {
-            // loads images from input folder to image list, and then from imageList to inList
+            statusMessage.Text = "One moment....";
+             Application.DoEvents();
             thumbnailImageList.Images.Clear();
             inList.Items.Clear();
             outList.Items.Clear();
@@ -162,9 +162,11 @@ namespace Scanned_Page_Sorter
             foreach (string file in files)
             {
                 Image img = Image.FromFile(file);
+                string fileName = Path.GetFileNameWithoutExtension(file); // Fix: Added this line to get the file name
                 thumbnailImageList.Images.Add(img);
-                inList.Items.Add(file, thumbnailImageList.Images.Count - 1);
+                inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1); // Fix: Added fileName as the first parameter
             }
+            statusMessage.Text = "Ready...";
         }
 
 
@@ -201,6 +203,9 @@ namespace Scanned_Page_Sorter
                 PdfDocument document = new PdfDocument(reader);
                 for (int i = 1; i <= document.GetNumberOfPages(); i++)
                 {
+                    statusMessage.Text = "Extracting image " + i ;
+                    Application.DoEvents();
+
                     PdfPage page = document.GetPage(i);
                     PdfResources resources = page.GetResources();
                     PdfDictionary xObjects = resources.GetResource(PdfName.XObject);
@@ -214,8 +219,15 @@ namespace Scanned_Page_Sorter
                         PdfImageXObject image = new PdfImageXObject(stream);
                         using (MemoryStream ms = new MemoryStream(image.GetImageBytes()))
                         {
-                            Image img = Image.FromStream(ms);
-                            img.Save(outputFolder + i + ".jpg", ImageFormat.Jpeg);
+                            try
+                            {
+                                Image img = Image.FromStream(ms);
+                                img.Save(outputFolder + ("000" + i).Substring(("000" + i).Length - 3) + ".jpg", ImageFormat.Jpeg);
+                            }
+                            catch (Exception e)
+                            {
+                                //MessageBox.Show(e.Message);
+                            }
                         }
                     }
                 }
@@ -252,7 +264,7 @@ namespace Scanned_Page_Sorter
                     foreach (ListViewItem item in listView.Items)
                     {
                         Image img = images[item.ImageIndex];
-                        string imageFilePath = imageFolder+ "/"+ ( item.Index+1) + ".jpg";
+                        string imageFilePath = imageFolder+ "/"+ ( item.Text) + ".jpg";
                         ImageData imageData = ImageDataFactory.Create(imageFilePath);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
 
@@ -261,5 +273,8 @@ namespace Scanned_Page_Sorter
                 }
             }
         }
+
+
+ 
     }
 }
