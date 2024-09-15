@@ -154,7 +154,6 @@
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(1000, 22);
             this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "";
             // 
             // statusMessage
             // 

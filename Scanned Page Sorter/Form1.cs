@@ -154,6 +154,7 @@ namespace Scanned_Page_Sorter
             statusMessage.Text = "One moment....";
              Application.DoEvents();
             thumbnailImageList.Images.Clear();
+            thumbnailImageList.ImageSize = new Size(255, 255);
             inList.Items.Clear();
             outList.Items.Clear();
             inList.LargeImageList = thumbnailImageList;
@@ -248,6 +249,7 @@ namespace Scanned_Page_Sorter
             Application.Exit();
         }
 
+
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             saveImagesToPDF (thumbnailImageList.Images,  outList, pdfFile  );
@@ -255,7 +257,7 @@ namespace Scanned_Page_Sorter
         // Inside the saveImagesToPDF method
         private void saveImagesToPDF(ImageList.ImageCollection images, ListView listView, string inputPdf)
         {
-            string outputPdf = System.IO.Path.GetDirectoryName(inputPdf) + "/" + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + "_sorted.pdf";
+            string outputPdf = System.IO.Path.GetDirectoryName(inputPdf) + "/Reordered - " + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + ".pdf";
             using (PdfWriter writer = new PdfWriter(outputPdf))
             {
                 using (PdfDocument pdf = new PdfDocument(writer))
