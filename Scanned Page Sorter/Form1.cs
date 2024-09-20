@@ -152,7 +152,7 @@ namespace Scanned_Page_Sorter
         private void loadImages(string inputFolder)
         {
             statusMessage.Text = "One moment....";
-             Application.DoEvents();
+            Application.DoEvents();
             thumbnailImageList.Images.Clear();
             thumbnailImageList.ImageSize = new Size(255, 255);
             inList.Items.Clear();
@@ -160,12 +160,15 @@ namespace Scanned_Page_Sorter
             inList.LargeImageList = thumbnailImageList;
             outList.LargeImageList = thumbnailImageList;
             string[] files = System.IO.Directory.GetFiles(inputFolder);
-            foreach (string file in files)
+            for (int i = 0; i < files.Length; i++)
             {
+                string file = files[i];
+                statusMessage.Text = "Loading file " + (i + 1) + " of " + files.Length;
                 Image img = Image.FromFile(file);
-                string fileName = Path.GetFileNameWithoutExtension(file); // Fix: Added this line to get the file name
+                string fileName = Path.GetFileNameWithoutExtension(file);
                 thumbnailImageList.Images.Add(img);
-                inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1); // Fix: Added fileName as the first parameter
+                inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1);
+                if (i % 10 == 0) Application.DoEvents();
             }
             statusMessage.Text = "Ready...";
         }
@@ -225,7 +228,7 @@ namespace Scanned_Page_Sorter
                                 Image img = Image.FromStream(ms);
                                 img.Save(outputFolder + ("000" + i).Substring(("000" + i).Length - 3) + ".jpg", ImageFormat.Jpeg);
                             }
-                            catch (Exception e)
+                            catch (Exception )
                             {
                                 //MessageBox.Show(e.Message);
                             }
@@ -239,10 +242,7 @@ namespace Scanned_Page_Sorter
             }
         }
 
-        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
+ 
 
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
@@ -276,7 +276,18 @@ namespace Scanned_Page_Sorter
             }
         }
 
-
- 
+        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // show folder open dialog to select a folder containing images
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.Description = "Select a folder containing images";
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                imageFolder = folderBrowserDialog.SelectedPath;
+                loadImages(imageFolder);
+                pdfFile = imageFolder + ".pdf";
+                this.Text = imageFolder;
+            }
+        }
     }
 }
