@@ -3,6 +3,7 @@ using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Kernel.Pdf.Xobject;
 using iText.Layout;
+using Manina.Windows.Forms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,8 +20,12 @@ namespace Scanned_Page_Sorter
 {
     public partial class pageSorterForm : Form
     {
-        private string pdfFile;
-        private string imageFolder;
+        #region private variables
+        private string currentlyOpenPDFfile;
+        private string currentlyOpenImageFolder;
+        #endregion
+
+        #region intialize properties
         public pageSorterForm()
         {
             InitializeComponent();
@@ -28,26 +33,23 @@ namespace Scanned_Page_Sorter
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
-            enableReorderOnList(inList);
-            enableReorderOnList(outList);
+            setupImageListStyles(inImageListView );
+            setupImageListStyles(inImageListView);
         }
 
-        private void enableReorderOnList(ListView list)
+        #endregion
+
+        #region imagelist event handlers and properties
+        private void setupImageListStyles(ImageListView list)
         {
             list.AllowDrop = true;
-            list.DragEnter += new DragEventHandler(dragEnterHandler);
-            list.DragDrop += new DragEventHandler(dragDropHandler);
-            list.ItemDrag += new ItemDragEventHandler(itemDragHandler);
-            list.DragOver += new DragEventHandler(dragOverHandler);
-            list.DragLeave += new EventHandler(dragLeaveHandler);
-            list.ListViewItemSorter = new ListViewIndexComparer();
+            //list.DragEnter += new DragEventHandler(dragEnterHandler);
+            //list.DragDrop += new DragEventHandler(dragDropHandler);
+            //list.DragOver += new DragEventHandler(dragOverHandler);
+            //list.DragLeave += new EventHandler(dragLeaveHandler);
         }
 
-        private void List_DragLeave(object sender, EventArgs e)
-        {
-            throw new NotImplementedException();
-        }
-
+  
         private void itemDragHandler(object sender, ItemDragEventArgs e)
         {
             ListView list = sender as ListView;
@@ -123,17 +125,18 @@ namespace Scanned_Page_Sorter
             list.InsertionMark.Index = -1;
         }
 
-        private class ListViewIndexComparer : System.Collections.IComparer
+
+        private void setupImageListViews(Manina.Windows.Forms.View view)
         {
-            public int Compare(object x, object y)
-            {
-                return ((ListViewItem)x).Index - ((ListViewItem)y).Index;
-            }
+            inImageListView.View = view;
+            outImageListView.View = view;
         }
+        #endregion
 
- 
+        #region File and Folder event handlers
 
-        private void openMenuItem_Click(object sender, EventArgs e)
+
+        private void openFile_Handler(object sender, EventArgs e)
         {
             // open a file dialog to select a pdf file.
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -142,23 +145,34 @@ namespace Scanned_Page_Sorter
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 // load the pdf file to the inList
-                pdfFile = openFileDialog.FileName;
-                                extractImages(pdfFile);
-                this.Text = System.IO.Path.GetFileName(pdfFile);
+                currentlyOpenPDFfile = openFileDialog.FileName;
+                                extractImages(currentlyOpenPDFfile);
+                this.Text = System.IO.Path.GetFileName(currentlyOpenPDFfile);
             }
         }
 
+        private void openFolder_Handler(object sender, EventArgs e)
+        {
+            // show folder open dialog to select a folder containing images
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            folderBrowserDialog.Description = "Select a folder containing images";
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            {
+                currentlyOpenImageFolder = folderBrowserDialog.SelectedPath;
+                loadImages(currentlyOpenImageFolder);
+                currentlyOpenPDFfile = currentlyOpenImageFolder + ".pdf";
+                this.Text = currentlyOpenImageFolder;
+            }
+        }
 
         private void loadImages(string inputFolder)
         {
             statusMessage.Text = "One moment....";
             Application.DoEvents();
-            thumbnailImageList.Images.Clear();
-            thumbnailImageList.ImageSize = new Size(255, 255);
-            inList.Items.Clear();
-            outList.Items.Clear();
-            inList.LargeImageList = thumbnailImageList;
-            outList.LargeImageList = thumbnailImageList;
+            inImageListView.Items.Clear();
+            outImageListView.Items.Clear();
+
+
             string[] files = System.IO.Directory.GetFiles(inputFolder);
             for (int i = 0; i < files.Length; i++)
             {
@@ -166,10 +180,15 @@ namespace Scanned_Page_Sorter
                 statusMessage.Text = "Loading file " + (i + 1) + " of " + files.Length;
                 Image img = Image.FromFile(file);
                 string fileName = Path.GetFileNameWithoutExtension(file);
-                thumbnailImageList.Images.Add(img);
-                inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1);
+                //thumbnailImageList.Images.Add(img);
+                //inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1);
+                ImageListViewItem item = new ImageListViewItem(); // Added missing initialization
+                inImageListView.Items.Add(file, fileName);
                 if (i % 10 == 0) Application.DoEvents();
             }
+            statusMessage.Text = "One moment...";
+
+            Application.DoEvents(); 
             statusMessage.Text = "Ready...";
         }
 
@@ -180,11 +199,11 @@ namespace Scanned_Page_Sorter
             string inputFolder = "../../images/";
             System.IO.Directory.CreateDirectory(inputFolder);
             string pdfFileName = System.IO.Path.GetFileNameWithoutExtension(pdfFile);
-            imageFolder = inputFolder + pdfFileName + "/";
+            currentlyOpenImageFolder = inputFolder + pdfFileName + "/";
             // empty the output folder if it already exists else create it
-            if (System.IO.Directory.Exists(imageFolder))
+            if (System.IO.Directory.Exists(currentlyOpenImageFolder))
             {
-                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(imageFolder);
+                System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(currentlyOpenImageFolder);
                 foreach (System.IO.FileInfo file in di.GetFiles())
                 {
                     file.Delete();
@@ -192,10 +211,10 @@ namespace Scanned_Page_Sorter
             }
             else
             {
-                System.IO.Directory.CreateDirectory(imageFolder);
+                System.IO.Directory.CreateDirectory(currentlyOpenImageFolder);
             }
-            extractImageFromPDF (pdfFile, imageFolder);
-            loadImages(imageFolder);
+            extractImageFromPDF (pdfFile, currentlyOpenImageFolder);
+            loadImages(currentlyOpenImageFolder);
         }
 
         public void extractImageFromPDF(string sourcePdf, string outputFolder)
@@ -252,7 +271,7 @@ namespace Scanned_Page_Sorter
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            saveImagesToPDF (thumbnailImageList.Images,  outList, pdfFile  );
+            //saveImagesToPDF (thumbnailImageList.Images,  outList, currentlyOpenPDFfile  );
         }
         // Inside the saveImagesToPDF method
         private void saveImagesToPDF(ImageList.ImageCollection images, ListView listView, string inputPdf)
@@ -266,7 +285,7 @@ namespace Scanned_Page_Sorter
                     foreach (ListViewItem item in listView.Items)
                     {
                         Image img = images[item.ImageIndex];
-                        string imageFilePath = imageFolder+ "/"+ ( item.Text) + ".jpg";
+                        string imageFilePath = currentlyOpenImageFolder+ "/"+ ( item.Text) + ".jpg";
                         ImageData imageData = ImageDataFactory.Create(imageFilePath);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
 
@@ -276,18 +295,39 @@ namespace Scanned_Page_Sorter
             }
         }
 
-        private void openFolderToolStripMenuItem_Click(object sender, EventArgs e)
+        #endregion
+
+        #region toolbox event handlers
+        private void thumbnailsToolStripButton_Click(object sender, EventArgs e)
         {
-            // show folder open dialog to select a folder containing images
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.Description = "Select a folder containing images";
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
-            {
-                imageFolder = folderBrowserDialog.SelectedPath;
-                loadImages(imageFolder);
-                pdfFile = imageFolder + ".pdf";
-                this.Text = imageFolder;
-            }
+            setupImageListViews(Manina.Windows.Forms.View.Thumbnails);
         }
+
+        private void galleryToolStripButton_Click(object sender, EventArgs e)
+        {
+            setupImageListViews(Manina.Windows.Forms.View.Gallery);
+        }
+
+        private void paneToolStripButton_Click(object sender, EventArgs e)
+        {
+         }
+
+        private void detailsToolStripButton_Click(object sender, EventArgs e)
+        {
+            setupImageListViews(Manina.Windows.Forms.View.Details);
+        }
+
+        private void horizontalStripToolStripButton_Click(object sender, EventArgs e)
+        {
+            setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
+        }
+
+        private void verticalStripToolStripButton_Click(object sender, EventArgs e)
+        {
+            setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
+        }
+        #endregion
+
+ 
     }
 }
