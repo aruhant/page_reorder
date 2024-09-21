@@ -269,7 +269,7 @@ namespace Scanned_Page_Sorter
         }
 
 
-        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exportPDF_Handler(object sender, EventArgs e)
         {
             //saveImagesToPDF (thumbnailImageList.Images,  outList, currentlyOpenPDFfile  );
         }
@@ -326,8 +326,10 @@ namespace Scanned_Page_Sorter
         {
             setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
         }
+
+
         #endregion
 
- 
+      
     }
 }

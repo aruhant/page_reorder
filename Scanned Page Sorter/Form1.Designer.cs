@@ -47,11 +47,9 @@
             this.inImageListView = new Manina.Windows.Forms.ImageListView();
             this.outImageListView = new Manina.Windows.Forms.ImageListView();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.rendererToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.openFileToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openFolderToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.rendererToolStripLabel = new System.Windows.Forms.ToolStripLabel();
-            this.renderertoolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
-            this.colorToolStripComboBox = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.thumbnailsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.galleryToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -88,6 +86,8 @@
             this.continuousCacheModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.usingWPFWICToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
+            this.exportToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -141,7 +141,7 @@
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
             this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.exportPDF_Handler);
             // 
             // exitMenuItem
             // 
@@ -270,12 +270,12 @@
             // 
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel1,
             this.openFileToolStripButton,
             this.openFolderToolStripButton,
-            this.rendererToolStripLabel,
-            this.renderertoolStripComboBox,
-            this.colorToolStripComboBox,
+            this.exportToolStripButton,
             this.toolStripSeparator2,
+            this.rendererToolStripLabel,
             this.thumbnailsToolStripButton,
             this.galleryToolStripButton,
             this.paneToolStripButton,
@@ -289,8 +289,14 @@
             this.toolStripDropDownButton2});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(733, 25);
+            this.toolStrip.Size = new System.Drawing.Size(527, 25);
             this.toolStrip.TabIndex = 0;
+            // 
+            // rendererToolStripLabel
+            // 
+            this.rendererToolStripLabel.Name = "rendererToolStripLabel";
+            this.rendererToolStripLabel.Size = new System.Drawing.Size(35, 22);
+            this.rendererToolStripLabel.Text = "View:";
             // 
             // openFileToolStripButton
             // 
@@ -311,24 +317,6 @@
             this.openFolderToolStripButton.Size = new System.Drawing.Size(23, 22);
             this.openFolderToolStripButton.Text = "Folder";
             this.openFolderToolStripButton.Click += new System.EventHandler(this.openFolder_Handler);
-            // 
-            // rendererToolStripLabel
-            // 
-            this.rendererToolStripLabel.Name = "rendererToolStripLabel";
-            this.rendererToolStripLabel.Size = new System.Drawing.Size(57, 22);
-            this.rendererToolStripLabel.Text = "Renderer:";
-            // 
-            // renderertoolStripComboBox
-            // 
-            this.renderertoolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.renderertoolStripComboBox.Name = "renderertoolStripComboBox";
-            this.renderertoolStripComboBox.Size = new System.Drawing.Size(121, 25);
-            // 
-            // colorToolStripComboBox
-            // 
-            this.colorToolStripComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.colorToolStripComboBox.Name = "colorToolStripComboBox";
-            this.colorToolStripComboBox.Size = new System.Drawing.Size(121, 25);
             // 
             // toolStripSeparator2
             // 
@@ -597,6 +585,22 @@
             this.usingWPFWICToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.usingWPFWICToolStripMenuItem.Text = "Using WPF/WIC";
             // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel1.Text = "Open:";
+            // 
+            // exportToolStripButton
+            // 
+            this.exportToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.exportToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripButton.Image")));
+            this.exportToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.exportToolStripButton.Name = "exportToolStripButton";
+            this.exportToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.exportToolStripButton.Text = "Folder";
+            this.exportToolStripButton.Click += new System.EventHandler(this.exportPDF_Handler);
+            // 
             // pageSorterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -648,8 +652,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripLabel rendererToolStripLabel;
-        private System.Windows.Forms.ToolStripComboBox renderertoolStripComboBox;
-        private System.Windows.Forms.ToolStripComboBox colorToolStripComboBox;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton thumbnailsToolStripButton;
         private System.Windows.Forms.ToolStripButton galleryToolStripButton;
@@ -690,6 +692,8 @@
         private System.Windows.Forms.ToolStripButton openFolderToolStripButton;
         private Manina.Windows.Forms.ImageListView inImageListView;
         private Manina.Windows.Forms.ImageListView outImageListView;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        private System.Windows.Forms.ToolStripButton exportToolStripButton;
     }
 }
 

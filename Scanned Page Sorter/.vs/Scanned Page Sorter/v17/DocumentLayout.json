@@ -3,16 +3,16 @@
   "WorkspaceRootPath": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -34,26 +34,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 0,
               "Title": "Form1.Designer.cs",
               "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "Form1.Designer.cs",
-              "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.Designer.cs",
-              "RelativeToolTip": "Form1.Designer.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAAAIEAAAAAAAAAAAAAAA==",
+              "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.Designer.cs*",
+              "RelativeToolTip": "Form1.Designer.cs*",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAAAI8AAABeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-20T23:25:23.162Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAAAIAAAAAAAAAA==",
+              "ViewState": "AgIAAP0AAAAAAAAAAAAcwA8BAAAmAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-09-13T03:35:00.125Z",
               "EditorCaption": ""
