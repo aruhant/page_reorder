@@ -49,7 +49,19 @@ namespace Scanned_Page_Sorter
             //list.DragLeave += new EventHandler(dragLeaveHandler);
         }
 
-  
+
+        private void dropComplete_Handler(object sender, DropCompleteEventArgs e)
+        {
+            ImageListView dropTarget = sender as ImageListView;
+            ImageListView dragSource = sender == inImageListView ? outImageListView : inImageListView;
+            foreach (ImageListViewItem item in dragSource.SelectedItems)
+            {
+                dragSource.Items.Remove(item);
+                //dropTarget.Items.Remove(item);
+            }
+        }
+
+
         private void itemDragHandler(object sender, ItemDragEventArgs e)
         {
             ListView list = sender as ListView;
@@ -328,8 +340,9 @@ namespace Scanned_Page_Sorter
         }
 
 
+
         #endregion
 
-      
+
     }
 }

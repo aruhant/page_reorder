@@ -47,10 +47,12 @@
             this.inImageListView = new Manina.Windows.Forms.ImageListView();
             this.outImageListView = new Manina.Windows.Forms.ImageListView();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.rendererToolStripLabel = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.openFileToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openFolderToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.exportToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.rendererToolStripLabel = new System.Windows.Forms.ToolStripLabel();
             this.thumbnailsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.galleryToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.paneToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -86,8 +88,6 @@
             this.continuousCacheModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.usingWPFWICToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.exportToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -244,6 +244,8 @@
             // 
             // inImageListView
             // 
+            this.inImageListView.AllowDrag = true;
+            this.inImageListView.AllowDrop = true;
             this.inImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inImageListView.Location = new System.Drawing.Point(0, 0);
@@ -253,9 +255,12 @@
             this.inImageListView.Size = new System.Drawing.Size(712, 450);
             this.inImageListView.TabIndex = 2;
             this.inImageListView.UseWIC = true;
+            this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             // 
             // outImageListView
             // 
+            this.outImageListView.AllowDrag = true;
+            this.outImageListView.AllowDrop = true;
             this.outImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outImageListView.Location = new System.Drawing.Point(0, 0);
@@ -265,6 +270,7 @@
             this.outImageListView.Size = new System.Drawing.Size(284, 450);
             this.outImageListView.TabIndex = 2;
             this.outImageListView.UseWIC = true;
+            this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             // 
             // toolStrip
             // 
@@ -289,14 +295,14 @@
             this.toolStripDropDownButton2});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(527, 25);
+            this.toolStrip.Size = new System.Drawing.Size(496, 25);
             this.toolStrip.TabIndex = 0;
             // 
-            // rendererToolStripLabel
+            // toolStripLabel1
             // 
-            this.rendererToolStripLabel.Name = "rendererToolStripLabel";
-            this.rendererToolStripLabel.Size = new System.Drawing.Size(35, 22);
-            this.rendererToolStripLabel.Text = "View:";
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel1.Text = "Open:";
             // 
             // openFileToolStripButton
             // 
@@ -318,10 +324,26 @@
             this.openFolderToolStripButton.Text = "Folder";
             this.openFolderToolStripButton.Click += new System.EventHandler(this.openFolder_Handler);
             // 
+            // exportToolStripButton
+            // 
+            this.exportToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.exportToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripButton.Image")));
+            this.exportToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.exportToolStripButton.Name = "exportToolStripButton";
+            this.exportToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.exportToolStripButton.Text = "Folder";
+            this.exportToolStripButton.Click += new System.EventHandler(this.exportPDF_Handler);
+            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // rendererToolStripLabel
+            // 
+            this.rendererToolStripLabel.Name = "rendererToolStripLabel";
+            this.rendererToolStripLabel.Size = new System.Drawing.Size(35, 22);
+            this.rendererToolStripLabel.Text = "View:";
             // 
             // thumbnailsToolStripButton
             // 
@@ -584,22 +606,6 @@
             this.usingWPFWICToolStripMenuItem.Name = "usingWPFWICToolStripMenuItem";
             this.usingWPFWICToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.usingWPFWICToolStripMenuItem.Text = "Using WPF/WIC";
-            // 
-            // toolStripLabel1
-            // 
-            this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(39, 22);
-            this.toolStripLabel1.Text = "Open:";
-            // 
-            // exportToolStripButton
-            // 
-            this.exportToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.exportToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripButton.Image")));
-            this.exportToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.exportToolStripButton.Name = "exportToolStripButton";
-            this.exportToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.exportToolStripButton.Text = "Folder";
-            this.exportToolStripButton.Click += new System.EventHandler(this.exportPDF_Handler);
             // 
             // pageSorterForm
             // 
