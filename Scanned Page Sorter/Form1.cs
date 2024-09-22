@@ -33,7 +33,7 @@ namespace Scanned_Page_Sorter
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
-            setupImageListStyles(inImageListView );
+            setupImageListStyles(inImageListView);
             setupImageListStyles(inImageListView);
         }
 
@@ -84,7 +84,7 @@ namespace Scanned_Page_Sorter
             ListView sourceList = draggedItems.Item2 as ListView;
             foreach (ListViewItem draggedItem in draggedItems.Item1)
             {
-                if (draggedItem.ListView == list )  if (draggedItem.Index < dropIndex) dropIndex--;
+                if (draggedItem.ListView == list) if (draggedItem.Index < dropIndex) dropIndex--;
                 draggedItem.ListView.Items.Remove(draggedItem);
             }
 
@@ -93,7 +93,7 @@ namespace Scanned_Page_Sorter
             foreach (ListViewItem draggedItem in draggedItems.Item1)
             {
                 list.Items.Insert(dropIndex, draggedItem);
-               dropIndex++; // Increment the dropIndex after inserting the draggedItem
+                dropIndex++; // Increment the dropIndex after inserting the draggedItem
             }
         }
         // Moves the insertion mark as the item is dragged.
@@ -131,7 +131,7 @@ namespace Scanned_Page_Sorter
         }
 
         // Removes the insertion mark when the mouse leaves the control.
-        private void dragLeaveHandler (object sender, EventArgs e)
+        private void dragLeaveHandler(object sender, EventArgs e)
         {
             ListView list = sender as ListView;
             list.InsertionMark.Index = -1;
@@ -158,7 +158,7 @@ namespace Scanned_Page_Sorter
             {
                 // load the pdf file to the inList
                 currentlyOpenPDFfile = openFileDialog.FileName;
-                                extractImages(currentlyOpenPDFfile);
+                extractImages(currentlyOpenPDFfile);
                 this.Text = System.IO.Path.GetFileName(currentlyOpenPDFfile);
             }
         }
@@ -200,7 +200,7 @@ namespace Scanned_Page_Sorter
             }
             statusMessage.Text = "One moment...";
 
-            Application.DoEvents(); 
+            Application.DoEvents();
             statusMessage.Text = "Ready...";
         }
 
@@ -225,7 +225,7 @@ namespace Scanned_Page_Sorter
             {
                 System.IO.Directory.CreateDirectory(currentlyOpenImageFolder);
             }
-            extractImageFromPDF (pdfFile, currentlyOpenImageFolder);
+            extractImageFromPDF(pdfFile, currentlyOpenImageFolder);
             loadImages(currentlyOpenImageFolder);
         }
 
@@ -238,7 +238,7 @@ namespace Scanned_Page_Sorter
                 PdfDocument document = new PdfDocument(reader);
                 for (int i = 1; i <= document.GetNumberOfPages(); i++)
                 {
-                    statusMessage.Text = "Extracting image " + i ;
+                    statusMessage.Text = "Extracting image " + i;
                     Application.DoEvents();
 
                     PdfPage page = document.GetPage(i);
@@ -259,7 +259,7 @@ namespace Scanned_Page_Sorter
                                 Image img = Image.FromStream(ms);
                                 img.Save(outputFolder + ("000" + i).Substring(("000" + i).Length - 3) + ".jpg", ImageFormat.Jpeg);
                             }
-                            catch (Exception )
+                            catch (Exception)
                             {
                                 //MessageBox.Show(e.Message);
                             }
@@ -273,7 +273,7 @@ namespace Scanned_Page_Sorter
             }
         }
 
- 
+
 
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
@@ -297,7 +297,7 @@ namespace Scanned_Page_Sorter
                     foreach (ListViewItem item in listView.Items)
                     {
                         Image img = images[item.ImageIndex];
-                        string imageFilePath = currentlyOpenImageFolder+ "/"+ ( item.Text) + ".jpg";
+                        string imageFilePath = currentlyOpenImageFolder + "/" + (item.Text) + ".jpg";
                         ImageData imageData = ImageDataFactory.Create(imageFilePath);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
 
@@ -312,31 +312,47 @@ namespace Scanned_Page_Sorter
         #region toolbox event handlers
         private void thumbnailsToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Thumbnails);
+            setupImageListViews(Manina.Windows.Forms.View.Thumbnails); inImageListView.ThumbnailSize = new Size(128, 128);
+            outImageListView.ThumbnailSize = new Size(128, 128);
+
         }
 
         private void galleryToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Gallery);
+            setupImageListViews(Manina.Windows.Forms.View.Gallery); inImageListView.ThumbnailSize = new Size(128, 128);
+            outImageListView.ThumbnailSize = new Size(128, 128);
+
         }
 
         private void paneToolStripButton_Click(object sender, EventArgs e)
         {
-         }
+        }
 
         private void detailsToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Details);
+            setupImageListViews(Manina.Windows.Forms.View.Details); inImageListView.ThumbnailSize = new Size(128, 128);
+            outImageListView.ThumbnailSize = new Size(128, 128);
+
         }
 
         private void horizontalStripToolStripButton_Click(object sender, EventArgs e)
         {
             setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
+            int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
+            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth+32;
+            inImageListView.ThumbnailSize = new Size(i- scrollbarWidth, i- scrollbarWidth);
+            i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
+            outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         }
 
         private void verticalStripToolStripButton_Click(object sender, EventArgs e)
         {
             setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
+            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth+32;
+            int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
+            inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+            i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
+            outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         }
 
 
