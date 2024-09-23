@@ -45,11 +45,11 @@
             this.statusMessage = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.inSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.inPreview = new System.Windows.Forms.PictureBox();
             this.inImageListView = new Manina.Windows.Forms.ImageListView();
             this.outSplitContainer = new System.Windows.Forms.SplitContainer();
             this.outImageListView = new Manina.Windows.Forms.ImageListView();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.outPreview = new System.Windows.Forms.PictureBox();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.openFileToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -106,12 +106,12 @@
             this.inSplitContainer.Panel1.SuspendLayout();
             this.inSplitContainer.Panel2.SuspendLayout();
             this.inSplitContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inPreview)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.outSplitContainer)).BeginInit();
             this.outSplitContainer.Panel1.SuspendLayout();
             this.outSplitContainer.Panel2.SuspendLayout();
             this.outSplitContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outPreview)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -182,8 +182,8 @@
             // 
             // rightToolStripPanel
             // 
-            this.rightToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.rightToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rightToolStripPanel.Location = new System.Drawing.Point(0, 0);
             this.rightToolStripPanel.Name = "rightToolStripPanel";
@@ -193,8 +193,8 @@
             // 
             // leftToolStripPanel
             // 
-            this.leftToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.leftToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.leftToolStripPanel.Location = new System.Drawing.Point(0, 0);
             this.leftToolStripPanel.Name = "leftToolStripPanel";
@@ -247,8 +247,8 @@
             // 
             // mainSplitContainer
             // 
-            this.mainSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.mainSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainSplitContainer.Location = new System.Drawing.Point(0, 0);
             this.mainSplitContainer.Name = "mainSplitContainer";
@@ -264,6 +264,7 @@
             this.mainSplitContainer.Size = new System.Drawing.Size(1000, 450);
             this.mainSplitContainer.SplitterDistance = 243;
             this.mainSplitContainer.TabIndex = 2;
+            this.mainSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
             // inSplitContainer
             // 
@@ -274,7 +275,7 @@
             // 
             // inSplitContainer.Panel1
             // 
-            this.inSplitContainer.Panel1.Controls.Add(this.pictureBox2);
+            this.inSplitContainer.Panel1.Controls.Add(this.inPreview);
             // 
             // inSplitContainer.Panel2
             // 
@@ -282,18 +283,19 @@
             this.inSplitContainer.Size = new System.Drawing.Size(1000, 243);
             this.inSplitContainer.SplitterDistance = 127;
             this.inSplitContainer.TabIndex = 0;
+            this.inSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
-            // pictureBox2
+            // inPreview
             // 
-            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.inPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(998, 124);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
+            this.inPreview.Location = new System.Drawing.Point(0, 0);
+            this.inPreview.Name = "inPreview";
+            this.inPreview.Size = new System.Drawing.Size(998, 124);
+            this.inPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.inPreview.TabIndex = 0;
+            this.inPreview.TabStop = false;
             // 
             // inImageListView
             // 
@@ -308,6 +310,7 @@
             this.inImageListView.Size = new System.Drawing.Size(1000, 112);
             this.inImageListView.TabIndex = 3;
             this.inImageListView.UseWIC = true;
+            this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInThumbnail);
             // 
             // outSplitContainer
             // 
@@ -322,10 +325,11 @@
             // 
             // outSplitContainer.Panel2
             // 
-            this.outSplitContainer.Panel2.Controls.Add(this.pictureBox1);
+            this.outSplitContainer.Panel2.Controls.Add(this.outPreview);
             this.outSplitContainer.Size = new System.Drawing.Size(1000, 203);
             this.outSplitContainer.SplitterDistance = 42;
             this.outSplitContainer.TabIndex = 0;
+            this.outSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
             // outImageListView
             // 
@@ -340,17 +344,19 @@
             this.outImageListView.Size = new System.Drawing.Size(1000, 42);
             this.outImageListView.TabIndex = 3;
             this.outImageListView.UseWIC = true;
+            this.outImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateOutThumbnail);
             // 
-            // pictureBox1
+            // outPreview
             // 
-            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
+            this.outPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+            | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox1.Location = new System.Drawing.Point(2, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(998, 157);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.outPreview.Location = new System.Drawing.Point(2, 0);
+            this.outPreview.Name = "outPreview";
+            this.outPreview.Size = new System.Drawing.Size(998, 157);
+            this.outPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.outPreview.TabIndex = 0;
+            this.outPreview.TabStop = false;
             // 
             // toolStrip
             // 
@@ -515,21 +521,21 @@
             // landscapeMenuItem
             // 
             this.landscapeMenuItem.Name = "landscapeMenuItem";
-            this.landscapeMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.landscapeMenuItem.Text = "LandScape";
-            this.landscapeMenuItem.Click += new System.EventHandler(this.setLandscapeLayout);
+            this.landscapeMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.landscapeMenuItem.Text = "One Below Another";
+            this.landscapeMenuItem.Click += new System.EventHandler(this.setOneBelowAnotherLayout);
             // 
             // portraitMenuItem
             // 
             this.portraitMenuItem.Name = "portraitMenuItem";
-            this.portraitMenuItem.Size = new System.Drawing.Size(136, 22);
-            this.portraitMenuItem.Text = "Portrait";
-            this.portraitMenuItem.Click += new System.EventHandler(this.setPortraitLayout);
+            this.portraitMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.portraitMenuItem.Text = "Side By Side";
+            this.portraitMenuItem.Click += new System.EventHandler(this.setSideBySideLayout);
             // 
             // thumbnailsMenuItem
             // 
             this.thumbnailsMenuItem.Name = "thumbnailsMenuItem";
-            this.thumbnailsMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.thumbnailsMenuItem.Size = new System.Drawing.Size(177, 22);
             this.thumbnailsMenuItem.Text = "Thumbnails";
             this.thumbnailsMenuItem.Click += new System.EventHandler(this.setThumbnailLayout);
             // 
@@ -720,12 +726,12 @@
             this.inSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.inSplitContainer)).EndInit();
             this.inSplitContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.inPreview)).EndInit();
             this.outSplitContainer.Panel1.ResumeLayout(false);
             this.outSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.outSplitContainer)).EndInit();
             this.outSplitContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.outPreview)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -796,8 +802,8 @@
         private Manina.Windows.Forms.ImageListView inImageListView;
         private System.Windows.Forms.SplitContainer outSplitContainer;
         private Manina.Windows.Forms.ImageListView outImageListView;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.PictureBox inPreview;
+        private System.Windows.Forms.PictureBox outPreview;
     }
 }
 

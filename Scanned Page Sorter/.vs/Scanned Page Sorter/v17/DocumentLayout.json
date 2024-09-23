@@ -3,16 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form",
       "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}|Form"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:utils.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:form1.designer.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|c:\\users\\amit\\documents\\code\\page_reorder\\scanned page sorter\\layoutfunctions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:layoutfunctions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{72B07BED-4572-4D29-BAC5-5707B3312A44}|Scanned Page Sorter.csproj|solutionrelative:app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     }
   ],
   "DocumentGroupContainers": [
@@ -22,40 +34,71 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 5,
           "Children": [
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{269a02dc-6af8-11d3-bdc4-00c04f688e50}"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
-            },
-            {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Form1.Designer.cs",
               "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.Designer.cs",
               "RelativeDocumentMoniker": "Form1.Designer.cs",
               "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.Designer.cs",
               "RelativeToolTip": "Form1.Designer.cs",
-              "ViewState": "AgIAAHgAAAAAAAAAAAAAAIUAAABSAAAAAAAAAA==",
+              "ViewState": "AgIAAEgBAAAAAAAAAAAqwFoBAAA7AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-20T23:25:23.162Z",
+              "WhenOpened": "2024-09-23T19:37:27.911Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
+              "Title": "Utils.cs",
+              "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Utils.cs",
+              "RelativeDocumentMoniker": "Utils.cs",
+              "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Utils.cs",
+              "RelativeToolTip": "Utils.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAQwCkAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-23T18:44:34.17Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "App.config",
+              "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\App.config",
+              "RelativeDocumentMoniker": "App.config",
+              "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\App.config",
+              "RelativeToolTip": "App.config",
+              "ViewState": "AgIAABIAAAAAAAAAAAAAAC0AAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000601|",
+              "WhenOpened": "2024-09-23T07:36:41.198Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "Form1.cs",
               "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.cs",
               "RelativeDocumentMoniker": "Form1.cs",
               "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.cs",
               "RelativeToolTip": "Form1.cs",
-              "ViewState": "AgIAAEYBAAAAAAAAAAA5wF4BAABMAAAAAAAAAA==",
+              "ViewState": "AgIAAC4BAAAAAAAAAAAiwD8BAACEAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-13T03:35:00.125Z",
+              "WhenOpened": "2024-09-23T06:23:05.019Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "LayoutFunctions.cs",
+              "DocumentMoniker": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\LayoutFunctions.cs",
+              "RelativeDocumentMoniker": "LayoutFunctions.cs",
+              "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\LayoutFunctions.cs",
+              "RelativeToolTip": "LayoutFunctions.cs",
+              "ViewState": "AgIAADYAAAAAAAAAAAAAwD8AAABUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-23T03:11:32.039Z",
               "EditorCaption": ""
             },
             {
@@ -67,7 +110,7 @@
               "ToolTip": "C:\\Users\\amit\\Documents\\code\\page_reorder\\Scanned Page Sorter\\Form1.cs [Design]",
               "RelativeToolTip": "Form1.cs [Design]",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-09-13T03:15:26.069Z",
+              "WhenOpened": "2024-09-23T01:18:48.856Z",
               "EditorCaption": " [Design]"
             }
           ]

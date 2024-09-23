@@ -17,6 +17,7 @@ using System.Configuration;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
 namespace Scanned_Page_Sorter
 {
@@ -37,7 +38,9 @@ namespace Scanned_Page_Sorter
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
             setupImageListStyles(inImageListView);
-            setupImageListStyles(inImageListView);           
+            setupImageListStyles(inImageListView);
+            Application.DoEvents();
+            loadLayout();
         }
 
         #endregion
@@ -218,24 +221,6 @@ namespace Scanned_Page_Sorter
                 }
             }
             inImageListView.ResumeLayout();
-
-
-            //string[] files = System.IO.Directory.GetFiles(inputFolder);
-            //for (int i = 0; i < files.Length; i++)
-            //{
-            //    string file = files[i];
-            //    statusMessage.Text = "Loading file " + (i + 1) + " of " + files.Length;
-            //    Image img = Image.FromFile(file);
-            //    string fileName = Path.GetFileNameWithoutExtension(file);
-            //    //thumbnailImageList.Images.Add(img);
-            //    //inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1);
-            //    ImageListViewItem item = new ImageListViewItem(); // Added missing initialization
-            //    inImageListView.Items.Add(file, fileName);
-            //    if (i % 10 == 0) Application.DoEvents();
-            //}
-            //statusMessage.Text = "One moment...";
-
-            //Application.DoEvents();
             statusMessage.Text = "Ready...";
         }
 
@@ -318,10 +303,9 @@ namespace Scanned_Page_Sorter
 
         private void exportPDF_Handler(object sender, EventArgs e)
         {
-            //saveImagesToPDF (thumbnailImageList.Images,  outList, currentlyOpenPDFfile  );
+            saveImagesToPDF(outImageListView, currentlyOpenPDFfile);
         }
-        // Inside the saveImagesToPDF method
-        private void saveImagesToPDF(ImageList.ImageCollection images, ListView listView, string inputPdf)
+        private void saveImagesToPDF(ImageListView outImageListView, string inputPdf)
         {
             string outputPdf = System.IO.Path.GetDirectoryName(inputPdf) + "/Reordered - " + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + ".pdf";
             using (PdfWriter writer = new PdfWriter(outputPdf))
@@ -329,13 +313,11 @@ namespace Scanned_Page_Sorter
                 using (PdfDocument pdf = new PdfDocument(writer))
                 {
                     Document doc = new Document(pdf); // Create a Document instance
-                    foreach (ListViewItem item in listView.Items)
+                    foreach (ImageListViewItem item in outImageListView.Items)
                     {
-                        Image img = images[item.ImageIndex];
-                        string imageFilePath = currentlyOpenImageFolder + "/" + (item.Text) + ".jpg";
-                        ImageData imageData = ImageDataFactory.Create(imageFilePath);
+                        string path = Path.Combine(item.FilePath, item.FileName);
+                        ImageData imageData = ImageDataFactory.Create(path);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
-
                         doc.Add(image);
                     }
                 }
@@ -388,24 +370,34 @@ namespace Scanned_Page_Sorter
         }
         #endregion
 
-   
 
 
-        private void setLandscapeLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.SideByside);
+
+        private void setOneBelowAnotherLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.OneBelowAnother);
+
+        private void setSideBySideLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.SideBySide);
+
+        private void setThumbnailLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Thumbnails);
 
 
-        private void setPortraitLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.OnTop);
+        private void mainFormResized(object sender, EventArgs e) => loadLayout();
 
-        private void setThumbnailLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.None);
+        private void splitterMoved(object sender, SplitterEventArgs e) => saveLayout();
 
-        private void imageListView1_ItemClick(object sender, ItemClickEventArgs e)
+        private void updateInThumbnail(object sender, ItemHoverEventArgs e)
         {
-
+            if (e.Item == null) return;
+            string path = Path.Combine(e.Item.FilePath, e.Item.FileName);
+            inPreview.Image = Image.FromFile(path);
         }
 
-        private void mainFormResized(object sender, EventArgs e)
+
+        private void updateOutThumbnail(object sender, ItemHoverEventArgs e)
         {
-            loadLayout();
+            if (e.Item == null) return;
+            string path = Path.Combine(e.Item.FilePath, e.Item.FileName);
+            outPreview.Image = Image.FromFile(path);
+
         }
     }
-}
+};
