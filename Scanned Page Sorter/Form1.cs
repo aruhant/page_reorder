@@ -12,6 +12,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -138,10 +139,14 @@ namespace Scanned_Page_Sorter
         }
 
 
-        private void setupImageListViews(Manina.Windows.Forms.View view)
-        {
+        private void setupImageListViews(Manina.Windows.Forms.View view, [Optional]Size? size) { 
             inImageListView.View = view;
             outImageListView.View = view;
+            if (size != null)
+            {
+                inImageListView.ThumbnailSize = size.Value;
+                outImageListView.ThumbnailSize = size.Value;
+            }
         }
         #endregion
 
@@ -339,28 +344,24 @@ namespace Scanned_Page_Sorter
         #region toolbox event handlers
         private void thumbnailsToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Thumbnails); inImageListView.ThumbnailSize = new Size(128, 128);
-            outImageListView.ThumbnailSize = new Size(128, 128);
+            setupImageListViews(Manina.Windows.Forms.View.Thumbnails, new Size(128, 128));
 
         }
 
         private void galleryToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Gallery); inImageListView.ThumbnailSize = new Size(128, 128);
-            outImageListView.ThumbnailSize = new Size(128, 128);
+            setupImageListViews(Manina.Windows.Forms.View.Gallery, new Size(128, 128));
 
         }
 
         private void paneToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Pane); inImageListView.ThumbnailSize = new Size(128, 128);
+            setupImageListViews(Manina.Windows.Forms.View.Pane, new Size(128, 128));
         }
 
         private void detailsToolStripButton_Click(object sender, EventArgs e)
         {
-            setupImageListViews(Manina.Windows.Forms.View.Details); inImageListView.ThumbnailSize = new Size(128, 128);
-            outImageListView.ThumbnailSize = new Size(128, 128);
-
+            setupImageListViews(Manina.Windows.Forms.View.Details, new Size(128, 128));
         }
 
         private void horizontalStripToolStripButton_Click(object sender, EventArgs e)
