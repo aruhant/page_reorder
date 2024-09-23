@@ -144,16 +144,6 @@ namespace Scanned_Page_Sorter
         }
 
 
-        private void setupImageListViews(Manina.Windows.Forms.View view, [Optional] Size? size)
-        {
-            inImageListView.View = view;
-            outImageListView.View = view;
-            if (size != null)
-            {
-                inImageListView.ThumbnailSize = size.Value;
-                outImageListView.ThumbnailSize = size.Value;
-            }
-        }
         #endregion
 
         #region File and Folder event handlers

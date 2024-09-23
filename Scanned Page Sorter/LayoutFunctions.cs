@@ -2,7 +2,17 @@
 using System.Configuration;
 using System.Collections.Specialized;
 using System.Windows.Forms;
-using System.Windows.Threading;
+using iText.IO.Image;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
+using iText.Kernel.Pdf.Xobject;
+using iText.Layout;
+using Manina.Windows.Forms;
+using System.Collections.Generic;
+using Manina.Windows.Forms;
+using System.Data;
+using System.Drawing;
+using System.Runtime.InteropServices;
 
 namespace Scanned_Page_Sorter
 {
@@ -46,6 +56,16 @@ namespace Scanned_Page_Sorter
         }
 
 
+        private void setupImageListViews(Manina.Windows.Forms.View view, [Optional] Size? size)
+        {
+            inImageListView.View = view;
+            outImageListView.View = view;
+            if (size != null)
+            {
+                inImageListView.ThumbnailSize = size.Value;
+                outImageListView.ThumbnailSize = size.Value;
+            }
+        }
 
         private void loadLayout()
         {
@@ -79,6 +99,7 @@ namespace Scanned_Page_Sorter
                     inSplitContainer.Orientation = Orientation.Horizontal;
                     inSplitContainer.Panel1Collapsed = false;
                     outSplitContainer.Panel2Collapsed = false;
+                    setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
                     break;
                 case SplitterPanelLayout.SideBySide:
                     mainSplitContainer.Orientation = Orientation.Vertical;
@@ -86,6 +107,7 @@ namespace Scanned_Page_Sorter
                     inSplitContainer.Orientation = Orientation.Vertical;
                     inSplitContainer.Panel1Collapsed = false;
                     outSplitContainer.Panel2Collapsed = false;
+                    setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
                     break;
                 case SplitterPanelLayout.Thumbnails:
                     mainSplitContainer.Orientation = Orientation.Vertical;
@@ -93,6 +115,7 @@ namespace Scanned_Page_Sorter
                     inSplitContainer.Orientation = Orientation.Vertical;
                     inSplitContainer.Panel1Collapsed = true;
                     outSplitContainer.Panel2Collapsed = true;
+                    setupImageListViews(Manina.Windows.Forms.View.Thumbnails);
 
                     break;
             }
