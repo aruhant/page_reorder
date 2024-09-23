@@ -390,6 +390,10 @@ namespace Scanned_Page_Sorter
         private enum SplitterPanelLayout { SideByside, OnTop, None }
         private void setLayout(SplitterPanelLayout layout)
         {
+            // suspend layout
+            mainSplitContainer.SuspendLayout();
+            inSplitContainer.SuspendLayout();
+            outSplitContainer.SuspendLayout();
             switch (layout)
             {
                 case SplitterPanelLayout.SideByside:
@@ -415,7 +419,9 @@ namespace Scanned_Page_Sorter
 
                     break;
             }
-
+            mainMenu.ResumeLayout();
+            inSplitContainer.ResumeLayout();
+            outSplitContainer.ResumeLayout();
 
 
             #endregion
