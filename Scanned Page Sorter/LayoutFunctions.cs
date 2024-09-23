@@ -31,7 +31,7 @@ namespace Scanned_Page_Sorter
             if (splitterPanelLayout == null) return;
             Console.WriteLine("splitter panel layout: " + splitterPanelLayout);
             config.AppSettings.Settings["SplitterPanelLayout"].Value = splitterPanelLayout.ToString();
-            if (splitterPanelLayout == SplitterPanelLayout.OneBelowAnother)
+            if (splitterPanelLayout == SplitterPanelLayout.Horizontal)
             {
                 config.AppSettings.Settings[mainSplitContainer.Name + splitterPanelLayout.ToString()].Value = mainSplitContainer.SplitterDistance / (double)this.Height + "";
                 config.AppSettings.Settings[inSplitContainer.Name + splitterPanelLayout.ToString()].Value = inSplitContainer.SplitterDistance / (double)this.Height + "";
@@ -76,12 +76,12 @@ namespace Scanned_Page_Sorter
             }
             else
             {
-                SplitterPanelLayout layout = (config.AppSettings.Settings["SplitterPanelLayout"] == null) ? SplitterPanelLayout.OneBelowAnother : (SplitterPanelLayout)Enum.Parse(typeof(SplitterPanelLayout), config.AppSettings.Settings["SplitterPanelLayout"].Value);
+                SplitterPanelLayout layout = (config.AppSettings.Settings["SplitterPanelLayout"] == null) ? SplitterPanelLayout.Horizontal : (SplitterPanelLayout)Enum.Parse(typeof(SplitterPanelLayout), config.AppSettings.Settings["SplitterPanelLayout"].Value);
                 setSplitterLayout(layout);
             }
         }
         #region splitpane layouts
-        private enum SplitterPanelLayout { OneBelowAnother, SideBySide, Thumbnails }
+        private enum SplitterPanelLayout { Horizontal, Vertical, HorizontalThumbs, VerticalThumbs }
         private void setSplitterLayout(SplitterPanelLayout layout)
         {
             splitterPanelLayout = layout;
@@ -93,7 +93,7 @@ namespace Scanned_Page_Sorter
             outSplitContainer.Panel2Collapsed = true;
             switch (layout)
             {
-                case SplitterPanelLayout.OneBelowAnother:
+                case SplitterPanelLayout.Horizontal:
                     mainSplitContainer.Orientation = Orientation.Horizontal;
                     outSplitContainer.Orientation = Orientation.Horizontal;
                     inSplitContainer.Orientation = Orientation.Horizontal;
@@ -101,7 +101,7 @@ namespace Scanned_Page_Sorter
                     outSplitContainer.Panel2Collapsed = false;
                     setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
                     break;
-                case SplitterPanelLayout.SideBySide:
+                case SplitterPanelLayout.Vertical:
                     mainSplitContainer.Orientation = Orientation.Vertical;
                     outSplitContainer.Orientation = Orientation.Vertical;
                     inSplitContainer.Orientation = Orientation.Vertical;
@@ -109,7 +109,15 @@ namespace Scanned_Page_Sorter
                     outSplitContainer.Panel2Collapsed = false;
                     setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
                     break;
-                case SplitterPanelLayout.Thumbnails:
+                case SplitterPanelLayout.HorizontalThumbs:
+                    mainSplitContainer.Orientation = Orientation.Horizontal;
+                    outSplitContainer.Orientation = Orientation.Horizontal;
+                    inSplitContainer.Orientation = Orientation.Horizontal;
+                    inSplitContainer.Panel1Collapsed = true;
+                    outSplitContainer.Panel2Collapsed = true;
+                    setupImageListViews(Manina.Windows.Forms.View.Thumbnails);
+                    break;
+                case SplitterPanelLayout.VerticalThumbs:
                     mainSplitContainer.Orientation = Orientation.Vertical;
                     outSplitContainer.Orientation = Orientation.Vertical;
                     inSplitContainer.Orientation = Orientation.Vertical;
@@ -140,7 +148,7 @@ namespace Scanned_Page_Sorter
             double defaults = container == mainSplitContainer ? 0.5 : 0.25;
             double panelRatio = string.IsNullOrEmpty(panelRatioString) ? defaults : double.Parse(panelRatioString);
             if (panelRatio < 0 || panelRatio > 1) panelRatio = defaults;
-            container.SplitterDistance = (int)(layout == SplitterPanelLayout.OneBelowAnother ? this.Height * panelRatio : this.Width * panelRatio);
+            container.SplitterDistance = (int)(layout == SplitterPanelLayout.Horizontal ? this.Height * panelRatio : this.Width * panelRatio);
             Console.WriteLine(container.Name + " -- > " + panelRatio);
         }
 

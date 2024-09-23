@@ -237,57 +237,38 @@ namespace Scanned_Page_Sorter
         #endregion
 
         #region toolbox event handlers
-        private void thumbnailsToolStripButton_Click(object sender, EventArgs e)
-        {
-            setupImageListViews(Manina.Windows.Forms.View.Thumbnails, new Size(128, 128));
+        
+        private void setVerticalThumbs(object sender, EventArgs e)        =>            setSplitterLayout(SplitterPanelLayout.VerticalThumbs);
+        
 
-        }
+        private void setHorizontalThumbs(object sender, EventArgs e)        => setSplitterLayout(SplitterPanelLayout.HorizontalThumbs); 
 
-        private void galleryToolStripButton_Click(object sender, EventArgs e)
-        {
-            setupImageListViews(Manina.Windows.Forms.View.Gallery, new Size(128, 128));
+        private void setVertical(object sender, EventArgs e)=>        setSplitterLayout(SplitterPanelLayout.Vertical);
 
-        }
+        private void setHorizontal(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Horizontal);
+        //{
+        //    setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
+        //    int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
+        //    int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
+        //    inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+        //    i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
+        //    outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+        //}
 
-        private void paneToolStripButton_Click(object sender, EventArgs e)
-        {
-            setupImageListViews(Manina.Windows.Forms.View.Pane, new Size(128, 128));
-        }
-
-        private void detailsToolStripButton_Click(object sender, EventArgs e)
-        {
-            setupImageListViews(Manina.Windows.Forms.View.Details, new Size(128, 128));
-        }
-
-        private void horizontalStripToolStripButton_Click(object sender, EventArgs e)
-        {
-            setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
-            int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
-            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
-            inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
-            i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
-            outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
-        }
-
-        private void verticalStripToolStripButton_Click(object sender, EventArgs e)
-        {
-            setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
-            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
-            int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
-            inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
-            i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
-            outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
-        }
+        private void verticalStripToolStripButton_Click(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Vertical);
+        //{
+        //    setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
+        //    int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
+        //    int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
+        //    inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+        //    i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
+        //    outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+        //}
         #endregion
 
 
 
-
-        private void setOneBelowAnotherLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.OneBelowAnother);
-
-        private void setSideBySideLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.SideBySide);
-
-        private void setThumbnailLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Thumbnails);
+ 
 
 
         private void mainFormResized(object sender, EventArgs e) => loadLayout();
