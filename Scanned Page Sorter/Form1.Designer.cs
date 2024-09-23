@@ -182,8 +182,8 @@
             // 
             // rightToolStripPanel
             // 
-            this.rightToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.rightToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rightToolStripPanel.Location = new System.Drawing.Point(0, 0);
             this.rightToolStripPanel.Name = "rightToolStripPanel";
@@ -193,8 +193,8 @@
             // 
             // leftToolStripPanel
             // 
-            this.leftToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.leftToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.leftToolStripPanel.Location = new System.Drawing.Point(0, 0);
             this.leftToolStripPanel.Name = "leftToolStripPanel";
@@ -247,8 +247,8 @@
             // 
             // mainSplitContainer
             // 
-            this.mainSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.mainSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainSplitContainer.Location = new System.Drawing.Point(0, 0);
             this.mainSplitContainer.Name = "mainSplitContainer";
@@ -287,8 +287,8 @@
             // 
             // inPreview
             // 
-            this.inPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.inPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inPreview.Location = new System.Drawing.Point(0, 0);
             this.inPreview.Name = "inPreview";
@@ -310,6 +310,7 @@
             this.inImageListView.Size = new System.Drawing.Size(1000, 112);
             this.inImageListView.TabIndex = 3;
             this.inImageListView.UseWIC = true;
+            this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInThumbnail);
             // 
             // outSplitContainer
@@ -344,12 +345,13 @@
             this.outImageListView.Size = new System.Drawing.Size(1000, 42);
             this.outImageListView.TabIndex = 3;
             this.outImageListView.UseWIC = true;
+            this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             this.outImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateOutThumbnail);
             // 
             // outPreview
             // 
-            this.outPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.outPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outPreview.Location = new System.Drawing.Point(2, 0);
             this.outPreview.Name = "outPreview";

@@ -49,10 +49,6 @@ namespace Scanned_Page_Sorter
         private void setupImageListStyles(ImageListView list)
         {
             list.AllowDrop = true;
-            //list.DragEnter += new DragEventHandler(dragEnterHandler);
-            //list.DragDrop += new DragEventHandler(dragDropHandler);
-            //list.DragOver += new DragEventHandler(dragOverHandler);
-            //list.DragLeave += new EventHandler(dragLeaveHandler);
         }
 
 
@@ -63,85 +59,9 @@ namespace Scanned_Page_Sorter
             foreach (ImageListViewItem item in dragSource.SelectedItems)
             {
                 dragSource.Items.Remove(item);
-                //dropTarget.Items.Remove(item);
-            }
+             }
         }
-
-
-        private void itemDragHandler(object sender, ItemDragEventArgs e)
-        {
-            ListView list = sender as ListView;
-            ListViewItem[] selectedItems = list.SelectedItems.Cast<ListViewItem>().ToArray();
-            DoDragDrop((items: selectedItems, source: sender), DragDropEffects.Move);
-        }
-        private void dragEnterHandler(object sender, DragEventArgs e)
-        {
-            e.Effect = DragDropEffects.Move;
-        }
-        private void dragDropHandler(object sender, DragEventArgs e)
-        {
-            ListView list = sender as ListView;
-            var draggedItems = ((ListViewItem[], object))e.Data.GetData(typeof((ListViewItem[], object)));
-
-            int dropIndex = list.InsertionMark.Index > 0 ? list.InsertionMark.Index : 0;
-            if (list.InsertionMark.AppearsAfterItem) dropIndex++;
-
-
-            ListView sourceList = draggedItems.Item2 as ListView;
-            foreach (ListViewItem draggedItem in draggedItems.Item1)
-            {
-                if (draggedItem.ListView == list) if (draggedItem.Index < dropIndex) dropIndex--;
-                draggedItem.ListView.Items.Remove(draggedItem);
-            }
-
-            Console.WriteLine("Dropped to " + dropIndex);
-
-            foreach (ListViewItem draggedItem in draggedItems.Item1)
-            {
-                list.Items.Insert(dropIndex, draggedItem);
-                dropIndex++; // Increment the dropIndex after inserting the draggedItem
-            }
-        }
-        // Moves the insertion mark as the item is dragged.
-        private void dragOverHandler(object sender, DragEventArgs e)
-        {
-            ListView listView = sender as ListView;
-            // Retrieve the client coordinates of the mouse pointer.
-            Point targetPoint =
-                listView.PointToClient(new Point(e.X, e.Y));
-
-            // Retrieve the index of the item closest to the mouse pointer.
-            int targetIndex = listView.InsertionMark.NearestIndex(targetPoint);
-
-            // Confirm that the mouse pointer is not over the dragged item.
-            if (targetIndex > -1)
-            {
-                // Determine whether the mouse pointer is to the left or
-                // the right of the midpoint of the closest item and set
-                // the InsertionMark.AppearsAfterItem property accordingly.
-                Rectangle itemBounds = listView.GetItemRect(targetIndex);
-                if (targetPoint.X > itemBounds.Left + (itemBounds.Width / 2))
-                {
-                    listView.InsertionMark.AppearsAfterItem = true;
-                }
-                else
-                {
-                    listView.InsertionMark.AppearsAfterItem = false;
-                }
-            }
-
-            // Set the location of the insertion mark. If the mouse is
-            // over the dragged item, the targetIndex value is -1 and
-            // the insertion mark disappears.
-            listView.InsertionMark.Index = targetIndex;
-        }
-
-        // Removes the insertion mark when the mouse leaves the control.
-        private void dragLeaveHandler(object sender, EventArgs e)
-        {
-            ListView list = sender as ListView;
-            list.InsertionMark.Index = -1;
-        }
+         
 
 
         #endregion
