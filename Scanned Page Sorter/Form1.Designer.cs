@@ -43,9 +43,7 @@
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.inImageListView = new Manina.Windows.Forms.ImageListView();
-            this.outImageListView = new Manina.Windows.Forms.ImageListView();
+            this.splitContainerMain = new System.Windows.Forms.SplitContainer();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.openFileToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -62,9 +60,9 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearThumbsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
-            this.x96ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x120ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.x200ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.landscapeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.portraitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.thumbnailsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripDropDownButton2 = new System.Windows.Forms.ToolStripDropDownButton();
             this.allowCheckBoxClickToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,17 +86,33 @@
             this.continuousCacheModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripSeparator();
             this.usingWPFWICToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.inSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.inImageListView = new Manina.Windows.Forms.ImageListView();
+            this.outSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.outImageListView = new Manina.Windows.Forms.ImageListView();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.statusStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
-            this.splitContainer1.Panel1.SuspendLayout();
-            this.splitContainer1.Panel2.SuspendLayout();
-            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
+            this.splitContainerMain.Panel1.SuspendLayout();
+            this.splitContainerMain.Panel2.SuspendLayout();
+            this.splitContainerMain.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.inSplitContainer)).BeginInit();
+            this.inSplitContainer.Panel1.SuspendLayout();
+            this.inSplitContainer.Panel2.SuspendLayout();
+            this.inSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.outSplitContainer)).BeginInit();
+            this.outSplitContainer.Panel1.SuspendLayout();
+            this.outSplitContainer.Panel2.SuspendLayout();
+            this.outSplitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -195,7 +209,7 @@
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainer1);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainerMain);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1000, 450);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
@@ -225,52 +239,22 @@
             this.statusMessage.Size = new System.Drawing.Size(39, 17);
             this.statusMessage.Text = "Ready";
             // 
-            // splitContainer1
+            // splitContainerMain
             // 
-            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerMain.Location = new System.Drawing.Point(0, 0);
+            this.splitContainerMain.Name = "splitContainerMain";
             // 
-            // splitContainer1.Panel1
+            // splitContainerMain.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.inImageListView);
+            this.splitContainerMain.Panel1.Controls.Add(this.inSplitContainer);
             // 
-            // splitContainer1.Panel2
+            // splitContainerMain.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.outImageListView);
-            this.splitContainer1.Size = new System.Drawing.Size(1000, 450);
-            this.splitContainer1.SplitterDistance = 712;
-            this.splitContainer1.TabIndex = 2;
-            // 
-            // inImageListView
-            // 
-            this.inImageListView.AllowDrag = true;
-            this.inImageListView.AllowDrop = true;
-            this.inImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
-            this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.inImageListView.Location = new System.Drawing.Point(0, 0);
-            this.inImageListView.Name = "inImageListView";
-            this.inImageListView.PersistentCacheDirectory = "";
-            this.inImageListView.PersistentCacheSize = ((long)(100));
-            this.inImageListView.Size = new System.Drawing.Size(712, 450);
-            this.inImageListView.TabIndex = 2;
-            this.inImageListView.UseWIC = true;
-            this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
-            // 
-            // outImageListView
-            // 
-            this.outImageListView.AllowDrag = true;
-            this.outImageListView.AllowDrop = true;
-            this.outImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
-            this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.outImageListView.Location = new System.Drawing.Point(0, 0);
-            this.outImageListView.Name = "outImageListView";
-            this.outImageListView.PersistentCacheDirectory = "";
-            this.outImageListView.PersistentCacheSize = ((long)(100));
-            this.outImageListView.Size = new System.Drawing.Size(284, 450);
-            this.outImageListView.TabIndex = 2;
-            this.outImageListView.UseWIC = true;
-            this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
+            this.splitContainerMain.Panel2.Controls.Add(this.outSplitContainer);
+            this.splitContainerMain.Size = new System.Drawing.Size(1000, 450);
+            this.splitContainerMain.SplitterDistance = 712;
+            this.splitContainerMain.TabIndex = 2;
             // 
             // toolStrip
             // 
@@ -295,7 +279,7 @@
             this.toolStripDropDownButton2});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(496, 25);
+            this.toolStrip.Size = new System.Drawing.Size(452, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -423,32 +407,35 @@
             // 
             this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.x96ToolStripMenuItem,
-            this.x120ToolStripMenuItem,
-            this.x200ToolStripMenuItem});
+            this.landscapeMenuItem,
+            this.portraitMenuItem,
+            this.thumbnailsMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
             this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
-            this.toolStripDropDownButton1.Size = new System.Drawing.Size(100, 22);
-            this.toolStripDropDownButton1.Text = "Thumbnail Size";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(56, 22);
+            this.toolStripDropDownButton1.Text = "Layout";
             // 
-            // x96ToolStripMenuItem
+            // landscapeMenuItem
             // 
-            this.x96ToolStripMenuItem.Name = "x96ToolStripMenuItem";
-            this.x96ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x96ToolStripMenuItem.Text = "96x96";
+            this.landscapeMenuItem.Name = "landscapeMenuItem";
+            this.landscapeMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.landscapeMenuItem.Text = "LandScape";
+            this.landscapeMenuItem.Click += new System.EventHandler(this.setLandscapeLayout);
             // 
-            // x120ToolStripMenuItem
+            // portraitMenuItem
             // 
-            this.x120ToolStripMenuItem.Name = "x120ToolStripMenuItem";
-            this.x120ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x120ToolStripMenuItem.Text = "120x120";
+            this.portraitMenuItem.Name = "portraitMenuItem";
+            this.portraitMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.portraitMenuItem.Text = "Portrait";
+            this.portraitMenuItem.Click += new System.EventHandler(this.setPortraitLayout);
             // 
-            // x200ToolStripMenuItem
+            // thumbnailsMenuItem
             // 
-            this.x200ToolStripMenuItem.Name = "x200ToolStripMenuItem";
-            this.x200ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.x200ToolStripMenuItem.Text = "200x200";
+            this.thumbnailsMenuItem.Name = "thumbnailsMenuItem";
+            this.thumbnailsMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.thumbnailsMenuItem.Text = "Thumbnails";
+            this.thumbnailsMenuItem.Click += new System.EventHandler(this.setThumbnailLayout);
             // 
             // toolStripSeparator4
             // 
@@ -607,6 +594,91 @@
             this.usingWPFWICToolStripMenuItem.Size = new System.Drawing.Size(213, 22);
             this.usingWPFWICToolStripMenuItem.Text = "Using WPF/WIC";
             // 
+            // inSplitContainer
+            // 
+            this.inSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.inSplitContainer.Name = "inSplitContainer";
+            // 
+            // inSplitContainer.Panel1
+            // 
+            this.inSplitContainer.Panel1.Controls.Add(this.pictureBox2);
+            // 
+            // inSplitContainer.Panel2
+            // 
+            this.inSplitContainer.Panel2.Controls.Add(this.inImageListView);
+            this.inSplitContainer.Size = new System.Drawing.Size(712, 450);
+            this.inSplitContainer.SplitterDistance = 237;
+            this.inSplitContainer.TabIndex = 0;
+            // 
+            // inImageListView
+            // 
+            this.inImageListView.AllowDrag = true;
+            this.inImageListView.AllowDrop = true;
+            this.inImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
+            this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.inImageListView.Location = new System.Drawing.Point(0, 0);
+            this.inImageListView.Name = "inImageListView";
+            this.inImageListView.PersistentCacheDirectory = "";
+            this.inImageListView.PersistentCacheSize = ((long)(100));
+            this.inImageListView.Size = new System.Drawing.Size(471, 450);
+            this.inImageListView.TabIndex = 3;
+            this.inImageListView.UseWIC = true;
+            // 
+            // outSplitContainer
+            // 
+            this.outSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.outSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.outSplitContainer.Name = "outSplitContainer";
+            // 
+            // outSplitContainer.Panel1
+            // 
+            this.outSplitContainer.Panel1.Controls.Add(this.outImageListView);
+            // 
+            // outSplitContainer.Panel2
+            // 
+            this.outSplitContainer.Panel2.Controls.Add(this.pictureBox1);
+            this.outSplitContainer.Size = new System.Drawing.Size(284, 450);
+            this.outSplitContainer.SplitterDistance = 94;
+            this.outSplitContainer.TabIndex = 0;
+            // 
+            // outImageListView
+            // 
+            this.outImageListView.AllowDrag = true;
+            this.outImageListView.AllowDrop = true;
+            this.outImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
+            this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.outImageListView.Location = new System.Drawing.Point(0, 0);
+            this.outImageListView.Name = "outImageListView";
+            this.outImageListView.PersistentCacheDirectory = "";
+            this.outImageListView.PersistentCacheSize = ((long)(100));
+            this.outImageListView.Size = new System.Drawing.Size(94, 450);
+            this.outImageListView.TabIndex = 3;
+            this.outImageListView.UseWIC = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox1.Location = new System.Drawing.Point(2, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(184, 450);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(235, 447);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            // 
             // pageSorterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -628,12 +700,22 @@
             this.toolStripContainer1.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.splitContainer1.Panel1.ResumeLayout(false);
-            this.splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
-            this.splitContainer1.ResumeLayout(false);
+            this.splitContainerMain.Panel1.ResumeLayout(false);
+            this.splitContainerMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
+            this.splitContainerMain.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.inSplitContainer.Panel1.ResumeLayout(false);
+            this.inSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.inSplitContainer)).EndInit();
+            this.inSplitContainer.ResumeLayout(false);
+            this.outSplitContainer.Panel1.ResumeLayout(false);
+            this.outSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.outSplitContainer)).EndInit();
+            this.outSplitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -655,7 +737,7 @@
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusMessage;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainerMain;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripLabel rendererToolStripLabel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -668,9 +750,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripButton clearThumbsToolStripButton;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
-        private System.Windows.Forms.ToolStripMenuItem x96ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem x120ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem x200ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem landscapeMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem portraitMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem thumbnailsMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton2;
         private System.Windows.Forms.ToolStripMenuItem allowCheckBoxClickToolStripMenuItem;
@@ -696,10 +778,14 @@
         private System.Windows.Forms.ToolStripMenuItem usingWPFWICToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton openFileToolStripButton;
         private System.Windows.Forms.ToolStripButton openFolderToolStripButton;
-        private Manina.Windows.Forms.ImageListView inImageListView;
-        private Manina.Windows.Forms.ImageListView outImageListView;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
         private System.Windows.Forms.ToolStripButton exportToolStripButton;
+        private System.Windows.Forms.SplitContainer inSplitContainer;
+        private Manina.Windows.Forms.ImageListView inImageListView;
+        private System.Windows.Forms.SplitContainer outSplitContainer;
+        private Manina.Windows.Forms.ImageListView outImageListView;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

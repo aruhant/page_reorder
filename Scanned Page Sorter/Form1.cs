@@ -139,7 +139,8 @@ namespace Scanned_Page_Sorter
         }
 
 
-        private void setupImageListViews(Manina.Windows.Forms.View view, [Optional]Size? size) { 
+        private void setupImageListViews(Manina.Windows.Forms.View view, [Optional] Size? size)
+        {
             inImageListView.View = view;
             outImageListView.View = view;
             if (size != null)
@@ -184,38 +185,38 @@ namespace Scanned_Page_Sorter
 
         private void loadImages(string inputFolder)
         {
-            DirectoryInfo path = new DirectoryInfo(inputFolder); 
+            DirectoryInfo path = new DirectoryInfo(inputFolder);
             statusMessage.Text = "One moment....";
             Application.DoEvents();
             inImageListView.Items.Clear();
             outImageListView.Items.Clear();
             inImageListView.SuspendLayout();
             FileInfo[] files = new FileInfo[0];
-                try
-                {
+            try
+            {
 
                 files = path.GetFiles("*.*");
 
-                }
-                catch
+            }
+            catch
+            {
+                files = new FileInfo[0];
+            }
+            foreach (FileInfo p in files)
+            {
+                if (
+                    p.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                    p.Name.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
+                    p.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
                 {
-                    files = new FileInfo[0];
-                }
-                foreach (FileInfo p in files)
-                {
-                    if (
-                        p.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                        p.Name.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||                        
-                        p.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
-                    {
                     // filename without extension
                     string title = Path.GetFileNameWithoutExtension(p.FullName);
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
                     inImageListView.Items.Add(item);
-                    }
                 }
+            }
             inImageListView.ResumeLayout();
-            
+
 
             //string[] files = System.IO.Directory.GetFiles(inputFolder);
             //for (int i = 0; i < files.Length; i++)
@@ -383,11 +384,48 @@ namespace Scanned_Page_Sorter
             i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
             outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         }
-
-
-
-
         #endregion
-         
+
+        #region splitpane layouts
+        private enum SplitterPanelLayout { SideByside, OnTop, None }
+        private void setLayout(SplitterPanelLayout layout)
+        {
+            switch (layout)
+            {
+                case SplitterPanelLayout.SideByside:
+                    splitContainerMain.Orientation = Orientation.Horizontal;
+                    outSplitContainer.Orientation = Orientation.Horizontal;
+                    inSplitContainer.Orientation = Orientation.Horizontal;
+                    break;
+                case SplitterPanelLayout.OnTop:
+                    splitContainerMain.Orientation = Orientation.Vertical;
+                    outSplitContainer.Orientation = Orientation.Vertical;
+                    inSplitContainer.Orientation = Orientation.Vertical;
+                    break;
+                case SplitterPanelLayout.None:
+                    splitContainerMain.Orientation = Orientation.Vertical;
+                    outSplitContainer.Orientation = Orientation.Vertical;
+                    inSplitContainer.Orientation = Orientation.Vertical;
+
+                    break;
+            }
+
+
+
+            #endregion
+        }
+
+
+        private void setLandscapeLayout(object sender, EventArgs e) => setLayout(SplitterPanelLayout.SideByside);
+
+
+        private void setPortraitLayout(object sender, EventArgs e) => setLayout(SplitterPanelLayout.OnTop);
+
+        private void setThumbnailLayout(object sender, EventArgs e) => setLayout(SplitterPanelLayout.None);
+
+        private void imageListView1_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
+        }
     }
-}
+    }
