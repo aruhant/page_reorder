@@ -179,28 +179,55 @@ namespace Scanned_Page_Sorter
 
         private void loadImages(string inputFolder)
         {
+            DirectoryInfo path = new DirectoryInfo(inputFolder); 
             statusMessage.Text = "One moment....";
             Application.DoEvents();
             inImageListView.Items.Clear();
             outImageListView.Items.Clear();
+            inImageListView.SuspendLayout();
+            FileInfo[] files = new FileInfo[0];
+                try
+                {
 
+                files = path.GetFiles("*.*");
 
-            string[] files = System.IO.Directory.GetFiles(inputFolder);
-            for (int i = 0; i < files.Length; i++)
-            {
-                string file = files[i];
-                statusMessage.Text = "Loading file " + (i + 1) + " of " + files.Length;
-                Image img = Image.FromFile(file);
-                string fileName = Path.GetFileNameWithoutExtension(file);
-                //thumbnailImageList.Images.Add(img);
-                //inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1);
-                ImageListViewItem item = new ImageListViewItem(); // Added missing initialization
-                inImageListView.Items.Add(file, fileName);
-                if (i % 10 == 0) Application.DoEvents();
-            }
-            statusMessage.Text = "One moment...";
+                }
+                catch
+                {
+                    files = new FileInfo[0];
+                }
+                foreach (FileInfo p in files)
+                {
+                    if (
+                        p.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
+                        p.Name.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||                        
+                        p.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
+                    {
+                    // filename without extension
+                    string title = Path.GetFileNameWithoutExtension(p.FullName);
+                    ImageListViewItem item = new ImageListViewItem(p.FullName, title);
+                    inImageListView.Items.Add(item);
+                    }
+                }
+            inImageListView.ResumeLayout();
+            
 
-            Application.DoEvents();
+            //string[] files = System.IO.Directory.GetFiles(inputFolder);
+            //for (int i = 0; i < files.Length; i++)
+            //{
+            //    string file = files[i];
+            //    statusMessage.Text = "Loading file " + (i + 1) + " of " + files.Length;
+            //    Image img = Image.FromFile(file);
+            //    string fileName = Path.GetFileNameWithoutExtension(file);
+            //    //thumbnailImageList.Images.Add(img);
+            //    //inList.Items.Add(fileName, thumbnailImageList.Images.Count - 1);
+            //    ImageListViewItem item = new ImageListViewItem(); // Added missing initialization
+            //    inImageListView.Items.Add(file, fileName);
+            //    if (i % 10 == 0) Application.DoEvents();
+            //}
+            //statusMessage.Text = "One moment...";
+
+            //Application.DoEvents();
             statusMessage.Text = "Ready...";
         }
 
@@ -326,6 +353,7 @@ namespace Scanned_Page_Sorter
 
         private void paneToolStripButton_Click(object sender, EventArgs e)
         {
+            setupImageListViews(Manina.Windows.Forms.View.Pane); inImageListView.ThumbnailSize = new Size(128, 128);
         }
 
         private void detailsToolStripButton_Click(object sender, EventArgs e)
@@ -339,8 +367,8 @@ namespace Scanned_Page_Sorter
         {
             setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
             int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
-            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth+32;
-            inImageListView.ThumbnailSize = new Size(i- scrollbarWidth, i- scrollbarWidth);
+            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
+            inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
             i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
             outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         }
@@ -348,7 +376,7 @@ namespace Scanned_Page_Sorter
         private void verticalStripToolStripButton_Click(object sender, EventArgs e)
         {
             setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
-            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth+32;
+            int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
             int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
             inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
             i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
@@ -357,8 +385,8 @@ namespace Scanned_Page_Sorter
 
 
 
+
         #endregion
-
-
+         
     }
 }
