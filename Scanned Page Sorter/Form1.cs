@@ -13,7 +13,8 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
+using System.Configuration;
+using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -30,12 +31,13 @@ namespace Scanned_Page_Sorter
         public pageSorterForm()
         {
             InitializeComponent();
+
         }
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
             setupImageListStyles(inImageListView);
-            setupImageListStyles(inImageListView);
+            setupImageListStyles(inImageListView);           
         }
 
         #endregion
@@ -386,58 +388,24 @@ namespace Scanned_Page_Sorter
         }
         #endregion
 
-        #region splitpane layouts
-        private enum SplitterPanelLayout { SideByside, OnTop, None }
-        private void setLayout(SplitterPanelLayout layout)
-        {
-            // suspend layout
-            mainSplitContainer.SuspendLayout();
-            inSplitContainer.SuspendLayout();
-            outSplitContainer.SuspendLayout();
-            switch (layout)
-            {
-                case SplitterPanelLayout.SideByside:
-                    mainSplitContainer.Orientation = Orientation.Horizontal;
-                    outSplitContainer.Orientation = Orientation.Horizontal;
-                    inSplitContainer.Orientation = Orientation.Horizontal;
-                    inSplitContainer.Panel1Collapsed = false;
-                    outSplitContainer.Panel2Collapsed = false;
-                    break;
-                case SplitterPanelLayout.OnTop:
-                    mainSplitContainer.Orientation = Orientation.Vertical;
-                    outSplitContainer.Orientation = Orientation.Vertical;
-                    inSplitContainer.Orientation = Orientation.Vertical;
-                    inSplitContainer.Panel1Collapsed = false;
-                    outSplitContainer.Panel2Collapsed = false;
-                    break;
-                case SplitterPanelLayout.None:
-                    mainSplitContainer.Orientation = Orientation.Vertical;
-                    outSplitContainer.Orientation = Orientation.Vertical;
-                    inSplitContainer.Orientation = Orientation.Vertical;
-                    inSplitContainer.Panel1Collapsed = true;
-                    outSplitContainer.Panel2Collapsed = true;
-
-                    break;
-            }
-            mainMenu.ResumeLayout();
-            inSplitContainer.ResumeLayout();
-            outSplitContainer.ResumeLayout();
+   
 
 
-            #endregion
-        }
+        private void setLandscapeLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.SideByside);
 
 
-        private void setLandscapeLayout(object sender, EventArgs e) => setLayout(SplitterPanelLayout.SideByside);
+        private void setPortraitLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.OnTop);
 
-
-        private void setPortraitLayout(object sender, EventArgs e) => setLayout(SplitterPanelLayout.OnTop);
-
-        private void setThumbnailLayout(object sender, EventArgs e) => setLayout(SplitterPanelLayout.None);
+        private void setThumbnailLayout(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.None);
 
         private void imageListView1_ItemClick(object sender, ItemClickEventArgs e)
         {
 
+        }
+
+        private void mainFormResized(object sender, EventArgs e)
+        {
+            loadLayout();
         }
     }
 }
