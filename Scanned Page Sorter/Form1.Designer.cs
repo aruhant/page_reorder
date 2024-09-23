@@ -36,14 +36,14 @@
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.TopToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.RightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
-            this.LeftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.topToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.rightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
+            this.leftToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.ContentPanel = new System.Windows.Forms.ToolStripContentPanel();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.statusMessage = new System.Windows.Forms.ToolStripStatusLabel();
-            this.splitContainerMain = new System.Windows.Forms.SplitContainer();
+            this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.openFileToolStripButton = new System.Windows.Forms.ToolStripButton();
@@ -98,10 +98,10 @@
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.statusStrip.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).BeginInit();
-            this.splitContainerMain.Panel1.SuspendLayout();
-            this.splitContainerMain.Panel2.SuspendLayout();
-            this.splitContainerMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).BeginInit();
+            this.mainSplitContainer.Panel1.SuspendLayout();
+            this.mainSplitContainer.Panel2.SuspendLayout();
+            this.mainSplitContainer.SuspendLayout();
             this.toolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inSplitContainer)).BeginInit();
             this.inSplitContainer.Panel1.SuspendLayout();
@@ -172,29 +172,35 @@
             this.BottomToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.BottomToolStripPanel.Size = new System.Drawing.Size(0, 0);
             // 
-            // TopToolStripPanel
+            // topToolStripPanel
             // 
-            this.TopToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.TopToolStripPanel.Name = "TopToolStripPanel";
-            this.TopToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.TopToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.TopToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            this.topToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.topToolStripPanel.Name = "topToolStripPanel";
+            this.topToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.topToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.topToolStripPanel.Size = new System.Drawing.Size(0, 0);
             // 
-            // RightToolStripPanel
+            // rightToolStripPanel
             // 
-            this.RightToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.RightToolStripPanel.Name = "RightToolStripPanel";
-            this.RightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.RightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.RightToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            this.rightToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rightToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.rightToolStripPanel.Name = "rightToolStripPanel";
+            this.rightToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.rightToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.rightToolStripPanel.Size = new System.Drawing.Size(0, 0);
             // 
-            // LeftToolStripPanel
+            // leftToolStripPanel
             // 
-            this.LeftToolStripPanel.Location = new System.Drawing.Point(0, 0);
-            this.LeftToolStripPanel.Name = "LeftToolStripPanel";
-            this.LeftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.LeftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
-            this.LeftToolStripPanel.Size = new System.Drawing.Size(0, 0);
+            this.leftToolStripPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.leftToolStripPanel.Location = new System.Drawing.Point(0, 0);
+            this.leftToolStripPanel.Name = "leftToolStripPanel";
+            this.leftToolStripPanel.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.leftToolStripPanel.RowMargin = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.leftToolStripPanel.Size = new System.Drawing.Size(0, 0);
             // 
             // ContentPanel
             // 
@@ -209,7 +215,7 @@
             // 
             // toolStripContainer1.ContentPanel
             // 
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.splitContainerMain);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.mainSplitContainer);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1000, 450);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
@@ -239,22 +245,25 @@
             this.statusMessage.Size = new System.Drawing.Size(39, 17);
             this.statusMessage.Text = "Ready";
             // 
-            // splitContainerMain
+            // mainSplitContainer
             // 
-            this.splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerMain.Location = new System.Drawing.Point(0, 0);
-            this.splitContainerMain.Name = "splitContainerMain";
+            this.mainSplitContainer.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.mainSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.mainSplitContainer.Name = "mainSplitContainer";
+            this.mainSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainerMain.Panel1
+            // mainSplitContainer.Panel1
             // 
-            this.splitContainerMain.Panel1.Controls.Add(this.inSplitContainer);
+            this.mainSplitContainer.Panel1.Controls.Add(this.inSplitContainer);
             // 
-            // splitContainerMain.Panel2
+            // mainSplitContainer.Panel2
             // 
-            this.splitContainerMain.Panel2.Controls.Add(this.outSplitContainer);
-            this.splitContainerMain.Size = new System.Drawing.Size(1000, 450);
-            this.splitContainerMain.SplitterDistance = 712;
-            this.splitContainerMain.TabIndex = 2;
+            this.mainSplitContainer.Panel2.Controls.Add(this.outSplitContainer);
+            this.mainSplitContainer.Size = new System.Drawing.Size(1000, 450);
+            this.mainSplitContainer.SplitterDistance = 243;
+            this.mainSplitContainer.TabIndex = 2;
             // 
             // toolStrip
             // 
@@ -599,6 +608,7 @@
             this.inSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inSplitContainer.Location = new System.Drawing.Point(0, 0);
             this.inSplitContainer.Name = "inSplitContainer";
+            this.inSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // inSplitContainer.Panel1
             // 
@@ -607,8 +617,8 @@
             // inSplitContainer.Panel2
             // 
             this.inSplitContainer.Panel2.Controls.Add(this.inImageListView);
-            this.inSplitContainer.Size = new System.Drawing.Size(712, 450);
-            this.inSplitContainer.SplitterDistance = 237;
+            this.inSplitContainer.Size = new System.Drawing.Size(1000, 243);
+            this.inSplitContainer.SplitterDistance = 127;
             this.inSplitContainer.TabIndex = 0;
             // 
             // inImageListView
@@ -621,7 +631,7 @@
             this.inImageListView.Name = "inImageListView";
             this.inImageListView.PersistentCacheDirectory = "";
             this.inImageListView.PersistentCacheSize = ((long)(100));
-            this.inImageListView.Size = new System.Drawing.Size(471, 450);
+            this.inImageListView.Size = new System.Drawing.Size(1000, 112);
             this.inImageListView.TabIndex = 3;
             this.inImageListView.UseWIC = true;
             // 
@@ -630,6 +640,7 @@
             this.outSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outSplitContainer.Location = new System.Drawing.Point(0, 0);
             this.outSplitContainer.Name = "outSplitContainer";
+            this.outSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
             // outSplitContainer.Panel1
             // 
@@ -638,8 +649,8 @@
             // outSplitContainer.Panel2
             // 
             this.outSplitContainer.Panel2.Controls.Add(this.pictureBox1);
-            this.outSplitContainer.Size = new System.Drawing.Size(284, 450);
-            this.outSplitContainer.SplitterDistance = 94;
+            this.outSplitContainer.Size = new System.Drawing.Size(1000, 203);
+            this.outSplitContainer.SplitterDistance = 42;
             this.outSplitContainer.TabIndex = 0;
             // 
             // outImageListView
@@ -652,7 +663,7 @@
             this.outImageListView.Name = "outImageListView";
             this.outImageListView.PersistentCacheDirectory = "";
             this.outImageListView.PersistentCacheSize = ((long)(100));
-            this.outImageListView.Size = new System.Drawing.Size(94, 450);
+            this.outImageListView.Size = new System.Drawing.Size(1000, 42);
             this.outImageListView.TabIndex = 3;
             this.outImageListView.UseWIC = true;
             // 
@@ -663,7 +674,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox1.Location = new System.Drawing.Point(2, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(184, 450);
+            this.pictureBox1.Size = new System.Drawing.Size(998, 157);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -674,7 +685,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(235, 447);
+            this.pictureBox2.Size = new System.Drawing.Size(998, 124);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
@@ -700,10 +711,10 @@
             this.toolStripContainer1.PerformLayout();
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
-            this.splitContainerMain.Panel1.ResumeLayout(false);
-            this.splitContainerMain.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainerMain)).EndInit();
-            this.splitContainerMain.ResumeLayout(false);
+            this.mainSplitContainer.Panel1.ResumeLayout(false);
+            this.mainSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.mainSplitContainer)).EndInit();
+            this.mainSplitContainer.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.inSplitContainer.Panel1.ResumeLayout(false);
@@ -730,14 +741,14 @@
         private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openFolderToolStripMenuItem;
         private System.Windows.Forms.ToolStripPanel BottomToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel TopToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel RightToolStripPanel;
-        private System.Windows.Forms.ToolStripPanel LeftToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel topToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel rightToolStripPanel;
+        private System.Windows.Forms.ToolStripPanel leftToolStripPanel;
         private System.Windows.Forms.ToolStripContentPanel ContentPanel;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel statusMessage;
-        private System.Windows.Forms.SplitContainer splitContainerMain;
+        private System.Windows.Forms.SplitContainer mainSplitContainer;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripLabel rendererToolStripLabel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;

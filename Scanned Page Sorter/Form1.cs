@@ -393,19 +393,25 @@ namespace Scanned_Page_Sorter
             switch (layout)
             {
                 case SplitterPanelLayout.SideByside:
-                    splitContainerMain.Orientation = Orientation.Horizontal;
+                    mainSplitContainer.Orientation = Orientation.Horizontal;
                     outSplitContainer.Orientation = Orientation.Horizontal;
                     inSplitContainer.Orientation = Orientation.Horizontal;
+                    inSplitContainer.Panel1Collapsed = false;
+                    outSplitContainer.Panel2Collapsed = false;
                     break;
                 case SplitterPanelLayout.OnTop:
-                    splitContainerMain.Orientation = Orientation.Vertical;
+                    mainSplitContainer.Orientation = Orientation.Vertical;
                     outSplitContainer.Orientation = Orientation.Vertical;
                     inSplitContainer.Orientation = Orientation.Vertical;
+                    inSplitContainer.Panel1Collapsed = false;
+                    outSplitContainer.Panel2Collapsed = false;
                     break;
                 case SplitterPanelLayout.None:
-                    splitContainerMain.Orientation = Orientation.Vertical;
+                    mainSplitContainer.Orientation = Orientation.Vertical;
                     outSplitContainer.Orientation = Orientation.Vertical;
                     inSplitContainer.Orientation = Orientation.Vertical;
+                    inSplitContainer.Panel1Collapsed = true;
+                    outSplitContainer.Panel2Collapsed = true;
 
                     break;
             }
@@ -428,4 +434,4 @@ namespace Scanned_Page_Sorter
 
         }
     }
-    }
+}
