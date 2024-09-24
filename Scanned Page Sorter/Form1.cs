@@ -306,11 +306,8 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < inImageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = inImageListView.SelectedItems[i];
-                string path = Path.Combine(item.FilePath, item.FileName);
-                Image img = Image.FromFile(path);
-                img.RotateFlip(r);
-                img.Save(path);
-                img.Dispose();
+                item.ThumbnailImage.RotateFlip(r);
+                Console.WriteLine("Rotating + " + item.FileName);
             }
         }
     }
