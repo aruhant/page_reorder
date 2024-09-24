@@ -64,6 +64,8 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearThumbsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.rotateRight = new System.Windows.Forms.ToolStripButton();
+            this.rotateLeft = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -348,10 +350,12 @@
             this.horizontalButton,
             this.toolStripSeparator3,
             this.clearThumbsToolStripButton,
-            this.toolStripSeparator4});
+            this.toolStripSeparator4,
+            this.rotateLeft,
+            this.rotateRight});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(319, 25);
+            this.toolStrip.Size = new System.Drawing.Size(365, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -460,6 +464,26 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
+            // rotateRight
+            // 
+            this.rotateRight.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rotateRight.Image = ((System.Drawing.Image)(resources.GetObject("rotateRight.Image")));
+            this.rotateRight.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rotateRight.Name = "rotateRight";
+            this.rotateRight.Size = new System.Drawing.Size(23, 22);
+            this.rotateRight.Text = "rotateRight";
+            this.rotateRight.Click += new System.EventHandler(this.rotateRight_Click);
+            // 
+            // rotateLeft
+            // 
+            this.rotateLeft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rotateLeft.Image = ((System.Drawing.Image)(resources.GetObject("rotateLeft.Image")));
+            this.rotateLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rotateLeft.Name = "rotateLeft";
+            this.rotateLeft.Size = new System.Drawing.Size(23, 22);
+            this.rotateLeft.Text = "rotateLeft";
+            this.rotateLeft.Click += new System.EventHandler(this.rotateLeft_Click);
+            // 
             // pageSorterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -540,6 +564,8 @@
         private Manina.Windows.Forms.ImageListView outImageListView;
         private System.Windows.Forms.PictureBox inPreview;
         private System.Windows.Forms.PictureBox outPreview;
+        private System.Windows.Forms.ToolStripButton rotateLeft;
+        private System.Windows.Forms.ToolStripButton rotateRight;
     }
 }
 
