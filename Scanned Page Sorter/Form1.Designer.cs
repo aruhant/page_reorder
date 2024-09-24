@@ -275,15 +275,17 @@
             // 
             this.inImageListView.AllowDrag = true;
             this.inImageListView.AllowDrop = true;
+            this.inImageListView.AutoRotateThumbnails = false;
+            this.inImageListView.CacheLimit = "0";
             this.inImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
             this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inImageListView.Location = new System.Drawing.Point(0, 0);
             this.inImageListView.Name = "inImageListView";
             this.inImageListView.PersistentCacheDirectory = "";
-            this.inImageListView.PersistentCacheSize = ((long)(100));
+            this.inImageListView.PersistentCacheSize = ((long)(0));
             this.inImageListView.Size = new System.Drawing.Size(1000, 112);
             this.inImageListView.TabIndex = 3;
-            this.inImageListView.UseWIC = true;
+            this.inImageListView.UseWIC = false;
             this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInThumbnail);
             // 
@@ -355,7 +357,7 @@
             this.rotateRight});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(365, 25);
+            this.toolStrip.Size = new System.Drawing.Size(334, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1

@@ -18,6 +18,7 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using Manina.Windows.Forms.ImageListViewRenderers;
 
 namespace Scanned_Page_Sorter
 {
@@ -29,11 +30,9 @@ namespace Scanned_Page_Sorter
         #endregion
 
         #region intialize properties
-        public pageSorterForm()
-        {
-            InitializeComponent();
+        public pageSorterForm() =>    InitializeComponent();
 
-        }
+        
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
@@ -49,6 +48,7 @@ namespace Scanned_Page_Sorter
         private void setupImageListStyles(ImageListView list)
         {
             list.AllowDrop = true;
+            list.SetRenderer(new ThumbnailRenderer());
         }
 
 
@@ -293,20 +293,21 @@ namespace Scanned_Page_Sorter
 
         private void rotateLeft_Click(object sender, EventArgs e)
         {
-            rotate(inImageListView , RotateFlipType.Rotate270FlipNone);
+            rotate(inImageListView , -10);
         }
 
         private void rotateRight_Click(object sender, EventArgs e)
         {
-            rotate(inImageListView, RotateFlipType.Rotate90FlipNone);
+            rotate(inImageListView, 10);
         }
 
-        private void rotate(ImageListView inImageListView, RotateFlipType r)
+        private void rotate(ImageListView inImageListView, int angle)
         {
             for (int i = 0; i < inImageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = inImageListView.SelectedItems[i];
-                item.ThumbnailImage.RotateFlip(r);
+                int a = item.Tag == null ? 0 : Convert.ToInt32(item.Tag);
+                item.Tag = a + angle;
                 Console.WriteLine("Rotating + " + item.FileName);
             }
         }
