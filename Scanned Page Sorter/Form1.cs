@@ -18,7 +18,11 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+
 using Manina.Windows.Forms.ImageListViewRenderers;
+using iText.Kernel.Pdf.Canvas.Parser;
+using iText.Kernel.Pdf.Canvas.Parser.Data;
+using iText.Kernel.Pdf.Canvas.Parser.Listener;
 
 namespace Scanned_Page_Sorter
 {
@@ -164,42 +168,18 @@ namespace Scanned_Page_Sorter
             loadImages(currentlyOpenImageFolder);
         }
 
+        // Replace the following method in the pageSorterForm class
         public void extractImageFromPDF(string sourcePdf, string outputFolder)
         {
             PdfReader reader = new PdfReader(sourcePdf);
 
             try
             {
-                PdfDocument document = new PdfDocument(reader);
-                for (int i = 1; i <= document.GetNumberOfPages(); i++)
+                PdfDocument pdfDoc = new PdfDocument(reader);
+                PdfCanvasProcessor parser = new PdfCanvasProcessor(new ImageRenderListener(outputFolder));
+                for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
-                    statusMessage.Text = "Extracting image " + i;
-                    Application.DoEvents();
-
-                    PdfPage page = document.GetPage(i);
-                    PdfResources resources = page.GetResources();
-                    PdfDictionary xObjects = resources.GetResource(PdfName.XObject);
-                    if (xObjects == null)
-                    {
-                        continue;
-                    }
-                    foreach (PdfName key in xObjects.KeySet())
-                    {
-                        PdfStream stream = (PdfStream)xObjects.GetAsStream(key);
-                        PdfImageXObject image = new PdfImageXObject(stream);
-                        using (MemoryStream ms = new MemoryStream(image.GetImageBytes()))
-                        {
-                            try
-                            {
-                                Image img = Image.FromStream(ms);
-                                img.Save(outputFolder + ("000" + i).Substring(("000" + i).Length - 3) + ".jpg", ImageFormat.Jpeg);
-                            }
-                            catch (Exception)
-                            {
-                                //MessageBox.Show(e.Message);
-                            }
-                        }
-                    }
+                    parser.ProcessPageContent(pdfDoc.GetPage(i));
                 }
             }
             catch (Exception e)
@@ -318,4 +298,52 @@ namespace Scanned_Page_Sorter
         }
          
     }
+
+
+  public class ImageRenderListener : IEventListener
+    {
+    static int i =0;
+        private readonly string outputFolder;
+
+        public ImageRenderListener(string outputFolder)
+        {
+            this.outputFolder = outputFolder;
+        }
+
+        public void EventOccurred(IEventData data, EventType type)
+        {
+            if (type == EventType.RENDER_IMAGE)
+            {
+                var renderInfo = (iText.Kernel.Pdf.Canvas.Parser.Data.ImageRenderInfo)data;
+                PdfImageXObject image = renderInfo.GetImage();
+                var imageBytes = image.GetImageBytes(true);
+                var croppedImage = CropToBounds(image, new Rectangle((int)renderInfo.GetImageCtm().Get(6), (int)renderInfo.GetImageCtm().Get(7), (int)renderInfo.GetImageCtm().Get(0), (int)renderInfo.GetImageCtm().Get(4)));
+                var fileName = Path.Combine(outputFolder, $"{i++:D3}.jpg");
+                croppedImage.Save(fileName, ImageFormat.Png);
+            }
+        }
+
+        public ICollection<EventType> GetSupportedEvents()
+        {
+            return new HashSet<EventType> { EventType.RENDER_IMAGE };
+        }
+
+        private System.Drawing.Image CropToBounds(PdfImageXObject img, Rectangle cropRect)
+        {
+            using (MemoryStream ms = new MemoryStream(img.GetImageBytes(true)))
+            {
+                Bitmap src = new Bitmap(ms);
+                Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
+
+                using (Graphics g = Graphics.FromImage(target))
+                {
+                    g.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel);
+                }
+
+                return target;
+            }
+        }
+
+    }
+
 };

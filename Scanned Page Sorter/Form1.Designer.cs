@@ -124,7 +124,7 @@
             this.openMenuItem.Text = "&Open File";
             this.openMenuItem.Click += new System.EventHandler(this.openFile_Handler);
             // 
-            // openFolderToolStripMenuItem
+            // openFolderToolStripMenuIteg
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
             this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
