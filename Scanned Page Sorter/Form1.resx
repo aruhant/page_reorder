@@ -123,6 +123,9 @@
   <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>288, 17</value>
   </metadata>
+  <metadata name="commentsContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>502, 17</value>
+  </metadata>
   <metadata name="toolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>403, 17</value>
   </metadata>
@@ -207,13 +210,13 @@
   <data name="rotateLeft.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPrZG/S8NQEMcj+GNVcBRc/CdcHDq0GTRkdBLy
-        N7TgHChZsnd1cXUQXQpZsppA6CK0VOiikHZImjYpLj2/F+8VqwVb9AvHe+/uPt93edH+XXmeH83n8z05
-        biaGp9NpP0mSfUmtLwUXRUGIS8QDcmM+Y82wPqKuS/uyFOy6LsPU7Xap2WySaZpUqVTIMAyybZt6vR6b
-        3RLRrqCfUjA3e55H1Wq13H8PXdep3W7zJXcw2RJc00aj0aKpVquVa71epzAMaTgcUhRF1Gg0yjybdzod
-        NrkSfNlAwZiq/BwO7F8w+hvnVR35J8F/GqhotVoM9/mNEBdBEJR5nhL5d8FXG3yFuSfLssM4jhd1nqyE
-        WWpUFYCWYBbO5/wmDPPfQW0spdXCK2/LVpvNZieTyeRVvYHjOHzRvZR/F5pPceOz7/tkWRYNBgM2OJPy
-        esJEO4Cu8Snwym8kvblgcpym6YEc/ypN+wB3RHBVGgilVAAAAABJRU5ErkJggg==
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFnSURBVDhPrZE/S8NgEMYj+GdVcBRc/BIuDh2aDBoyOgn5
+        DAk4B0qX7FldXB1El0CWrDYQsggNFbooJBnSJE2LS8+7eG8xWrBFHzjevHf3e97rVfp31XV9tFgs9vi6
+        mQieTqejPM/3ObW+BDybzQDjEuMBcwXd8SzxfMS6wu1tCdi2bYJhOBxCr9cDTdOg0+mAqqpgWRbEcUxm
+        twCwy+inBEzNnudBt9ttvr+Hoijgui49cocmW4xLUpZlyyZZlpvTMAwIggDSNIUwDME0zSZP5lEUkckV
+        420DAeNUzc+hqKrqBUd/o7yoY/6J8Z8GIhzHIaMR7QjjYjAYNHmasizLd8ZXG3yFqQeBwyRJlnWarIFJ
+        YlQRCLVgEt7PaScE07+DtYJLq4Vb3uZPaT6fnxRF8Sp20O/36aF7Lv8ubD7FF5993wdd12E8HpPBGZfX
+        E060g9A17gK96htOby40OZ5MJgd8/ask6QNb/3BAmYcWEgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="rotateRight.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -227,9 +230,6 @@
         Av4mogcJDooH2Uk2QgAAAABJRU5ErkJggg==
 </value>
   </data>
-  <metadata name="contextMenuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>502, 17</value>
-  </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>67</value>
   </metadata>

@@ -86,12 +86,17 @@ namespace Scanned_Page_Sorter
 
         private void openFolder_Handler(object sender, EventArgs e)
         {
-            // show folder open dialog to select a folder containing images
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            folderBrowserDialog.Description = "Select a folder containing images";
-            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
+            OpenFileDialog folderBrowser = new OpenFileDialog();
+            // Set validate names and check file exists to false otherwise windows will
+            // not let you select "Folder Selection."
+            folderBrowser.ValidateNames = false;
+            folderBrowser.CheckFileExists = false;
+            folderBrowser.CheckPathExists = true;
+            // Always default to Folder Selection.
+            folderBrowser.FileName = "Folder Selection.";
+            if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
-                currentlyOpenImageFolder = folderBrowserDialog.SelectedPath;
+                currentlyOpenImageFolder = Path.GetDirectoryName(folderBrowser.FileName);
                 loadImages(currentlyOpenImageFolder);
                 currentlyOpenPDFfile = currentlyOpenImageFolder + ".pdf";
                 this.Text = currentlyOpenImageFolder;
@@ -311,5 +316,6 @@ namespace Scanned_Page_Sorter
                 Console.WriteLine("Rotating + " + item.FileName);
             }
         }
+         
     }
 };
