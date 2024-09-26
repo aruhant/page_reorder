@@ -33,14 +33,21 @@ namespace Scanned_Page_Sorter
                                 {
                                     System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
 
-                                    // Convert image.Bounds to pixels from pdf units
-                                    Rectangle cropRect = new Rectangle((int)image.Bounds.Left, (int)image.Bounds.Top, (int)image.Bounds.Width, (int)image.Bounds.Height) ;
+                                    // Convert PdfRectangle to System.Drawing.Rectangle
+                                    PdfRectangle pdfRect = page.CropBox.Bounds;
 
-                                    img = CropToBounds(img, cropRect);
+                                    double scale = img.Height / image.Bounds.Height;
+                                    Rectangle cropRect = new Rectangle((int)(pdfRect.Left * scale), (int)(pdfRect.Top * scale), (int)(pdfRect.Width * scale), (int)(pdfRect.Height * scale));
+                                    Console.WriteLine("Height " + img.Height + "samples " + image.Bounds.Height + "Crop " + cropRect.Height);
+                                    Console.WriteLine("Height " + img.Width + "samples " + image.Bounds.Width + "Crop " + cropRect.Width);
+                                    // convert  croprect from pdf units to pixels
+                                    double rotation = (double)page.Rotation.Radians;
+                                    Console.WriteLine(scale + " Rot " + rotation);
+
+                                    img = CropToBounds(img, cropRect, rotation);
                                     img.Save(Path.Combine(outputFolder, $"{i:D3}.jpg"), ImageFormat.Jpeg);
                                     i++;
                                     Console.WriteLine("Wrote " + outputFolder + i.ToString("D3") + ".jpg");
-                                    Console.WriteLine(image.Bounds);
                                 }
                                 catch (Exception e)
                                 {
@@ -53,15 +60,23 @@ namespace Scanned_Page_Sorter
             }
         }
 
-        private Image CropToBounds(Image img, Rectangle cropRect)
+        private Image CropToBounds(Image img, Rectangle cropRect, double rotation)
         {
             Bitmap src = img as Bitmap;
-            Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
 
+            if (cropRect.Height == 0 || cropRect.Width == 0) cropRect = new Rectangle(0, 0, img.Width, img.Height);
+
+            Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
             using (Graphics g = Graphics.FromImage(target))
             {
                 g.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel);
+                if (rotation != 0) {
+                    g.TranslateTransform(target.Height / 2, target.Width / 2);
+                    g.RotateTransform((float)(rotation * (180.0 / Math.PI)));
+                    g.TranslateTransform(-target.Height / 2, -target.Width / 2); }
             }
+        
+    
 
             return target;
         }

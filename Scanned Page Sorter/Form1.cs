@@ -164,7 +164,7 @@ namespace Scanned_Page_Sorter
             {
                 System.IO.Directory.CreateDirectory(currentlyOpenImageFolder);
             }
-            extractImageFromPDF(pdfFile, currentlyOpenImageFolder);
+            extractImagesFromPDF(pdfFile, currentlyOpenImageFolder);
             loadImages(currentlyOpenImageFolder);
         }
 
@@ -300,9 +300,10 @@ namespace Scanned_Page_Sorter
     }
 
 
-  public class ImageRenderListener : IEventListener
+    public class ImageRenderListener : IEventListener
     {
-    static int i =0;
+        static int i = 0;
+        static Rectangle bounds = new Rectangle();
         private readonly string outputFolder;
 
         public ImageRenderListener(string outputFolder)
@@ -317,9 +318,22 @@ namespace Scanned_Page_Sorter
                 var renderInfo = (iText.Kernel.Pdf.Canvas.Parser.Data.ImageRenderInfo)data;
                 PdfImageXObject image = renderInfo.GetImage();
                 var imageBytes = image.GetImageBytes(true);
-                var croppedImage = CropToBounds(image, new Rectangle((int)renderInfo.GetImageCtm().Get(6), (int)renderInfo.GetImageCtm().Get(7), (int)renderInfo.GetImageCtm().Get(0), (int)renderInfo.GetImageCtm().Get(4)));
                 var fileName = Path.Combine(outputFolder, $"{i++:D3}.jpg");
-                croppedImage.Save(fileName, ImageFormat.Png);
+                if (bounds.Height == 0 || bounds.Width==0)
+                {
+                    File.WriteAllBytes(fileName, imageBytes);
+                    
+                }else{
+                var croppedImage = CropToBounds(image, bounds);
+                    croppedImage.Save(fileName, ImageFormat.Png);
+                }
+            }
+            else if (type == EventType.CLIP_PATH_CHANGED)
+            {
+                var clipPath = (ClippingPathInfo)data;
+                var cpath = clipPath.GetClippingPath();
+                Console.WriteLine(cpath);
+
             }
         }
 
@@ -330,6 +344,7 @@ namespace Scanned_Page_Sorter
 
         private System.Drawing.Image CropToBounds(PdfImageXObject img, Rectangle cropRect)
         {
+
             using (MemoryStream ms = new MemoryStream(img.GetImageBytes(true)))
             {
                 Bitmap src = new Bitmap(ms);
@@ -343,7 +358,6 @@ namespace Scanned_Page_Sorter
                 return target;
             }
         }
-
     }
 
 };
