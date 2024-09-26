@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(pageSorterForm));
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,8 +65,13 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearThumbsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.rotateRight = new System.Windows.Forms.ToolStripButton();
             this.rotateLeft = new System.Windows.Forms.ToolStripButton();
+            this.rotateRight = new System.Windows.Forms.ToolStripButton();
+            this.commentsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.missingPageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.blurredImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.missingCoverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -87,6 +93,7 @@
             this.outSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outPreview)).BeginInit();
             this.toolStrip.SuspendLayout();
+            this.commentsContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -278,6 +285,7 @@
             this.inImageListView.AutoRotateThumbnails = false;
             this.inImageListView.CacheLimit = "0";
             this.inImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
+            this.inImageListView.ContextMenuStrip = this.commentsContextMenu;
             this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inImageListView.Location = new System.Drawing.Point(0, 0);
             this.inImageListView.Name = "inImageListView";
@@ -285,7 +293,7 @@
             this.inImageListView.PersistentCacheSize = ((long)(0));
             this.inImageListView.Size = new System.Drawing.Size(1000, 112);
             this.inImageListView.TabIndex = 3;
-            this.inImageListView.UseWIC = false;
+            this.inImageListView.UseWIC = true;
             this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInThumbnail);
             // 
@@ -313,6 +321,7 @@
             this.outImageListView.AllowDrag = true;
             this.outImageListView.AllowDrop = true;
             this.outImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
+            this.outImageListView.ContextMenuStrip = this.commentsContextMenu;
             this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outImageListView.Location = new System.Drawing.Point(0, 0);
             this.outImageListView.Name = "outImageListView";
@@ -466,6 +475,16 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
+            // rotateLeft
+            // 
+            this.rotateLeft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.rotateLeft.Image = ((System.Drawing.Image)(resources.GetObject("rotateLeft.Image")));
+            this.rotateLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.rotateLeft.Name = "rotateLeft";
+            this.rotateLeft.Size = new System.Drawing.Size(23, 22);
+            this.rotateLeft.Text = "rotateLeft";
+            this.rotateLeft.Click += new System.EventHandler(this.rotateLeft_Click);
+            // 
             // rotateRight
             // 
             this.rotateRight.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -476,15 +495,40 @@
             this.rotateRight.Text = "rotateRight";
             this.rotateRight.Click += new System.EventHandler(this.rotateRight_Click);
             // 
-            // rotateLeft
+            // commentsContextMenu
             // 
-            this.rotateLeft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.rotateLeft.Image = ((System.Drawing.Image)(resources.GetObject("rotateLeft.Image")));
-            this.rotateLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.rotateLeft.Name = "rotateLeft";
-            this.rotateLeft.Size = new System.Drawing.Size(23, 22);
-            this.rotateLeft.Text = "rotateLeft";
-            this.rotateLeft.Click += new System.EventHandler(this.rotateLeft_Click);
+            this.commentsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.missingPageToolStripMenuItem,
+            this.blurredImageToolStripMenuItem,
+            this.commentToolStripMenuItem,
+            this.missingCoverToolStripMenuItem});
+            this.commentsContextMenu.Name = "contextMenuStrip1";
+            this.commentsContextMenu.Size = new System.Drawing.Size(181, 114);
+            // 
+            // missingPageToolStripMenuItem
+            // 
+            this.missingPageToolStripMenuItem.Name = "missingPageToolStripMenuItem";
+            this.missingPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.missingPageToolStripMenuItem.Text = "&Missing Page";
+            // 
+            // blurredImageToolStripMenuItem
+            // 
+            this.blurredImageToolStripMenuItem.Name = "blurredImageToolStripMenuItem";
+            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.blurredImageToolStripMenuItem.Text = "&Blurred Image";
+            // 
+            // commentToolStripMenuItem
+            // 
+            this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
+            this.commentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.commentToolStripMenuItem.Text = "&Comment...";
+            // 
+            // missingCoverToolStripMenuItem
+            // 
+            this.missingCoverToolStripMenuItem.Name = "missingCoverToolStripMenuItem";
+            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.missingCoverToolStripMenuItem.Text = "Missong ";
+
             // 
             // pageSorterForm
             // 
@@ -524,6 +568,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.outPreview)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.commentsContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -568,6 +613,11 @@
         private System.Windows.Forms.PictureBox outPreview;
         private System.Windows.Forms.ToolStripButton rotateLeft;
         private System.Windows.Forms.ToolStripButton rotateRight;
+        private System.Windows.Forms.ContextMenuStrip commentsContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem missingPageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem blurredImageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem missingCoverToolStripMenuItem;
     }
 }
 
