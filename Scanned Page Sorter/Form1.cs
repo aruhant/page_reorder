@@ -23,6 +23,10 @@ using Manina.Windows.Forms.ImageListViewRenderers;
 using iText.Kernel.Pdf.Canvas.Parser;
 using iText.Kernel.Pdf.Canvas.Parser.Data;
 using iText.Kernel.Pdf.Canvas.Parser.Listener;
+using iText.Kernel.Exceptions;
+using System.Security.Cryptography;
+using Org.BouncyCastle.Cms;
+using System.Collections;
 
 namespace Scanned_Page_Sorter
 {
@@ -164,7 +168,7 @@ namespace Scanned_Page_Sorter
             {
                 System.IO.Directory.CreateDirectory(currentlyOpenImageFolder);
             }
-            extractImagesFromPDF(pdfFile, currentlyOpenImageFolder);
+            extractImageFromPDF(pdfFile, currentlyOpenImageFolder);
             loadImages(currentlyOpenImageFolder);
         }
 
@@ -172,14 +176,29 @@ namespace Scanned_Page_Sorter
         public void extractImageFromPDF(string sourcePdf, string outputFolder)
         {
             PdfReader reader = new PdfReader(sourcePdf);
-
             try
             {
                 PdfDocument pdfDoc = new PdfDocument(reader);
-                PdfCanvasProcessor parser = new PdfCanvasProcessor(new ImageRenderListener(outputFolder));
+                ImageRenderListener imageListner = new ImageRenderListener(outputFolder);
+                PdfCanvasProcessor parser = new PdfCanvasProcessor(imageListner);
                 for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
-                    parser.ProcessPageContent(pdfDoc.GetPage(i));
+                    var currentPage = pdfDoc.GetPage(i);
+                    iText.Kernel.Pdf.PdfDictionary po = currentPage.GetPdfObject();
+                    pdfDoc.GetNumberOfPdfObjects();
+                    int numberOfPdfObject = po.Size();
+                    foreach (PdfObject obj in po.Values())
+                    {
+                        ProcessPDFObject(obj);
+
+                    }
+
+
+                    //imageListner.SetCurrentPage(i, pdfDoc.GetPage(i)); // Corrected method name                    
+                    //parser.ProcessPageContent(pdfDoc.GetPage(i));
+                    Console.WriteLine(currentPage.GetPageSizeWithRotation());
+                    Console.WriteLine(currentPage.GetPageSize());
+                    Console.WriteLine(currentPage.GetRotation());
                 }
             }
             catch (Exception e)
@@ -188,7 +207,63 @@ namespace Scanned_Page_Sorter
             }
         }
 
+        Hashtable
+            processedObjects
+            = new Hashtable();
 
+        private void ProcessPDFObject(PdfObject obj, String name = null) // optional name parameter
+        {
+            if (obj == null || (obj.GetIndirectReference()!=null && processedObjects.ContainsKey(obj.GetIndirectReference() ))) return;
+            if (name != null) if (ProcessName(name) != 0) Console.WriteLine($"{name}:{obj}");
+            if (obj.GetIndirectReference() != null)processedObjects.Add(obj.GetIndirectReference() , obj);
+            switch (obj.GetObjectType())
+            {
+                case PdfObject.ARRAY:
+                    var a = (PdfArray)obj;
+                    Console.WriteLine(obj.GetType());
+                    foreach (var child in a) ProcessPDFObject(child);
+                    break;
+                case PdfObject.DICTIONARY:
+                    Console.WriteLine(obj.GetType());
+
+                        foreach (var key in ((PdfDictionary)obj).KeySet())
+                        {
+                            ProcessPDFObject(((PdfDictionary)obj).Get(key), key.ToString());
+                        }
+                    break;
+                case PdfObject.INDIRECT_REFERENCE:
+                    Console.WriteLine(obj.GetType());
+                    break;
+                case PdfObject.STREAM:
+                    Console.WriteLine(obj.GetType());
+                    break;
+                default:
+                    Console.WriteLine(obj.GetType());
+                    // Handle unknown type
+                    break;
+            }
+        }
+
+
+
+        private int ProcessName(string name)
+        {
+                    Console.WriteLine(name);
+            switch (name)
+            {
+                case "/CropBox":
+                    return 1;
+                case "/MediaBox":
+                    return 1;
+                case "/Type":
+                    return 1;
+                case "/Rotate":
+                    return 1;
+                default:
+                    return 0;
+
+            }
+        }
 
         private void exitMenuItem_Click(object sender, EventArgs e)
         {
@@ -296,14 +371,14 @@ namespace Scanned_Page_Sorter
                 Console.WriteLine("Rotating + " + item.FileName);
             }
         }
+       
          
     }
 
 
     public class ImageRenderListener : IEventListener
     {
-        static int i = 0;
-        static Rectangle bounds = new Rectangle();
+         static Rectangle bounds = new Rectangle();
         private readonly string outputFolder;
 
         public ImageRenderListener(string outputFolder)
@@ -311,14 +386,23 @@ namespace Scanned_Page_Sorter
             this.outputFolder = outputFolder;
         }
 
+        private PdfPage CurrentPage;
+        private int PageNumber;
+        public void SetCurrentPage(int pageNumber, PdfPage page)
+        {
+            PageNumber = pageNumber;
+            CurrentPage = page;
+        }
+
         public void EventOccurred(IEventData data, EventType type)
         {
-            if (type == EventType.RENDER_IMAGE)
+             if (type == EventType.RENDER_IMAGE)
             {
                 var renderInfo = (iText.Kernel.Pdf.Canvas.Parser.Data.ImageRenderInfo)data;
                 PdfImageXObject image = renderInfo.GetImage();
                 var imageBytes = image.GetImageBytes(true);
-                var fileName = Path.Combine(outputFolder, $"{i++:D3}.jpg");
+                var fileName = Path.Combine(outputFolder, $"{PageNumber:D3}.jpg");
+                Console.WriteLine($"Page Number: {PageNumber} Bounds: { CurrentPage.GetPageSizeWithRotation() }" );
                 if (bounds.Height == 0 || bounds.Width==0)
                 {
                     File.WriteAllBytes(fileName, imageBytes);

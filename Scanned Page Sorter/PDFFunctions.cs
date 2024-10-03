@@ -20,10 +20,11 @@ namespace Scanned_Page_Sorter
             {
                 foreach (Page page in document.GetPages())
                 {
+                    Console.WriteLine("\n" + page.ToString() );
                     IEnumerable<IPdfImage> images = page.GetImages();
-                    foreach (var image in images)
+                    foreach (IPdfImage image in images)
                     {
-                        Console.WriteLine("image: " + image.ToString());
+                        Console.WriteLine( "\n" + page.Number +  "\n" + image.ToString());
                         IReadOnlyList<byte> bytes = image.RawBytes;
                         if (bytes != null && bytes.Count > 0)
                         {
@@ -38,13 +39,13 @@ namespace Scanned_Page_Sorter
 
                                     double scale = img.Height / image.Bounds.Height;
                                     Rectangle cropRect = new Rectangle((int)(pdfRect.Left * scale), (int)(pdfRect.Top * scale), (int)(pdfRect.Width * scale), (int)(pdfRect.Height * scale));
-                                    Console.WriteLine("Height " + img.Height + "samples " + image.Bounds.Height + "Crop " + cropRect.Height);
-                                    Console.WriteLine("Height " + img.Width + "samples " + image.Bounds.Width + "Crop " + cropRect.Width);
-                                    // convert  croprect from pdf units to pixels
+                                    Console.WriteLine("Height " + img.Height + " samples " + image.Bounds.Height + " Crop " + cropRect.Height);
+                                    Console.WriteLine("Width " + img.Width + " samples " + image.Bounds.Width + " Crop " + cropRect.Width);
+                                    /// convert  croprect from pdf units to pixels
                                     double rotation = (double)page.Rotation.Radians;
-                                    Console.WriteLine(scale + " Rot " + rotation);
+                                    Console.WriteLine("Scale "+ scale + " Rot " + rotation + "\n");
 
-                                    img = CropToBounds(img, cropRect, rotation);
+                                    //img = CropToBounds(img, cropRect, rotation);
                                     img.Save(Path.Combine(outputFolder, $"{i:D3}.jpg"), ImageFormat.Jpeg);
                                     i++;
                                     Console.WriteLine("Wrote " + outputFolder + i.ToString("D3") + ".jpg");
