@@ -1,67 +1,66 @@
-﻿using System;
+﻿using PdfSharp.Pdf;
+using PdfSharp.Pdf.Advanced;
+using PdfSharp.Pdf.IO;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
-using System.Windows.Forms;
-using UglyToad.PdfPig;
-using UglyToad.PdfPig.Content;
-using UglyToad.PdfPig.Core;
-
+using System.Runtime.InteropServices;
+using System.Runtime.InteropServices.ComTypes;
+using System.Windows.Forms; 
 namespace Scanned_Page_Sorter
 {
     public partial class pageSorterForm : Form
     {
+        static void ExportAsPngImage(PdfDictionary image, string outputFolder, ref int count)
+        {
+            Console.WriteLine(string.Join(", ", image.Elements.KeyNames.Select(k => k.ToString())));
+            Console.WriteLine(image.Elements.GetString("/Filter") );
+            byte[] stream = image.Stream.Value;
+            FileStream fs = new FileStream(  $"{outputFolder}{count++:D3}.jpeg", FileMode.Create, FileAccess.Write);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(stream);
+            bw.Close();
+        }
+         
         private void extractImagesFromPDF(string sourcePdf, string outputFolder)
         {
-            int i = 0;
-            using (PdfDocument document = PdfDocument.Open(sourcePdf))
+            int imageCount = 0;
+
+            PdfDocument document = PdfReader.Open(sourcePdf);
+            foreach (PdfPage page in document.Pages)
             {
-                foreach (Page page in document.GetPages())
+                // Get resources dictionary
+                PdfDictionary resources = page.Elements.GetDictionary("/Resources");
+                if (resources != null)
                 {
-                    Console.WriteLine("\n" + page.ToString() );
-                    IEnumerable<IPdfImage> images = page.GetImages();
-                    foreach (IPdfImage image in images)
+                    // Get external objects dictionary
+                    PdfDictionary xObjects = resources.Elements.GetDictionary("/XObject");
+                    if (xObjects != null)
                     {
-                        Console.WriteLine( "\n" + page.Number +  "\n" + image.ToString());
-                        IReadOnlyList<byte> bytes = image.RawBytes;
-                        if (bytes != null && bytes.Count > 0)
+                        ICollection<PdfItem> items = xObjects.Elements.Values;
+                        // Iterate references to external objects
+                        foreach (PdfItem item in items)
                         {
-                            using (var ms = new MemoryStream(bytes.ToArray()))
+                            PdfReference reference = item as PdfReference;
+                            if (reference != null)
                             {
-                                try
+                                PdfDictionary xObject = reference.Value as PdfDictionary;
+                                // Is external object an image?
+                                if (xObject != null && xObject.Elements.GetString("/Subtype") == "/Image")
                                 {
-                                    System.Drawing.Image img = System.Drawing.Image.FromStream(ms);
-
-                                    // Convert PdfRectangle to System.Drawing.Rectangle
-                                    PdfRectangle pdfRect = page.CropBox.Bounds;
-
-                                    double scale = img.Height / image.Bounds.Height;
-                                    Rectangle cropRect = new Rectangle((int)(pdfRect.Left * scale), (int)(pdfRect.Top * scale), (int)(pdfRect.Width * scale), (int)(pdfRect.Height * scale));
-                                    Console.WriteLine("Height " + img.Height + " samples " + image.Bounds.Height + " Crop " + cropRect.Height);
-                                    Console.WriteLine("Width " + img.Width + " samples " + image.Bounds.Width + " Crop " + cropRect.Width);
-                                    /// convert  croprect from pdf units to pixels
-                                    double rotation = (double)page.Rotation.Radians;
-                                    Console.WriteLine("Scale "+ scale + " Rot " + rotation + "\n");
-
-                                    //img = CropToBounds(img, cropRect, rotation);
-                                    img.Save(Path.Combine(outputFolder, $"{i:D3}.jpg"), ImageFormat.Jpeg);
-                                    i++;
-                                    Console.WriteLine("Wrote " + outputFolder + i.ToString("D3") + ".jpg");
-                                }
-                                catch (Exception e)
-                                {
-                                    Console.WriteLine("Error: " + e.Message);
+                                    ExportAsPngImage(xObject, outputFolder, ref imageCount);
                                 }
                             }
                         }
                     }
                 }
+
             }
         }
-
-        private Image CropToBounds(Image img, Rectangle cropRect, double rotation)
+        private Image CropToBound(Image img, Rectangle cropRect, double rotation)
         {
             Bitmap src = img as Bitmap;
 

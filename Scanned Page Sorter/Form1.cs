@@ -38,9 +38,9 @@ namespace Scanned_Page_Sorter
         #endregion
 
         #region intialize properties
-        public pageSorterForm() =>    InitializeComponent();
+        public pageSorterForm() => InitializeComponent();
 
-        
+
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
@@ -67,9 +67,9 @@ namespace Scanned_Page_Sorter
             foreach (ImageListViewItem item in dragSource.SelectedItems)
             {
                 dragSource.Items.Remove(item);
-             }
+            }
         }
-         
+
 
 
         #endregion
@@ -179,26 +179,26 @@ namespace Scanned_Page_Sorter
             try
             {
                 PdfDocument pdfDoc = new PdfDocument(reader);
-                ImageRenderListener imageListner = new ImageRenderListener(outputFolder);
-                PdfCanvasProcessor parser = new PdfCanvasProcessor(imageListner);
+                 imageNumber = 0;
                 for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
                     var currentPage = pdfDoc.GetPage(i);
-                    iText.Kernel.Pdf.PdfDictionary po = currentPage.GetPdfObject();
+                    rotation = currentPage.GetRotation();
+                    clip = Rectangle.Empty;
+                    Console.WriteLine("GetPageSizeWithRotation " + currentPage.GetPageSizeWithRotation());
+                    Console.WriteLine("GetPageSize " + currentPage.GetPageSize());
+                    Console.WriteLine("GetRotation " + currentPage.GetRotation());
+                    iText.Kernel.Pdf.PdfDictionary currentPageObjects = currentPage.GetPdfObject();
                     pdfDoc.GetNumberOfPdfObjects();
-                    int numberOfPdfObject = po.Size();
-                    foreach (PdfObject obj in po.Values())
+                    int numberOfPdfObject = currentPageObjects.Size();
+                    foreach (PdfObject currentPageObject in currentPageObjects.Values())
                     {
-                        ProcessPDFObject(obj);
-
+                        ProcessPDFObject(currentPageObject, outputFolder);
                     }
 
 
                     //imageListner.SetCurrentPage(i, pdfDoc.GetPage(i)); // Corrected method name                    
                     //parser.ProcessPageContent(pdfDoc.GetPage(i));
-                    Console.WriteLine(currentPage.GetPageSizeWithRotation());
-                    Console.WriteLine(currentPage.GetPageSize());
-                    Console.WriteLine(currentPage.GetRotation());
                 }
             }
             catch (Exception e)
@@ -207,57 +207,84 @@ namespace Scanned_Page_Sorter
             }
         }
 
-        Hashtable
-            processedObjects
-            = new Hashtable();
+        Hashtable processedObjects = new Hashtable();
+        int rotation = 0;
+        int imageNumber = 0;
+        Rectangle clip = Rectangle.Empty;
+        Rectangle mediabox = Rectangle.Empty;
 
-        private void ProcessPDFObject(PdfObject obj, String name = null) // optional name parameter
+        private void ProcessPDFObject(PdfObject obj, string outputFolder, String name = null) // optional name parameter
         {
-            if (obj == null || (obj.GetIndirectReference()!=null && processedObjects.ContainsKey(obj.GetIndirectReference() ))) return;
-            if (name != null) if (ProcessName(name) != 0) Console.WriteLine($"{name}:{obj}");
-            if (obj.GetIndirectReference() != null)processedObjects.Add(obj.GetIndirectReference() , obj);
+            if (obj == null || (obj.GetIndirectReference() != null && processedObjects.ContainsKey(obj.GetIndirectReference()))) return;
+            if (name != null) ProcessName(name, obj) ;
+            if (obj.GetIndirectReference() != null) processedObjects.Add(obj.GetIndirectReference(), obj);
             switch (obj.GetObjectType())
             {
                 case PdfObject.ARRAY:
                     var a = (PdfArray)obj;
-                    Console.WriteLine(obj.GetType());
-                    foreach (var child in a) ProcessPDFObject(child);
+                    foreach (var child in a) ProcessPDFObject(child, outputFolder);
                     break;
                 case PdfObject.DICTIONARY:
-                    Console.WriteLine(obj.GetType());
-
-                        foreach (var key in ((PdfDictionary)obj).KeySet())
-                        {
-                            ProcessPDFObject(((PdfDictionary)obj).Get(key), key.ToString());
-                        }
+                    foreach (var key in ((PdfDictionary)obj).KeySet())
+                    {
+                        if (((PdfDictionary)obj).Get(key).IsNumber())
+                            ProcessPDFObject(((PdfDictionary)obj).Get(key), outputFolder, key.ToString());
+                    }
+                    foreach (var key in ((PdfDictionary)obj).KeySet())
+                    {
+                        if (!((PdfDictionary)obj).Get(key).IsNumber())
+                            ProcessPDFObject(((PdfDictionary)obj).Get(key), outputFolder, key.ToString());
+                    }
                     break;
                 case PdfObject.INDIRECT_REFERENCE:
-                    Console.WriteLine(obj.GetType());
                     break;
                 case PdfObject.STREAM:
-                    Console.WriteLine(obj.GetType());
+                    var PDFStremObj = (PdfStream)obj;
+                    PdfObject subtype = PDFStremObj.Get(PdfName.Subtype);
+                    if ((subtype == null) || subtype.ToString() != PdfName.Image.ToString()) break;
+                    var fileName = Path.Combine(outputFolder, $"{imageNumber++:D3}.jpg");
+                    byte[] data = (obj as PdfStream).GetBytes();
+                    using (var ms = new MemoryStream(data))
+                    {
+                        using (var img = Image.FromStream(ms))
+                        {
+                            var croppedImg = CropToBoundsAndRotate(img, clip, mediabox, rotation);
+                            croppedImg.Save(fileName, ImageFormat.Jpeg);
+                        }
+                    }
+                    Console.WriteLine(name + " image: " + imageNumber + "Rotation: " + rotation + "Mediabox " + mediabox + " clip " + clip + " r ");
+                    break;
+                case PdfObject.NAME:
+                    break;
+                case PdfObject.NUMBER:
                     break;
                 default:
-                    Console.WriteLine(obj.GetType());
-                    // Handle unknown type
+                    Console.WriteLine("-->" + obj.GetType());
                     break;
             }
         }
 
 
 
-        private int ProcessName(string name)
+        private int ProcessName(string name, PdfObject obj)
         {
-                    Console.WriteLine(name);
-            switch (name)
+             switch (name)
             {
                 case "/CropBox":
+                    clip = ConvertToRectangle(obj as PdfArray);
                     return 1;
                 case "/MediaBox":
+                    mediabox = ConvertToRectangle(obj as PdfArray);
                     return 1;
                 case "/Type":
+                    if (obj.ToString() == "/Page") {
+                        mediabox = Rectangle.Empty;
+                        rotation = 0;
+                        clip = Rectangle.Empty;
+                    }
                     return 1;
                 case "/Rotate":
+                    rotation = int.Parse(obj.ToString());
                     return 1;
                 default:
                     return 0;
@@ -297,13 +324,13 @@ namespace Scanned_Page_Sorter
         #endregion
 
         #region toolbox event handlers
-        
-        private void setVerticalThumbs(object sender, EventArgs e)        =>            setSplitterLayout(SplitterPanelLayout.VerticalThumbs);
-        
 
-        private void setHorizontalThumbs(object sender, EventArgs e)        => setSplitterLayout(SplitterPanelLayout.HorizontalThumbs); 
+        private void setVerticalThumbs(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.VerticalThumbs);
 
-        private void setVertical(object sender, EventArgs e)=>        setSplitterLayout(SplitterPanelLayout.Vertical);
+
+        private void setHorizontalThumbs(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.HorizontalThumbs);
+
+        private void setVertical(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Vertical);
 
         private void setHorizontal(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Horizontal);
         //{
@@ -325,10 +352,6 @@ namespace Scanned_Page_Sorter
         //    outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         //}
         #endregion
-
-
-
- 
 
 
         private void mainFormResized(object sender, EventArgs e) => loadLayout();
@@ -353,7 +376,7 @@ namespace Scanned_Page_Sorter
 
         private void rotateLeft_Click(object sender, EventArgs e)
         {
-            rotate(inImageListView , -10);
+            rotate(inImageListView, -10);
         }
 
         private void rotateRight_Click(object sender, EventArgs e)
@@ -371,77 +394,6 @@ namespace Scanned_Page_Sorter
                 Console.WriteLine("Rotating + " + item.FileName);
             }
         }
-       
-         
-    }
 
 
-    public class ImageRenderListener : IEventListener
-    {
-         static Rectangle bounds = new Rectangle();
-        private readonly string outputFolder;
-
-        public ImageRenderListener(string outputFolder)
-        {
-            this.outputFolder = outputFolder;
-        }
-
-        private PdfPage CurrentPage;
-        private int PageNumber;
-        public void SetCurrentPage(int pageNumber, PdfPage page)
-        {
-            PageNumber = pageNumber;
-            CurrentPage = page;
-        }
-
-        public void EventOccurred(IEventData data, EventType type)
-        {
-             if (type == EventType.RENDER_IMAGE)
-            {
-                var renderInfo = (iText.Kernel.Pdf.Canvas.Parser.Data.ImageRenderInfo)data;
-                PdfImageXObject image = renderInfo.GetImage();
-                var imageBytes = image.GetImageBytes(true);
-                var fileName = Path.Combine(outputFolder, $"{PageNumber:D3}.jpg");
-                Console.WriteLine($"Page Number: {PageNumber} Bounds: { CurrentPage.GetPageSizeWithRotation() }" );
-                if (bounds.Height == 0 || bounds.Width==0)
-                {
-                    File.WriteAllBytes(fileName, imageBytes);
-                    
-                }else{
-                var croppedImage = CropToBounds(image, bounds);
-                    croppedImage.Save(fileName, ImageFormat.Png);
-                }
-            }
-            else if (type == EventType.CLIP_PATH_CHANGED)
-            {
-                var clipPath = (ClippingPathInfo)data;
-                var cpath = clipPath.GetClippingPath();
-                Console.WriteLine(cpath);
-
-            }
-        }
-
-        public ICollection<EventType> GetSupportedEvents()
-        {
-            return new HashSet<EventType> { EventType.RENDER_IMAGE };
-        }
-
-        private System.Drawing.Image CropToBounds(PdfImageXObject img, Rectangle cropRect)
-        {
-
-            using (MemoryStream ms = new MemoryStream(img.GetImageBytes(true)))
-            {
-                Bitmap src = new Bitmap(ms);
-                Bitmap target = new Bitmap(cropRect.Width, cropRect.Height);
-
-                using (Graphics g = Graphics.FromImage(target))
-                {
-                    g.DrawImage(src, new Rectangle(0, 0, target.Width, target.Height), cropRect, GraphicsUnit.Pixel);
-                }
-
-                return target;
-            }
-        }
-    }
-
-};
+    } }
