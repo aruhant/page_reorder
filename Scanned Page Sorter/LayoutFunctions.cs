@@ -68,6 +68,7 @@ namespace Scanned_Page_Sorter
 
         private void loadLayout()
         {
+            if (this.WindowState == FormWindowState.Minimized) return;
             printConfig();
             if (splitterPanelLayout != null)
             {
