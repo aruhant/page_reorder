@@ -72,7 +72,7 @@ namespace Scanned_Page_Sorter
             double scaley = (double)src.Height / mediaRect.Height;
             Console.WriteLine($"Scalex {scalex} Scaley {scaley}");
             if (cropRect.Height == 0 || cropRect.Width == 0) cropRect = new Rectangle(0, 0, img.Width, img.Height);
-            else cropRect = new Rectangle((int)((cropRect.X) * scalex), (int)((cropRect.Height - cropRect.Y) * scaley),
+            else cropRect = new Rectangle((int)((cropRect.X) * scalex), (int)((mediaRect.Height- cropRect.Height - cropRect.Y) * scaley),
                 (int)(cropRect.Width * scalex), (int)(cropRect.Height * scaley));
 
             // Create a new bitmap for the bmp image
@@ -84,6 +84,7 @@ namespace Scanned_Page_Sorter
             {
                 g.DrawImage(src, new Rectangle(0, 0, cropRect.Width, cropRect.Height), new Rectangle(cropRect.X, cropRect.Y, cropRect.Width, cropRect.Height), GraphicsUnit.Pixel);
             }
+            if (rotation == 0) return bmp;
 
             double radianAngle = rotation / 180.0 * Math.PI;
             double cosA = Math.Abs(Math.Cos(radianAngle));
