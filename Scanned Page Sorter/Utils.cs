@@ -16,8 +16,7 @@ namespace Scanned_Page_Sorter
         private Thread thread;
         private volatile Action action;
         private volatile int delay = 0;
-        private volatile int frequency;
-
+ 
         public void Debounce(Action action, int delay = 1250)
         {
             this.action = action;

@@ -318,7 +318,12 @@ namespace Scanned_Page_Sorter
                         doc.Add(image);
                     }
                 }
+                writer.Close();
+                // Show notification about successful save
+                // Show notification about successful save
+                MessageBox.Show($"PDF saved successfully to {outputPdf}");               
             }
+
         }
 
         #endregion
