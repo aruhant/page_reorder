@@ -72,6 +72,8 @@
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.rotateLeft = new System.Windows.Forms.ToolStripButton();
             this.rotateRight = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.tooggleLayout = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -124,7 +126,7 @@
             this.openMenuItem.Text = "&Open File";
             this.openMenuItem.Click += new System.EventHandler(this.openFile_Handler);
             // 
-            // openFolderToolStripMenuIteg
+            // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
             this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
@@ -396,11 +398,13 @@
             this.toolStripSeparator3,
             this.clearThumbsToolStripButton,
             this.toolStripSeparator4,
+            this.tooggleLayout,
+            this.toolStripSeparator1,
             this.rotateLeft,
             this.rotateRight});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(334, 25);
+            this.toolStrip.Size = new System.Drawing.Size(394, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -529,6 +533,21 @@
             this.rotateRight.Text = "rotateRight";
             this.rotateRight.Click += new System.EventHandler(this.rotateRight_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tooggleLayout
+            // 
+            this.tooggleLayout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tooggleLayout.Image = global::Scanned_Page_Sorter.Properties.Resources._85194_200;
+            this.tooggleLayout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tooggleLayout.Name = "tooggleLayout";
+            this.tooggleLayout.Size = new System.Drawing.Size(23, 22);
+            this.tooggleLayout.Text = "rotateLeft";
+            this.tooggleLayout.Click += new System.EventHandler(this.tooggleLayout_Click);
+            // 
             // pageSorterForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -617,6 +636,8 @@
         private System.Windows.Forms.ToolStripMenuItem blurredImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem missingCoverToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton tooggleLayout;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 

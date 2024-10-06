@@ -45,7 +45,7 @@ namespace Scanned_Page_Sorter
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
             setupImageListStyles(inImageListView);
-            setupImageListStyles(inImageListView);
+            setupImageListStyles(outImageListView);
             Application.DoEvents();
             loadLayout();
         }
@@ -54,9 +54,7 @@ namespace Scanned_Page_Sorter
 
         #region imagelist event handlers and properties
         private void setupImageListStyles(ImageListView list)
-        {
-            list.AllowDrop = true;
-            list.SetRenderer(new ThumbnailRenderer());
+        {   list.SetRenderer(new ThumbnailRenderer());
         }
 
 
@@ -381,12 +379,18 @@ namespace Scanned_Page_Sorter
 
         private void rotateLeft_Click(object sender, EventArgs e)
         {
-            rotate(inImageListView, -10);
+            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+                rotate(inImageListView, -10);
+            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
+                rotate(outImageListView, -10);
         }
 
         private void rotateRight_Click(object sender, EventArgs e)
         {
+            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
             rotate(inImageListView, 10);
+            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
+                rotate(outImageListView, 10);
         }
 
         private void rotate(ImageListView inImageListView, int angle)
@@ -400,5 +404,8 @@ namespace Scanned_Page_Sorter
             }
         }
 
+        private void tooggleLayout_Click(object sender, EventArgs e)
+        {
 
+        }
     } }
