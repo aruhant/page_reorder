@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Manina.Windows.Forms.ImageListViewRenderers
@@ -80,15 +81,16 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
                     Image img = item.GetCachedImage(CachedImageType.Thumbnail);
                     if (img != null)
                     {
-                        // rotation angle
+                        // orientation angle
+                        ImageMetadata metadata= imageMetadataMap[item.Text];
 
-                        float a = imageMetadataMap[item.Text].Rotate;
-                        // rotate image by angle a if a!=0
-                        if (a != 0)
-                        {
-                            img = RotateImage(img, a);
-                        }
-                        Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));
+                        //float a = metadata.Rotate;
+                        //// rotate image by angle a if a!=0
+                        //Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));
+                        //if ((a ) != 0) img = RotateImage(img, a );                        
+                        //pos = getRotatedRectangle(pos, metadata.Orientation);
+                        if ((metadata.Rotate + metadata.Orientation)!=0) img = RotateImage(img, metadata.Orientation, metadata.Rotate);
+                        Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));                        
                         g.DrawImage(img, pos);
                         // Draw image border
                         if (Math.Min(pos.Width, pos.Height) > 32)
@@ -180,17 +182,65 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
             }
         }
 
-        private Image RotateImage(Image img, float rotationAngle)
+        private Image RotateImage(Image img, int orientation, float rotation)
         {
-            Bitmap bmp = new Bitmap(img.Width, img.Height);
-            using (Graphics g = Graphics.FromImage(bmp))
+    
+                Bitmap src = img as Bitmap;
+                 Rectangle   cropRect = new Rectangle(0, 0, img.Width, img.Height);
+
+                // Create a new bitmap for the bmp image
+
+                Bitmap bmp = new Bitmap(cropRect.Width, cropRect.Height);
+                using (Graphics g = Graphics.FromImage(bmp))
+                {
+                    g.DrawImage(src, cropRect, cropRect, GraphicsUnit.Pixel);
+                }
+                if (orientation +rotation == 0) return bmp;
+
+                double radianAngle = orientation / 180.0 * Math.PI;
+                double cosA = Math.Abs(Math.Cos(radianAngle));
+                double sinA = Math.Abs(Math.Sin(radianAngle));
+
+                int newWidth = (int)(cosA * bmp.Width + sinA * bmp.Height);
+                int newHeight = (int)(cosA * bmp.Height + sinA * bmp.Width);
+
+                var rotatedBitmap = new Bitmap(newWidth, newHeight);
+                rotatedBitmap.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
+
+                using (Graphics g = Graphics.FromImage(rotatedBitmap))
+                {
+                    g.TranslateTransform(rotatedBitmap.Width / 2, rotatedBitmap.Height / 2);
+                    g.RotateTransform((float)(orientation+ rotation));
+                    g.TranslateTransform(-bmp.Width / 2, -bmp.Height / 2);
+                    g.DrawImage(bmp, new Point(0, 0));
+                }
+
+                bmp.Dispose();//Remove if you want to keep oryginal bitmap
+
+                return rotatedBitmap;
+             
+        }
+        private Rectangle getRotatedRectangle(Rectangle rect, double angle)
+        {
+            // Calculate the rotated rectangle's bounds
+            PointF[] points = new PointF[4];
+            points[0] = new PointF(rect.Left, rect.Top);
+            points[1] = new PointF(rect.Right, rect.Top);
+            points[2] = new PointF(rect.Right, rect.Bottom);
+            points[3] = new PointF(rect.Left, rect.Bottom);
+
+            using (Matrix matrix = new Matrix())
             {
-                g.TranslateTransform((float)img.Width / 2, (float)img.Height / 2);
-                g.RotateTransform(rotationAngle);
-                g.TranslateTransform(-(float)img.Width / 2, -(float)img.Height / 2);
-                g.DrawImage(img, new Point(0, 0));
+                matrix.RotateAt((float)angle, new PointF(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2));
+                matrix.TransformPoints(points);
             }
-            return bmp;
+
+            float minX = points.Min(p => p.X);
+            float maxX = points.Max(p => p.X);
+            float minY = points.Min(p => p.Y);
+            float maxY = points.Max(p => p.Y);
+
+            return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
         }
     }
 }

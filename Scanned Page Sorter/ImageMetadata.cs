@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,9 @@ namespace Scanned_Page_Sorter
             Rotate = 0;
             Orientation = 0;
         }
+
+        //public Bitmap getRoatatedThumbnail() {        }
+
     }
     internal class ImageMetadataMap
     {
@@ -34,10 +38,7 @@ namespace Scanned_Page_Sorter
         {
             get
             {
-                if (!map.ContainsKey(key))
-                {
-                    map[key] = new ImageMetadata(key);
-                }
+                if (!map.ContainsKey(key))    map[key] = new ImageMetadata(key);                
                 return map[key];
             }
             set

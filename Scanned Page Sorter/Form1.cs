@@ -348,7 +348,7 @@ namespace Scanned_Page_Sorter
 
         private void splitterMoved(object sender, SplitterEventArgs e) => saveLayout();
 
-        private void updateInThumbnail(object sender, ItemHoverEventArgs e)
+        private void updateInPreview(object sender, ItemHoverEventArgs e)
         {
             if (e.Item == null) return;
             string path = Path.Combine(e.Item.FilePath, e.Item.FileName);
@@ -356,7 +356,7 @@ namespace Scanned_Page_Sorter
         }
 
 
-        private void updateOutThumbnail(object sender, ItemHoverEventArgs e)
+        private void updateOutPreview(object sender, ItemHoverEventArgs e)
         {
             if (e.Item == null) return;
             string path = Path.Combine(e.Item.FilePath, e.Item.FileName);
@@ -385,15 +385,27 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                imageMetadataMap[item.Text].Rotate  += angle;
+                imageMetadataMap[item.Text].Rotate += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
+                item.Update();
+            }
+        }
+        private void rotateLayout(ImageListView imageListView, int angle)
+        {
+            for (int i = 0; i < imageListView.SelectedItems.Count; i++)
+            {
+                ImageListViewItem item = imageListView.SelectedItems[i];
+                imageMetadataMap[item.Text].Orientation = (imageMetadataMap[item.Text].Orientation +angle) %360;
                 item.Update();
             }
         }
 
         private void tooggleLayout_Click(object sender, EventArgs e)
         {
-
+            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+                rotateLayout(inImageListView, 90);
+            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
+                rotateLayout(outImageListView, 90);
         }
     }
 }

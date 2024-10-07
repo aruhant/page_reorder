@@ -53,27 +53,6 @@ namespace Scanned_Page_Sorter
             return rotatedBitmap;
 
         }
-        private Rectangle getRotatedRectangle(Rectangle rect, double angle)
-        {
-            // Calculate the rotated rectangle's bounds
-            PointF[] points = new PointF[4];
-            points[0] = new PointF(rect.Left, rect.Top);
-            points[1] = new PointF(rect.Right, rect.Top);
-            points[2] = new PointF(rect.Right, rect.Bottom);
-            points[3] = new PointF(rect.Left, rect.Bottom);
-
-            using (Matrix matrix = new Matrix())
-            {
-                matrix.RotateAt((float)angle, new PointF(rect.Left + rect.Width / 2, rect.Top + rect.Height / 2));
-                matrix.TransformPoints(points);
-            }
-
-            float minX = points.Min(p => p.X);
-            float maxX = points.Max(p => p.X);
-            float minY = points.Min(p => p.Y);
-            float maxY = points.Max(p => p.Y);
-
-            return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
-        }
+       
     }
 }

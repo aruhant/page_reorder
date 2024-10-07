@@ -297,7 +297,7 @@
             this.inImageListView.TabIndex = 3;
             this.inImageListView.UseWIC = true;
             this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
-            this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInThumbnail);
+            this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInPreview);
             // 
             // commentsContextMenu
             // 
@@ -367,7 +367,7 @@
             this.outImageListView.TabIndex = 3;
             this.outImageListView.UseWIC = true;
             this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
-            this.outImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateOutThumbnail);
+            this.outImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateOutPreview);
             // 
             // outPreview
             // 
