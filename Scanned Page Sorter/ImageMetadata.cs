@@ -31,7 +31,7 @@ namespace Scanned_Page_Sorter
             this.parentFolder = parentFolder;
         }
 
-        public ImageMetadata(string parentFolder, string title) : this(parentFolder)
+        public ImageMetadata(string parentFolder, Rectangle rectangle, string title) : this(parentFolder)
         {
             Title = title;
             Comment = "";

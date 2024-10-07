@@ -392,6 +392,7 @@ namespace Scanned_Page_Sorter
         {
             if (item == null) return;
             ImageMetadata metadata = imageMetadataMap[item.Text];
+            preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
         }
@@ -444,7 +445,8 @@ namespace Scanned_Page_Sorter
 
         private void commentsContextMenuItem_Click(object sender, EventArgs e)
         {
-            string comment = sender.ToString().Replace("&", string.Empty); if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+            string comment = sender.ToString().Replace("&", string.Empty);
+            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
             {
                 setComment(inImageListView, comment);
                 updatePreview(inPreview, inImageListView.SelectedItems[0]);
@@ -454,16 +456,31 @@ namespace Scanned_Page_Sorter
                 setComment(outImageListView, comment);
                 updatePreview(outPreview, outImageListView.SelectedItems[0]);
             }
+            else if (inPreview.Focused)
+            {
+                setComment(inPreview.Tag as ImageListViewItem, comment);
+            } else if (outPreview.Focused)
+            {
+                setComment(outPreview.Tag as ImageListViewItem, comment);
+            }
         }
 
         private void setComment(ImageListView imageListView, string comment)
         {
-            for (int i = 0; i < imageListView.SelectedItems.Count; i++)
-            {
-                ImageListViewItem item = imageListView.SelectedItems[i];
+            foreach (var item in imageListView.SelectedItems)                setComment(item, comment);
+        }
+        private void setComment( ImageListViewItem item , string comment)
+        {
+            if (comment.Contains("Cover")) {
+                ImageMetadata imageMetadata = new ImageMetadata("Cover");
+                imageMetadata.Comment = comment;
+                imageMetadataMap["Cover"] = imageMetadata;
+
+            }else{
                 imageMetadataMap[item.Text].Comment = comment;
                 item.Update();
             }
+                
         }
     }
 }
