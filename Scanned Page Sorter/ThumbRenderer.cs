@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -122,9 +123,10 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
                         else
                             foreColor = ImageListView.Colors.UnFocusedForeColor;
                     }
+                    string label = Path.GetFileNameWithoutExtension(item.Text);
                     Size szt = TextRenderer.MeasureText(item.Text, ImageListView.Font);
                     Rectangle rt = new Rectangle(bounds.Left + itemPadding.Width, bounds.Top + 2 * itemPadding.Height + ImageListView.ThumbnailSize.Height, ImageListView.ThumbnailSize.Width, szt.Height);
-                    TextRenderer.DrawText(g, item.Text, ImageListView.Font, rt, foreColor,
+                    TextRenderer.DrawText(g, label, ImageListView.Font, rt, foreColor,
                         TextFormatFlags.EndEllipsis | TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine | TextFormatFlags.NoPrefix);
                 }
                 else base.DrawItem(g, item, state, bounds);

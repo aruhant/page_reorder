@@ -122,7 +122,7 @@ namespace Scanned_Page_Sorter
                     p.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
                 {
                     // filename without extension
-                    string title = Path.GetFileNameWithoutExtension(p.FullName);
+                    string title = Path.GetFileName(p.FullName);
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
                     inImageListView.Items.Add(item);
                     imageMetadataMap[title] = new ImageMetadata(inputFolder, title);
