@@ -70,10 +70,10 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.clearThumbsToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.tooggleLayout = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rotateLeft = new System.Windows.Forms.ToolStripButton();
             this.rotateRight = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.tooggleLayout = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -122,28 +122,28 @@
             // openMenuItem
             // 
             this.openMenuItem.Name = "openMenuItem";
-            this.openMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.openMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openMenuItem.Text = "&Open File";
             this.openMenuItem.Click += new System.EventHandler(this.openFile_Handler);
             // 
             // openFolderToolStripMenuItem
             // 
             this.openFolderToolStripMenuItem.Name = "openFolderToolStripMenuItem";
-            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.openFolderToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.openFolderToolStripMenuItem.Text = "Open Fol&der";
             this.openFolderToolStripMenuItem.Click += new System.EventHandler(this.openFolder_Handler);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.exportPDF_Handler);
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(139, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(180, 22);
             this.exitMenuItem.Text = "&Exit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
             // 
@@ -307,31 +307,36 @@
             this.commentToolStripMenuItem,
             this.missingCoverToolStripMenuItem});
             this.commentsContextMenu.Name = "contextMenuStrip1";
-            this.commentsContextMenu.Size = new System.Drawing.Size(150, 92);
+            this.commentsContextMenu.Size = new System.Drawing.Size(181, 114);
+            this.commentsContextMenu.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
             // 
             // missingPageToolStripMenuItem
             // 
             this.missingPageToolStripMenuItem.Name = "missingPageToolStripMenuItem";
-            this.missingPageToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.missingPageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.missingPageToolStripMenuItem.Text = "&Missing Page";
+            this.missingPageToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
             // 
             // blurredImageToolStripMenuItem
             // 
             this.blurredImageToolStripMenuItem.Name = "blurredImageToolStripMenuItem";
-            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.blurredImageToolStripMenuItem.Text = "&Blurred Image";
+            this.blurredImageToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
             // 
             // commentToolStripMenuItem
             // 
             this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
-            this.commentToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.commentToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.commentToolStripMenuItem.Text = "&Comment...";
+            this.commentToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
             // 
             // missingCoverToolStripMenuItem
             // 
             this.missingCoverToolStripMenuItem.Name = "missingCoverToolStripMenuItem";
-            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.missingCoverToolStripMenuItem.Text = "M&issing Cover";
+            this.missingCoverToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
             // 
             // outSplitContainer
             // 
@@ -404,7 +409,7 @@
             this.rotateRight});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(394, 25);
+            this.toolStrip.Size = new System.Drawing.Size(363, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -513,6 +518,21 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
             // 
+            // tooggleLayout
+            // 
+            this.tooggleLayout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tooggleLayout.Image = global::Scanned_Page_Sorter.Properties.Resources._85194_200;
+            this.tooggleLayout.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tooggleLayout.Name = "tooggleLayout";
+            this.tooggleLayout.Size = new System.Drawing.Size(23, 22);
+            this.tooggleLayout.Text = "rotateLeft";
+            this.tooggleLayout.Click += new System.EventHandler(this.tooggleLayout_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
             // rotateLeft
             // 
             this.rotateLeft.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -532,21 +552,6 @@
             this.rotateRight.Size = new System.Drawing.Size(23, 22);
             this.rotateRight.Text = "rotateRight";
             this.rotateRight.Click += new System.EventHandler(this.rotateRight_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tooggleLayout
-            // 
-            this.tooggleLayout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tooggleLayout.Image = global::Scanned_Page_Sorter.Properties.Resources._85194_200;
-            this.tooggleLayout.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tooggleLayout.Name = "tooggleLayout";
-            this.tooggleLayout.Size = new System.Drawing.Size(23, 22);
-            this.tooggleLayout.Text = "rotateLeft";
-            this.tooggleLayout.Click += new System.EventHandler(this.tooggleLayout_Click);
             // 
             // pageSorterForm
             // 

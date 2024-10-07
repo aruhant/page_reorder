@@ -44,6 +44,8 @@ namespace Scanned_Page_Sorter
     }
     internal class ImageMetadataMap
     {
+        internal IEnumerable<string> Keys { get => map.Keys; }
+        internal IEnumerable<ImageMetadata> Values { get => map.Values; }
         private Dictionary<string, ImageMetadata> map = new Dictionary<string, ImageMetadata>();
         public ImageMetadata this[string key]
         {
@@ -57,6 +59,5 @@ namespace Scanned_Page_Sorter
                 map[key] = value;
             }
         }
-
     }
 }

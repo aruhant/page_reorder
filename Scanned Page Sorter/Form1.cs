@@ -1,6 +1,7 @@
 ﻿using iText.IO.Image;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Font;
 using Manina.Windows.Forms;
 using Manina.Windows.Forms.ImageListViewRenderers;
 using Org.BouncyCastle.Asn1.Cms;
@@ -293,7 +294,25 @@ namespace Scanned_Page_Sorter
         private void exportPDF_Handler(object sender, EventArgs e)
         {
             saveImagesToPDF(outImageListView, currentlyOpenPDFfile);
+            saveCommentsToTXT(imageMetadataMap, currentlyOpenPDFfile );
         }
+
+        private void saveCommentsToTXT(ImageMetadataMap imageMetadataMap, string inputPdf)
+        {
+            string txtFile = System.IO.Path.GetDirectoryName(inputPdf) + "/Comments - " + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + ".txt";
+            using (StreamWriter sw = new StreamWriter(txtFile))
+            {
+                foreach (var item in imageMetadataMap.Values)
+                {
+                    if (item.Comment != null && item.Comment.Length > 0)
+                    {
+                        string page = item.Title.Split('.')[0];
+                        sw.WriteLine($"Page: {page} : {item.Comment}");
+                    }
+                }
+            }
+        }
+
         private void saveImagesToPDF(ImageListView outImageListView, string inputPdf)
         {
             string outputPdf = System.IO.Path.GetDirectoryName(inputPdf) + "/Reordered - " + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + ".pdf";
@@ -420,7 +439,31 @@ namespace Scanned_Page_Sorter
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
             { rotateLayout(inImageListView, 90); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            { rotateLayout(outImageListView, 90); updatePreview(inPreview, outImageListView.SelectedItems[0]); }
+            { rotateLayout(outImageListView, 90); updatePreview(outPreview, outImageListView.SelectedItems[0]); }
+        }
+
+        private void commentsContextMenuItem_Click(object sender, EventArgs e)
+        {
+            string comment = sender.ToString().Replace("&", string.Empty); if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+            {
+                setComment(inImageListView, comment);
+                updatePreview(inPreview, inImageListView.SelectedItems[0]);
+            }
+            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
+            {
+                setComment(outImageListView, comment);
+                updatePreview(outPreview, outImageListView.SelectedItems[0]);
+            }
+        }
+
+        private void setComment(ImageListView imageListView, string comment)
+        {
+            for (int i = 0; i < imageListView.SelectedItems.Count; i++)
+            {
+                ImageListViewItem item = imageListView.SelectedItems[i];
+                imageMetadataMap[item.Text].Comment = comment;
+                item.Update();
+            }
         }
     }
 }
