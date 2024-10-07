@@ -54,7 +54,8 @@ namespace Scanned_Page_Sorter
 
         #region imagelist event handlers and properties
         private void setupImageListStyles(ImageListView list)
-        {   list.SetRenderer(new ThumbnailRenderer());
+        {
+            list.SetRenderer(new ThumbnailRenderer());
         }
 
 
@@ -177,7 +178,7 @@ namespace Scanned_Page_Sorter
             try
             {
                 PdfDocument pdfDoc = new PdfDocument(reader);
-                 imageNumber = 0;
+                imageNumber = 0;
                 for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
                     var currentPage = pdfDoc.GetPage(i);
@@ -214,7 +215,7 @@ namespace Scanned_Page_Sorter
         private void ProcessPDFObject(PdfObject obj, string outputFolder, String name = null) // optional name parameter
         {
             if (obj == null || (obj.GetIndirectReference() != null && processedObjects.ContainsKey(obj.GetIndirectReference()))) return;
-            if (name != null) ProcessName(name, obj) ;
+            if (name != null) ProcessName(name, obj);
             if (obj.GetIndirectReference() != null) processedObjects.Add(obj.GetIndirectReference(), obj);
             switch (obj.GetObjectType())
             {
@@ -266,7 +267,7 @@ namespace Scanned_Page_Sorter
 
         private int ProcessName(string name, PdfObject obj)
         {
-             switch (name)
+            switch (name)
             {
                 case "/CropBox":
                     clip = ConvertToRectangle(obj as PdfArray);
@@ -275,7 +276,8 @@ namespace Scanned_Page_Sorter
                     mediabox = ConvertToRectangle(obj as PdfArray);
                     return 1;
                 case "/Type":
-                    if (obj.ToString() == "/Page") {
+                    if (obj.ToString() == "/Page")
+                    {
                         mediabox = Rectangle.Empty;
                         rotation = 0;
                         clip = Rectangle.Empty;
@@ -319,7 +321,7 @@ namespace Scanned_Page_Sorter
                 writer.Close();
                 // Show notification about successful save
                 // Show notification about successful save
-                MessageBox.Show($"PDF saved successfully to {outputPdf}");               
+                MessageBox.Show($"PDF saved successfully to {outputPdf}");
             }
 
         }
@@ -338,9 +340,9 @@ namespace Scanned_Page_Sorter
         private void setHorizontal(object sender, EventArgs e) => setSplitterLayout(SplitterPanelLayout.Horizontal);
         //{
         //    setupImageListViews(Manina.Windows.Forms.View.HorizontalStrip);
-        //    int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
+        //    int i = imageListView.ClientSize.Height < imageListView.ClientSize.Width ? imageListView.ClientSize.Height : imageListView.ClientSize.Width;
         //    int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
-        //    inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+        //    imageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         //    i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
         //    outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         //}
@@ -349,8 +351,8 @@ namespace Scanned_Page_Sorter
         //{
         //    setupImageListViews(Manina.Windows.Forms.View.VerticalStrip);
         //    int scrollbarWidth = SystemInformation.VerticalScrollBarWidth + 32;
-        //    int i = inImageListView.ClientSize.Height < inImageListView.ClientSize.Width ? inImageListView.ClientSize.Height : inImageListView.ClientSize.Width;
-        //    inImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
+        //    int i = imageListView.ClientSize.Height < imageListView.ClientSize.Width ? imageListView.ClientSize.Height : imageListView.ClientSize.Width;
+        //    imageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         //    i = outImageListView.ClientSize.Height < outImageListView.ClientSize.Width ? outImageListView.ClientSize.Height : outImageListView.ClientSize.Width;
         //    outImageListView.ThumbnailSize = new Size(i - scrollbarWidth, i - scrollbarWidth);
         //}
@@ -380,27 +382,28 @@ namespace Scanned_Page_Sorter
         private void rotateLeft_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                rotate(inImageListView, -10);
+                rotate(inImageListView, -1);
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                rotate(outImageListView, -10);
+                rotate(outImageListView, -1);
         }
 
         private void rotateRight_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-            rotate(inImageListView, 10);
+                rotate(inImageListView, 1);
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                rotate(outImageListView, 10);
+                rotate(outImageListView, 1);
         }
 
-        private void rotate(ImageListView inImageListView, int angle)
+        private void rotate(ImageListView imageListView, int angle)
         {
-            for (int i = 0; i < inImageListView.SelectedItems.Count; i++)
+            for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
-                ImageListViewItem item = inImageListView.SelectedItems[i];
+                ImageListViewItem item = imageListView.SelectedItems[i];
                 int a = item.Tag == null ? 0 : Convert.ToInt32(item.Tag);
                 item.Tag = a + angle;
                 Console.WriteLine("Rotating + " + item.FileName);
+                item.Update(); 
             }
         }
 
@@ -408,4 +411,5 @@ namespace Scanned_Page_Sorter
         {
 
         }
-    } }
+    }
+}
