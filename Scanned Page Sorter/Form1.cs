@@ -125,7 +125,6 @@ namespace Scanned_Page_Sorter
                     string title = Path.GetFileName(p.FullName);
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
                     inImageListView.Items.Add(item);
-                    imageMetadataMap[title] = new ImageMetadata(inputFolder, title);
                 }
             }
             inImageListView.ResumeLayout();
@@ -227,17 +226,23 @@ namespace Scanned_Page_Sorter
                     var PDFStremObj = (PdfStream)obj;
                     PdfObject subtype = PDFStremObj.Get(PdfName.Subtype);
                     if ((subtype == null) || subtype.ToString() != PdfName.Image.ToString()) break;
-                    var fileName = Path.Combine(outputFolder, $"{imageNumber++:D3}.jpg");
                     byte[] data = (obj as PdfStream).GetBytes();
+                    string title = $"{imageNumber++:D3}.jpg";
                     using (var ms = new MemoryStream(data))
                     {
+                    var fileName = Path.Combine(outputFolder, title);
                         using (var img = Image.FromStream(ms))
                         {
-                            var croppedImg = CropToBoundsAndRotate(img, clip, mediabox, rotation);
+                            var croppedImg = CropToBoundsAndRotate(img, clip, mediabox, 0);
                             croppedImg.Save(fileName, ImageFormat.Jpeg);
                         }
                     }
-                    Console.WriteLine(name + " image: " + imageNumber + "Rotation: " + rotation + "Mediabox " + mediabox + " clip " + clip + " r ");
+                    ImageMetadata metadata = new ImageMetadata(outputFolder, title);
+                    imageMetadataMap[title] = metadata;
+                    metadata.clipRect = clip;
+                    metadata.mediaRect = mediabox;
+                    metadata.Orientation = rotation;
+                    Console.WriteLine(name + " image: " + imageNumber + "Rotation: " + rotation + "Mediabox " + mediabox + " clipRect " + clip + " r ");
                     break;
                 case PdfObject.NAME:
                     break;
@@ -246,7 +251,7 @@ namespace Scanned_Page_Sorter
                 default:
                     Console.WriteLine("-->" + obj.GetType());
                     break;
-            }
+            }   
         }
 
 
@@ -296,20 +301,26 @@ namespace Scanned_Page_Sorter
                 using (PdfDocument pdf = new PdfDocument(writer))
                 {
                     Document doc = new Document(pdf); // Create a Document instance
-                    foreach (ImageListViewItem item in outImageListView.Items)
-                    {
-                        string path = Path.Combine(item.FilePath, item.FileName);
-                        ImageData imageData = ImageDataFactory.Create(path);
-                        iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
-                        doc.Add(image);
-                    }
-                }
-                writer.Close();
-                // Show notification about successful save
-                // Show notification about successful save
-                MessageBox.Show($"PDF saved successfully to {outputPdf}");
-            }
+                        foreach (ImageListViewItem item in outImageListView.Items)
+                        {
+                            string path = Path.Combine(item.FilePath, item.FileName);
+                            ImageMetadata metadata = imageMetadataMap[item.Text];
+                            PdfPage page = pdf.AddNewPage(metadata.pageSize);
+                            ImageData imageData = ImageDataFactory.Create(path);
+                            iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
+                        page.SetMediaBox(metadata.mediaBox);
+                        page.SetCropBox(metadata.clipBox);
+                        page.SetRotation(metadata.Orientation);
 
+
+                        Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
+                        }
+
+                 }
+                writer.Close();
+                MessageBox.Show("PDF saved successfully!", "Save PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                System.Diagnostics.Process.Start(outputPdf);
+            }
         }
 
         #endregion

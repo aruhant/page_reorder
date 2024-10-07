@@ -1,4 +1,5 @@
-﻿using System;
+﻿using iText.Kernel.Pdf;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -13,8 +14,17 @@ namespace Scanned_Page_Sorter
         public float Rotate { get; set; }
         public int Orientation { get; set; }
         public string Title { get; }
+        public Rectangle clipRect;
+        public Rectangle mediaRect;
+
+        public iText.Kernel.Geom.PageSize pageSize => clipRect.Width==0? new iText.Kernel.Geom.PageSize(mediaRect.Width, mediaRect.Height) : new iText.Kernel.Geom.PageSize(clipRect.Width, clipRect.Height);
+        public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width==0?    mediaBox:  new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
+        public iText.Kernel.Geom.Rectangle mediaBox => new iText.Kernel.Geom.Rectangle(mediaRect.Width, mediaRect.Height);
+
 
         private string parentFolder;
+        
+
         public ImageMetadata(string parentFolder)
         {
             this.parentFolder = parentFolder;
