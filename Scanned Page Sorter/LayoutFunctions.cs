@@ -1,17 +1,9 @@
-﻿using System;
+﻿using iText.Kernel.Pdf;
+using System;
 using System.Configuration;
-using System.Collections.Specialized;
-using System.Windows.Forms;
-using iText.IO.Image;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
-using iText.Kernel.Pdf.Xobject;
-using iText.Layout;
- using System.Collections.Generic;
-using Manina.Windows.Forms;
-using System.Data;
 using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace Scanned_Page_Sorter
 {

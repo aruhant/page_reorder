@@ -1,10 +1,6 @@
-﻿using iText.Layout.Font;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -20,11 +16,11 @@ namespace Scanned_Page_Sorter
             double scaley = (double)src.Height / mediaRect.Height;
             Console.WriteLine($"Scalex {scalex} Scaley {scaley}");
             if (cropRect.Height == 0 || cropRect.Width == 0) cropRect = new Rectangle(0, 0, img.Width, img.Height);
-            else cropRect = new Rectangle((int)((cropRect.X) * scalex), (int)((mediaRect.Height- cropRect.Height - cropRect.Y) * scaley),
+            else cropRect = new Rectangle((int)((cropRect.X) * scalex), (int)((mediaRect.Height - cropRect.Height - cropRect.Y) * scaley),
                 (int)(cropRect.Width * scalex), (int)(cropRect.Height * scaley));
 
             // Create a new bitmap for the bmp image
-            
+
             Bitmap bmp = new Bitmap(cropRect.Width, cropRect.Height);
             Console.WriteLine($"src:{src.Width},{src.Height} \nTargetrect: {cropRect}");
             // Rotate and crop the image

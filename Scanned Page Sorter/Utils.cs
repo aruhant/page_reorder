@@ -1,10 +1,4 @@
-﻿using System;
-using System.Configuration;
-using System.Collections.Specialized;
-using System.Windows.Forms;
-using System.Threading.Tasks;
-using System.Threading;
-using System.Windows.Threading;
+﻿using System.Windows.Forms;
 
 namespace Scanned_Page_Sorter
 {
@@ -16,7 +10,7 @@ namespace Scanned_Page_Sorter
         private Thread thread;
         private volatile Action action;
         private volatile int delay = 0;
- 
+
         public void Debounce(Action action, int delay = 1250)
         {
             this.action = action;

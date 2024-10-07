@@ -1,25 +1,18 @@
-﻿using System;
-using System.Configuration;
-using System.Collections.Specialized;
-using System.Windows.Forms;
-using iText.IO.Image;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
-using iText.Kernel.Pdf.Xobject;
-using iText.Layout;
-using Manina.Windows.Forms;
+﻿using Scanned_Page_Sorter;
+using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Drawing.Drawing2D;
-using static Manina.Windows.Forms.ImageListView;
+using System.Windows.Forms;
 
 namespace Manina.Windows.Forms.ImageListViewRenderers
 {
     public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
     {
         int padding = 6;
+        internal ImageMetadataMap imageMetadataMap;
+
+        internal ThumbnailRenderer(ImageMetadataMap imageMetadataMap) => this.imageMetadataMap = imageMetadataMap;
 
         public override void DrawItem(Graphics g, ImageListViewItem item, ItemState state, Rectangle bounds)
         {
@@ -88,7 +81,8 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
                     if (img != null)
                     {
                         // rotation angle
-                        int a = (item.Tag == null) ? 0 : Convert.ToInt32(item.Tag);
+
+                        float a = imageMetadataMap[item.Text].Rotate;
                         // rotate image by angle a if a!=0
                         if (a != 0)
                         {
@@ -199,5 +193,5 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
             return bmp;
         }
     }
-        }
+}
 

@@ -1,32 +1,15 @@
 ﻿using iText.IO.Image;
 using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
-using iText.Kernel.Pdf.Xobject;
 using iText.Layout;
 using Manina.Windows.Forms;
+using Manina.Windows.Forms.ImageListViewRenderers;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Configuration;
-using System.Collections.Specialized;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Drawing.Drawing2D;
-
-using Manina.Windows.Forms.ImageListViewRenderers;
-using iText.Kernel.Pdf.Canvas.Parser;
-using iText.Kernel.Pdf.Canvas.Parser.Data;
-using iText.Kernel.Pdf.Canvas.Parser.Listener;
-using iText.Kernel.Exceptions;
-using System.Security.Cryptography;
-using Org.BouncyCastle.Cms;
-using System.Collections;
 
 namespace Scanned_Page_Sorter
 {
@@ -35,6 +18,7 @@ namespace Scanned_Page_Sorter
         #region private variables
         private string currentlyOpenPDFfile;
         private string currentlyOpenImageFolder;
+        private ImageMetadataMap imageMetadataMap = new ImageMetadataMap();
         #endregion
 
         #region intialize properties
@@ -55,8 +39,8 @@ namespace Scanned_Page_Sorter
         #region imagelist event handlers and properties
         private void setupImageListStyles(ImageListView list)
         {
-            list.SetRenderer(new ThumbnailRenderer());
-        }
+            list.SetRenderer(new ThumbnailRenderer(imageMetadataMap));
+         }
 
 
         private void dropComplete_Handler(object sender, DropCompleteEventArgs e)
@@ -140,6 +124,7 @@ namespace Scanned_Page_Sorter
                     string title = Path.GetFileNameWithoutExtension(p.FullName);
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
                     inImageListView.Items.Add(item);
+                    imageMetadataMap[title] = new ImageMetadata(inputFolder, title);
                 }
             }
             inImageListView.ResumeLayout();
@@ -395,15 +380,14 @@ namespace Scanned_Page_Sorter
                 rotate(outImageListView, 1);
         }
 
-        private void rotate(ImageListView imageListView, int angle)
+        private void rotate(ImageListView imageListView, float angle)
         {
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                int a = item.Tag == null ? 0 : Convert.ToInt32(item.Tag);
-                item.Tag = a + angle;
+                imageMetadataMap[item.Text].Rotate  += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
-                item.Update(); 
+                item.Update();
             }
         }
 
