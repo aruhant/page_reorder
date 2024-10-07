@@ -21,6 +21,7 @@ namespace Scanned_Page_Sorter
         public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width==0?    mediaBox:  new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
         public iText.Kernel.Geom.Rectangle mediaBox => new iText.Kernel.Geom.Rectangle(mediaRect.Width, mediaRect.Height);
 
+        public double scale;
 
         private string parentFolder;
         

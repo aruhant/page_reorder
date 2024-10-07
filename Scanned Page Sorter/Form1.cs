@@ -41,7 +41,7 @@ namespace Scanned_Page_Sorter
         private void setupImageListStyles(ImageListView list)
         {
             list.SetRenderer(new ThumbnailRenderer(imageMetadataMap));
-         }
+        }
 
 
         private void dropComplete_Handler(object sender, DropCompleteEventArgs e)
@@ -228,10 +228,10 @@ namespace Scanned_Page_Sorter
                     if ((subtype == null) || subtype.ToString() != PdfName.Image.ToString()) break;
                     byte[] data = (obj as PdfStream).GetBytes();
                     string title = $"{imageNumber++:D3}.jpg";
-                    using (var ms = new MemoryStream(data))
+                    using (MemoryStream ms = new MemoryStream(data))
                     {
-                    var fileName = Path.Combine(outputFolder, title);
-                        using (var img = Image.FromStream(ms))
+                        var fileName = Path.Combine(outputFolder, title);
+                        using (Image img = Image.FromStream(ms))
                         {
                             var croppedImg = CropToBoundsAndRotate(img, clip, mediabox, 0);
                             croppedImg.Save(fileName, ImageFormat.Jpeg);
@@ -242,6 +242,7 @@ namespace Scanned_Page_Sorter
                     metadata.clipRect = clip;
                     metadata.mediaRect = mediabox;
                     metadata.Orientation = rotation;
+
                     Console.WriteLine(name + " image: " + imageNumber + "Rotation: " + rotation + "Mediabox " + mediabox + " clipRect " + clip + " r ");
                     break;
                 case PdfObject.NAME:
@@ -251,7 +252,7 @@ namespace Scanned_Page_Sorter
                 default:
                     Console.WriteLine("-->" + obj.GetType());
                     break;
-            }   
+            }
         }
 
 
@@ -301,22 +302,23 @@ namespace Scanned_Page_Sorter
                 using (PdfDocument pdf = new PdfDocument(writer))
                 {
                     Document doc = new Document(pdf); // Create a Document instance
-                        foreach (ImageListViewItem item in outImageListView.Items)
-                        {
-                            string path = Path.Combine(item.FilePath, item.FileName);
-                            ImageMetadata metadata = imageMetadataMap[item.Text];
-                            PdfPage page = pdf.AddNewPage(metadata.pageSize);
-                            ImageData imageData = ImageDataFactory.Create(path);
-                            iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData); // Use the correct Image class
+                    doc.SetMargins(0, 0, 0, 0);
+                    foreach (ImageListViewItem item in outImageListView.Items)
+                    {
+                        string path = Path.Combine(item.FilePath, item.FileName);
+                        ImageMetadata metadata = imageMetadataMap[item.Text];
+                        PdfPage page = pdf.AddNewPage(metadata.pageSize);
+                        ImageData imageData = ImageDataFactory.Create(path);
+                        iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);  
                         page.SetMediaBox(metadata.mediaBox);
                         page.SetCropBox(metadata.clipBox);
                         page.SetRotation(metadata.Orientation);
-
-
+                        image.SetRotationAngle(-metadata.Rotate * Math.PI / 180  );
+                        doc.Add(image);
                         Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
-                        }
+                    }
 
-                 }
+                }
                 writer.Close();
                 MessageBox.Show("PDF saved successfully!", "Save PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 System.Diagnostics.Process.Start(outputPdf);
@@ -360,13 +362,14 @@ namespace Scanned_Page_Sorter
 
         private void splitterMoved(object sender, SplitterEventArgs e) => saveLayout();
 
-        private void updateInPreview(object sender, ItemHoverEventArgs e)        =>            updatePreview(inPreview, e.Item);
+        private void updateInPreview(object sender, ItemHoverEventArgs e) => updatePreview(inPreview, e.Item);
 
-        private void updateOutPreview(object sender, ItemHoverEventArgs e)        =>            updatePreview(outPreview, e.Item);
-        
+        private void updateOutPreview(object sender, ItemHoverEventArgs e) => updatePreview(outPreview, e.Item);
 
-        private void updatePreview(PictureBox preview , ImageListViewItem item ) {
-            if(item == null) return;
+
+        private void updatePreview(PictureBox preview, ImageListViewItem item)
+        {
+            if (item == null) return;
             ImageMetadata metadata = imageMetadataMap[item.Text];
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
@@ -376,9 +379,9 @@ namespace Scanned_Page_Sorter
         private void rotateLeft_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                { rotate(inImageListView, -1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
+            { rotate(inImageListView, -1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                { rotate(outImageListView, -1); updatePreview(outPreview, inImageListView.SelectedItems[0]); }
+            { rotate(outImageListView, -1); updatePreview(outPreview, outImageListView.SelectedItems[0]); }
         }
 
         private void rotateRight_Click(object sender, EventArgs e)
@@ -386,7 +389,7 @@ namespace Scanned_Page_Sorter
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
             { rotate(inImageListView, 1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            { rotate(outImageListView, 1); updatePreview(outPreview, inImageListView.SelectedItems[0]); }
+            { rotate(outImageListView, 1); updatePreview(outPreview, outImageListView.SelectedItems[0]); }
 
         }
 
@@ -405,7 +408,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                imageMetadataMap[item.Text].Orientation = (imageMetadataMap[item.Text].Orientation +angle) %360;
+                imageMetadataMap[item.Text].Orientation = (imageMetadataMap[item.Text].Orientation + angle) % 360;
                 item.Update();
             }
         }
@@ -413,9 +416,9 @@ namespace Scanned_Page_Sorter
         private void tooggleLayout_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                { rotateLayout(inImageListView, 90); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
+            { rotateLayout(inImageListView, 90); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                { rotateLayout(outImageListView, 90); updatePreview(inPreview, outImageListView.SelectedItems[0]); }
+            { rotateLayout(outImageListView, 90); updatePreview(inPreview, outImageListView.SelectedItems[0]); }
         }
     }
 }
