@@ -306,7 +306,7 @@ namespace Scanned_Page_Sorter
                 {
                     if (item.Comment != null && item.Comment.Length > 0)
                     {
-                        string page = item.Title.Split('.')[0];
+                        string page = item.Title.Contains(".")? item.Title.Split('.')[0] : item.Title;
                         sw.WriteLine($"Page: {page} : {item.Comment}");
                     }
                 }
@@ -472,7 +472,7 @@ namespace Scanned_Page_Sorter
         private void setComment( ImageListViewItem item , string comment)
         {
             if (comment.Contains("Cover")) {
-                ImageMetadata imageMetadata = new ImageMetadata("Cover");
+                ImageMetadata imageMetadata = new ImageMetadata("Cover", "Cover");
                 imageMetadata.Comment = comment;
                 imageMetadataMap["Cover"] = imageMetadata;
 
