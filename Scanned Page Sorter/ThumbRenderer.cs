@@ -89,7 +89,7 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
                         //Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));
                         //if ((a ) != 0) img = RotateImage(img, a );                        
                         //pos = getRotatedRectangle(pos, metadata.Orientation);
-                        if ((metadata.Rotate + metadata.Orientation)!=0) img = RotateImage(img, metadata.Orientation, metadata.Rotate);
+                        if ((metadata.Rotate + metadata.Orientation)!=0) img = ImageUtils.RotateImage(img, metadata.Orientation, metadata.Rotate);
                         Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));                        
                         g.DrawImage(img, pos);
                         // Draw image border
@@ -182,44 +182,7 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
             }
         }
 
-        private Image RotateImage(Image img, int orientation, float rotation)
-        {
-    
-                Bitmap src = img as Bitmap;
-                 Rectangle   cropRect = new Rectangle(0, 0, img.Width, img.Height);
-
-                // Create a new bitmap for the bmp image
-
-                Bitmap bmp = new Bitmap(cropRect.Width, cropRect.Height);
-                using (Graphics g = Graphics.FromImage(bmp))
-                {
-                    g.DrawImage(src, cropRect, cropRect, GraphicsUnit.Pixel);
-                }
-                if (orientation +rotation == 0) return bmp;
-
-                double radianAngle = orientation / 180.0 * Math.PI;
-                double cosA = Math.Abs(Math.Cos(radianAngle));
-                double sinA = Math.Abs(Math.Sin(radianAngle));
-
-                int newWidth = (int)(cosA * bmp.Width + sinA * bmp.Height);
-                int newHeight = (int)(cosA * bmp.Height + sinA * bmp.Width);
-
-                var rotatedBitmap = new Bitmap(newWidth, newHeight);
-                rotatedBitmap.SetResolution(bmp.HorizontalResolution, bmp.VerticalResolution);
-
-                using (Graphics g = Graphics.FromImage(rotatedBitmap))
-                {
-                    g.TranslateTransform(rotatedBitmap.Width / 2, rotatedBitmap.Height / 2);
-                    g.RotateTransform((float)(orientation+ rotation));
-                    g.TranslateTransform(-bmp.Width / 2, -bmp.Height / 2);
-                    g.DrawImage(bmp, new Point(0, 0));
-                }
-
-                bmp.Dispose();//Remove if you want to keep oryginal bitmap
-
-                return rotatedBitmap;
-             
-        }
+     
         private Rectangle getRotatedRectangle(Rectangle rect, double angle)
         {
             // Calculate the rotated rectangle's bounds

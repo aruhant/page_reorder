@@ -136,12 +136,20 @@ namespace Scanned_Page_Sorter
         }
         private void restoreSplitPaneLayout(SplitterPanelLayout layout, SplitContainer container)
         {
-            string panelRatioString = config.AppSettings.Settings[container.Name + layout.ToString()]?.Value;
-            double defaults = container == mainSplitContainer ? 0.5 : 0.25;
-            double panelRatio = string.IsNullOrEmpty(panelRatioString) ? defaults : double.Parse(panelRatioString);
-            if (panelRatio < 0 || panelRatio > 1) panelRatio = defaults;
-            container.SplitterDistance = (int)(layout == SplitterPanelLayout.Horizontal ? this.Height * panelRatio : this.Width * panelRatio);
-            Console.WriteLine(container.Name + " -- > " + panelRatio);
+            try
+            {
+                string panelRatioString = config.AppSettings.Settings[container.Name + layout.ToString()]?.Value;
+                double defaults = container == mainSplitContainer ? 0.5 : 0.25;
+                double panelRatio = string.IsNullOrEmpty(panelRatioString) ? defaults : double.Parse(panelRatioString);
+                if (panelRatio < 0 || panelRatio > 1) panelRatio = defaults;
+                container.SplitterDistance = (int)(layout == SplitterPanelLayout.Horizontal ? this.Height * panelRatio : this.Width * panelRatio);
+                Console.WriteLine(container.Name + " -- > " + panelRatio);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error restoring split pane layout: " + ex.Message);
+            }
+             
         }
 
         #endregion

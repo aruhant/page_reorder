@@ -3,6 +3,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using Manina.Windows.Forms;
 using Manina.Windows.Forms.ImageListViewRenderers;
+using Org.BouncyCastle.Asn1.Cms;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -348,36 +349,34 @@ namespace Scanned_Page_Sorter
 
         private void splitterMoved(object sender, SplitterEventArgs e) => saveLayout();
 
-        private void updateInPreview(object sender, ItemHoverEventArgs e)
-        {
-            if (e.Item == null) return;
-            string path = Path.Combine(e.Item.FilePath, e.Item.FileName);
-            inPreview.Image = Image.FromFile(path);
+        private void updateInPreview(object sender, ItemHoverEventArgs e)        =>            updatePreview(inPreview, e.Item);
+
+        private void updateOutPreview(object sender, ItemHoverEventArgs e)        =>            updatePreview(outPreview, e.Item);
+        
+
+        private void updatePreview(PictureBox preview , ImageListViewItem item ) {
+            if(item == null) return;
+            ImageMetadata metadata = imageMetadataMap[item.Text];
+            string path = Path.Combine(item.FilePath, item.FileName);
+            preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
         }
 
-
-        private void updateOutPreview(object sender, ItemHoverEventArgs e)
-        {
-            if (e.Item == null) return;
-            string path = Path.Combine(e.Item.FilePath, e.Item.FileName);
-            outPreview.Image = Image.FromFile(path);
-
-        }
 
         private void rotateLeft_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                rotate(inImageListView, -1);
+                { rotate(inImageListView, -1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                rotate(outImageListView, -1);
+                { rotate(outImageListView, -1); updatePreview(outPreview, inImageListView.SelectedItems[0]); }
         }
 
         private void rotateRight_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                rotate(inImageListView, 1);
+            { rotate(inImageListView, 1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                rotate(outImageListView, 1);
+            { rotate(outImageListView, 1); updatePreview(outPreview, inImageListView.SelectedItems[0]); }
+
         }
 
         private void rotate(ImageListView imageListView, float angle)
@@ -403,9 +402,9 @@ namespace Scanned_Page_Sorter
         private void tooggleLayout_Click(object sender, EventArgs e)
         {
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                rotateLayout(inImageListView, 90);
+                { rotateLayout(inImageListView, 90); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                rotateLayout(outImageListView, 90);
+                { rotateLayout(outImageListView, 90); updatePreview(inPreview, outImageListView.SelectedItems[0]); }
         }
     }
 }
