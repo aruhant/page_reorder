@@ -17,14 +17,14 @@ namespace Scanned_Page_Sorter
         public Rectangle clipRect;
         public Rectangle mediaRect;
 
-        public iText.Kernel.Geom.PageSize pageSize => clipRect.Width==0? new iText.Kernel.Geom.PageSize(mediaRect.Width, mediaRect.Height) : new iText.Kernel.Geom.PageSize(clipRect.Width, clipRect.Height);
-        public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width==0?    mediaBox:  new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
+        public iText.Kernel.Geom.PageSize pageSize => clipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(mediaRect.Width, mediaRect.Height) : new iText.Kernel.Geom.PageSize(clipRect.Width, clipRect.Height);
+        public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width == 0 ? mediaBox : new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
         public iText.Kernel.Geom.Rectangle mediaBox => new iText.Kernel.Geom.Rectangle(mediaRect.Width, mediaRect.Height);
 
         public double scale;
 
         private string parentFolder;
-        
+
 
         public ImageMetadata(string parentFolder)
         {
@@ -49,7 +49,7 @@ namespace Scanned_Page_Sorter
         {
             get
             {
-                if (!map.ContainsKey(key))    map[key] = new ImageMetadata(key);                
+                if (!map.ContainsKey(key)) map[key] = new ImageMetadata(key);
                 return map[key];
             }
             set

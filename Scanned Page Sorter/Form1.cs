@@ -314,6 +314,8 @@ namespace Scanned_Page_Sorter
                         page.SetCropBox(metadata.clipBox);
                         page.SetRotation(metadata.Orientation);
                         image.SetRotationAngle(-metadata.Rotate * Math.PI / 180  );
+
+
                         doc.Add(image);
                         Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
                     }
