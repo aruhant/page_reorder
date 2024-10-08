@@ -322,10 +322,13 @@ namespace Scanned_Page_Sorter
                 {
                     Document doc = new Document(pdf); // Create a Document instance
                     doc.SetMargins(0, 0, 0, 0);
+                    if (imageMetadataMap["Cover"]!=null)
+                        addPagewithText(pdf, doc, imageMetadataMap["Cover"].Comment);
                     foreach (ImageListViewItem item in outImageListView.Items)
-                    {
+                    {                        
                         string path = Path.Combine(item.FilePath, item.FileName);
                         ImageMetadata metadata = imageMetadataMap[item.Text];
+                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf,doc, "Missing Page");
                         PdfPage page = pdf.AddNewPage(metadata.pageSize);
                         ImageData imageData = ImageDataFactory.Create(path);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);  
@@ -333,10 +336,9 @@ namespace Scanned_Page_Sorter
                         page.SetCropBox(metadata.clipBox);
                         page.SetRotation(metadata.Orientation);
                         image.SetRotationAngle(-metadata.Rotate * Math.PI / 180  );
-
-
                         doc.Add(image);
                         Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
+                        if (metadata.Comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
                     }
 
                 }
@@ -345,6 +347,18 @@ namespace Scanned_Page_Sorter
                 System.Diagnostics.Process.Start(outputPdf);
             }
         }
+
+        private void addPagewithText(PdfDocument pdf, Document doc, string v, bool addBreak=true)
+        {
+            // Set page background color to cyan
+            // and write text with large black letters in the center.
+            //PdfPage page =  pdf.AddNewPage();
+            doc.Add (new iText.Layout.Element.Paragraph(v)
+                .SetBackgroundColor(iText.Kernel.Colors.ColorConstants.CYAN)
+.SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
+                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                .SetFontSize(24f));
+         }
 
         #endregion
 
