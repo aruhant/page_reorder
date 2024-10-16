@@ -294,7 +294,7 @@ namespace Scanned_Page_Sorter
         private void exportPDF_Handler(object sender, EventArgs e)
         {
             saveImagesToPDF(outImageListView, currentlyOpenPDFfile);
-            saveCommentsToTXT(imageMetadataMap, currentlyOpenPDFfile );
+            saveCommentsToTXT(imageMetadataMap, currentlyOpenPDFfile);
         }
 
         private void saveCommentsToTXT(ImageMetadataMap imageMetadataMap, string inputPdf)
@@ -306,7 +306,7 @@ namespace Scanned_Page_Sorter
                 {
                     if (item.Comment != null && item.Comment.Length > 0)
                     {
-                        string page = item.Title.Contains(".")? item.Title.Split('.')[0] : item.Title;
+                        string page = item.Title.Contains(".") ? item.Title.Split('.')[0] : item.Title;
                         sw.WriteLine($"Page: {page} : {item.Comment}");
                     }
                 }
@@ -322,20 +322,20 @@ namespace Scanned_Page_Sorter
                 {
                     Document doc = new Document(pdf); // Create a Document instance
                     doc.SetMargins(0, 0, 0, 0);
-                    if (imageMetadataMap["Cover"]!=null)
+                    if (imageMetadataMap["Cover"] != null)
                         addPagewithText(pdf, doc, imageMetadataMap["Cover"].Comment);
                     foreach (ImageListViewItem item in outImageListView.Items)
-                    {                        
+                    {
                         string path = Path.Combine(item.FilePath, item.FileName);
                         ImageMetadata metadata = imageMetadataMap[item.Text];
-                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf,doc, "Missing Page");
+                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
                         PdfPage page = pdf.AddNewPage(metadata.pageSize);
                         ImageData imageData = ImageDataFactory.Create(path);
-                        iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);  
+                        iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);
                         page.SetMediaBox(metadata.mediaBox);
                         page.SetCropBox(metadata.clipBox);
                         page.SetRotation(metadata.Orientation);
-                        image.SetRotationAngle(-metadata.Rotate * Math.PI / 180  );
+                        image.SetRotationAngle(-metadata.Rotate * Math.PI / 180);
                         doc.Add(image);
                         Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
                         if (metadata.Comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
@@ -348,17 +348,17 @@ namespace Scanned_Page_Sorter
             }
         }
 
-        private void addPagewithText(PdfDocument pdf, Document doc, string v, bool addBreak=true)
+        private void addPagewithText(PdfDocument pdf, Document doc, string v, bool addBreak = true)
         {
             // Set page background color to cyan
             // and write text with large black letters in the center.
             //PdfPage page =  pdf.AddNewPage();
-            doc.Add (new iText.Layout.Element.Paragraph(v)
+            doc.Add(new iText.Layout.Element.Paragraph(v)
                 .SetBackgroundColor(iText.Kernel.Colors.ColorConstants.CYAN)
 .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                 .SetFontSize(24f));
-         }
+        }
 
         #endregion
 
@@ -473,7 +473,8 @@ namespace Scanned_Page_Sorter
             else if (inPreview.Focused)
             {
                 setComment(inPreview.Tag as ImageListViewItem, comment);
-            } else if (outPreview.Focused)
+            }
+            else if (outPreview.Focused)
             {
                 setComment(outPreview.Tag as ImageListViewItem, comment);
             }
@@ -481,20 +482,23 @@ namespace Scanned_Page_Sorter
 
         private void setComment(ImageListView imageListView, string comment)
         {
-            foreach (var item in imageListView.SelectedItems)                setComment(item, comment);
+            foreach (var item in imageListView.SelectedItems) setComment(item, comment);
         }
-        private void setComment( ImageListViewItem item , string comment)
+        private void setComment(ImageListViewItem item, string comment)
         {
-            if (comment.Contains("Cover")) {
+            if (comment.Contains("Cover"))
+            {
                 ImageMetadata imageMetadata = new ImageMetadata("Cover", "Cover");
                 imageMetadata.Comment = comment;
                 imageMetadataMap["Cover"] = imageMetadata;
 
-            }else{
+            }
+            else
+            {
                 imageMetadataMap[item.Text].Comment = comment;
                 item.Update();
             }
-                
+
         }
 
         private void duplexToggle_Click(object sender, EventArgs e)
@@ -507,6 +511,31 @@ namespace Scanned_Page_Sorter
         {
             AppConfig.Instance.HasCover = !AppConfig.Instance.HasCover;
             coverToggle.Checked = AppConfig.Instance.HasCover;
+        }
+
+        private void inImageListView_SelectionChanged(object sender, EventArgs e)
+        {
+            if ((inImageListView.SelectedItems.Count > 0) && AppConfig.Instance.DuplexSelectMode)
+            {
+                int hasCover = 1;
+                for (int i = 0; i < inImageListView.Items.Count; i++)
+                {
+                    if (inImageListView.Items[i].Text == "000.jpg"){ hasCover =  0; continue; }
+                    if (!inImageListView.Items[i].Selected) continue;
+                    if (((hasCover+ i) % 2 == 1) )
+                    {
+                        if (i < inImageListView.Items.Count - 1 && !inImageListView.Items[i + 1].Selected) inImageListView.Items[i + 1].Selected = true;
+                        i++;
+                    }
+                    else if ((hasCover+ i) % 2 == 0)
+                    {
+                        if (i >= 2) inImageListView.Items[i - 1].Selected = true;
+                    }
+                }
+
+
+            }
+
         }
     }
 }

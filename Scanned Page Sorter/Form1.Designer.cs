@@ -204,12 +204,12 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.mainSplitContainer);
-            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1333, 570);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
-            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.Size = new System.Drawing.Size(1333, 617);
             this.toolStripContainer1.TabIndex = 1;
@@ -241,7 +241,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.mainSplitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.mainSplitContainer.Margin = new System.Windows.Forms.Padding(4);
             this.mainSplitContainer.Name = "mainSplitContainer";
             this.mainSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -262,7 +262,7 @@
             // 
             this.inSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.inSplitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.inSplitContainer.Margin = new System.Windows.Forms.Padding(4);
             this.inSplitContainer.Name = "inSplitContainer";
             this.inSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -286,7 +286,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inPreview.ContextMenuStrip = this.commentsContextMenu;
             this.inPreview.Location = new System.Drawing.Point(0, 0);
-            this.inPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.inPreview.Margin = new System.Windows.Forms.Padding(4);
             this.inPreview.Name = "inPreview";
             this.inPreview.Size = new System.Drawing.Size(1331, 157);
             this.inPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -349,7 +349,7 @@
             this.inImageListView.ContextMenuStrip = this.commentsContextMenu;
             this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inImageListView.Location = new System.Drawing.Point(0, 0);
-            this.inImageListView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.inImageListView.Margin = new System.Windows.Forms.Padding(4);
             this.inImageListView.Name = "inImageListView";
             this.inImageListView.PersistentCacheDirectory = "";
             this.inImageListView.PersistentCacheSize = ((long)(0));
@@ -358,12 +358,13 @@
             this.inImageListView.UseWIC = true;
             this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             this.inImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateInPreview);
+            this.inImageListView.SelectionChanged += new System.EventHandler(this.inImageListView_SelectionChanged);
             // 
             // outSplitContainer
             // 
             this.outSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outSplitContainer.Location = new System.Drawing.Point(0, 0);
-            this.outSplitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.outSplitContainer.Margin = new System.Windows.Forms.Padding(4);
             this.outSplitContainer.Name = "outSplitContainer";
             this.outSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -388,7 +389,7 @@
             this.outImageListView.ContextMenuStrip = this.commentsContextMenu;
             this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outImageListView.Location = new System.Drawing.Point(0, 0);
-            this.outImageListView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.outImageListView.Margin = new System.Windows.Forms.Padding(4);
             this.outImageListView.Name = "outImageListView";
             this.outImageListView.PersistentCacheDirectory = "";
             this.outImageListView.PersistentCacheSize = ((long)(100));
@@ -405,9 +406,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outPreview.ContextMenuStrip = this.commentsContextMenu;
             this.outPreview.Location = new System.Drawing.Point(3, 0);
-            this.outPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.outPreview.Margin = new System.Windows.Forms.Padding(4);
             this.outPreview.Name = "outPreview";
-            this.outPreview.Size = new System.Drawing.Size(1331, 202);
+            this.outPreview.Size = new System.Drawing.Size(1331, 201);
             this.outPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.outPreview.TabIndex = 0;
             this.outPreview.TabStop = false;
@@ -439,7 +440,7 @@
             this.coverToggle});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(446, 25);
+            this.toolStrip.Size = new System.Drawing.Size(415, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -615,7 +616,7 @@
             this.ClientSize = new System.Drawing.Size(1333, 641);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.mainMenu);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "pageSorterForm";
             this.Text = "Page Sorter";
             this.Load += new System.EventHandler(this.pageSorterForm_Load);
