@@ -10,7 +10,7 @@ namespace Scanned_Page_Sorter
     public partial class pageSorterForm : Form
     {
         private SplitterPanelLayout? splitterPanelLayout = null;
-        private Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        private Configuration config = AppConfig.Instance.Config;
         private Debouncer debouncer = new Debouncer();
 
 
@@ -18,7 +18,6 @@ namespace Scanned_Page_Sorter
 
         private void _SaveLayout()
         {
-            Console.WriteLine("**********************Saving ");
             if (splitterPanelLayout == null) return;
             Console.WriteLine("splitter panel layout: " + splitterPanelLayout);
             config.AppSettings.Settings["SplitterPanelLayout"].Value = splitterPanelLayout.ToString();

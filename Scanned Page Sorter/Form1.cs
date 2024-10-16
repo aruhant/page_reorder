@@ -32,6 +32,8 @@ namespace Scanned_Page_Sorter
         {
             setupImageListStyles(inImageListView);
             setupImageListStyles(outImageListView);
+            coverToggle.Checked = AppConfig.Instance.HasCover;
+            duplexToggle.Checked = AppConfig.Instance.DuplexSelectMode;
             Application.DoEvents();
             loadLayout();
         }
@@ -517,19 +519,21 @@ namespace Scanned_Page_Sorter
         {
             if ((inImageListView.SelectedItems.Count > 0) && AppConfig.Instance.DuplexSelectMode)
             {
-                int hasCover = 1;
+                int coverNotSeen = AppConfig.Instance.HasCover? 1:0 ;
+                Console.WriteLine($"{coverNotSeen}");
                 for (int i = 0; i < inImageListView.Items.Count; i++)
                 {
-                    if (inImageListView.Items[i].Text == "000.jpg"){ hasCover =  0; continue; }
+                    if ( coverNotSeen!=0 && inImageListView.Items[i].Text == "000.jpg"){ coverNotSeen =  0; if (AppConfig.Instance.HasCover)  continue; }
                     if (!inImageListView.Items[i].Selected) continue;
-                    if (((hasCover+ i) % 2 == 1) )
+                    if (((coverNotSeen+ i) % 2 == 1) )
                     {
                         if (i < inImageListView.Items.Count - 1 && !inImageListView.Items[i + 1].Selected) inImageListView.Items[i + 1].Selected = true;
                         i++;
                     }
-                    else if ((hasCover+ i) % 2 == 0)
+                    else if ((coverNotSeen+ i) % 2 == 0)
                     {
                         if (i >= 2) inImageListView.Items[i - 1].Selected = true;
+                        if (i<=1 && coverNotSeen==1 ) inImageListView.Items[i - 1].Selected = true;
                     }
                 }
 
