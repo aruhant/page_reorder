@@ -496,5 +496,17 @@ namespace Scanned_Page_Sorter
             }
                 
         }
+
+        private void duplexToggle_Click(object sender, EventArgs e)
+        {
+            AppConfig.Instance.DuplexSelectMode = !AppConfig.Instance.DuplexSelectMode;
+            duplexToggle.Checked = AppConfig.Instance.DuplexSelectMode;
+        }
+
+        private void coverToggle_Click(object sender, EventArgs e)
+        {
+            AppConfig.Instance.HasCover = !AppConfig.Instance.HasCover;
+            coverToggle.Checked = AppConfig.Instance.HasCover;
+        }
     }
 }

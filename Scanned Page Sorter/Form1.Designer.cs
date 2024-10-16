@@ -51,6 +51,8 @@
             this.blurredImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missingCoverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.missingPageToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.previousPageMissingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.inImageListView = new Manina.Windows.Forms.ImageListView();
             this.outSplitContainer = new System.Windows.Forms.SplitContainer();
             this.outImageListView = new Manina.Windows.Forms.ImageListView();
@@ -73,8 +75,9 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rotateLeft = new System.Windows.Forms.ToolStripButton();
             this.rotateRight = new System.Windows.Forms.ToolStripButton();
-            this.missingPageToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.previousPageMissingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.duplexToggle = new System.Windows.Forms.ToolStripButton();
+            this.coverToggle = new System.Windows.Forms.ToolStripButton();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -105,7 +108,8 @@
             this.fileToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
-            this.mainMenu.Size = new System.Drawing.Size(1000, 24);
+            this.mainMenu.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.mainMenu.Size = new System.Drawing.Size(1333, 24);
             this.mainMenu.TabIndex = 0;
             this.mainMenu.Text = "menuStrip1";
             // 
@@ -200,12 +204,14 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.mainSplitContainer);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1000, 450);
+            this.toolStripContainer1.ContentPanel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1333, 570);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
+            this.toolStripContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.toolStripContainer1.Name = "toolStripContainer1";
-            this.toolStripContainer1.Size = new System.Drawing.Size(1000, 497);
+            this.toolStripContainer1.Size = new System.Drawing.Size(1333, 617);
             this.toolStripContainer1.TabIndex = 1;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -220,7 +226,7 @@
             this.statusMessage});
             this.statusStrip.Location = new System.Drawing.Point(0, 0);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(1000, 22);
+            this.statusStrip.Size = new System.Drawing.Size(1333, 22);
             this.statusStrip.TabIndex = 0;
             // 
             // statusMessage
@@ -235,6 +241,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.mainSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.mainSplitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.mainSplitContainer.Name = "mainSplitContainer";
             this.mainSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -245,8 +252,9 @@
             // mainSplitContainer.Panel2
             // 
             this.mainSplitContainer.Panel2.Controls.Add(this.outSplitContainer);
-            this.mainSplitContainer.Size = new System.Drawing.Size(1000, 450);
-            this.mainSplitContainer.SplitterDistance = 243;
+            this.mainSplitContainer.Size = new System.Drawing.Size(1333, 570);
+            this.mainSplitContainer.SplitterDistance = 306;
+            this.mainSplitContainer.SplitterWidth = 5;
             this.mainSplitContainer.TabIndex = 2;
             this.mainSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
@@ -254,6 +262,7 @@
             // 
             this.inSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.inSplitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.inSplitContainer.Name = "inSplitContainer";
             this.inSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -264,8 +273,9 @@
             // inSplitContainer.Panel2
             // 
             this.inSplitContainer.Panel2.Controls.Add(this.inImageListView);
-            this.inSplitContainer.Size = new System.Drawing.Size(1000, 243);
-            this.inSplitContainer.SplitterDistance = 127;
+            this.inSplitContainer.Size = new System.Drawing.Size(1333, 306);
+            this.inSplitContainer.SplitterDistance = 159;
+            this.inSplitContainer.SplitterWidth = 5;
             this.inSplitContainer.TabIndex = 0;
             this.inSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
@@ -276,8 +286,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inPreview.ContextMenuStrip = this.commentsContextMenu;
             this.inPreview.Location = new System.Drawing.Point(0, 0);
+            this.inPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.inPreview.Name = "inPreview";
-            this.inPreview.Size = new System.Drawing.Size(998, 124);
+            this.inPreview.Size = new System.Drawing.Size(1331, 157);
             this.inPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.inPreview.TabIndex = 0;
             this.inPreview.TabStop = false;
@@ -291,7 +302,7 @@
             this.missingPageToolStripMenuItem1,
             this.previousPageMissingToolStripMenuItem});
             this.commentsContextMenu.Name = "contextMenuStrip1";
-            this.commentsContextMenu.Size = new System.Drawing.Size(193, 136);
+            this.commentsContextMenu.Size = new System.Drawing.Size(193, 114);
             // 
             // blurredImageToolStripMenuItem
             // 
@@ -314,6 +325,20 @@
             this.missingCoverToolStripMenuItem.Text = "M&issing Cover";
             this.missingCoverToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
             // 
+            // missingPageToolStripMenuItem1
+            // 
+            this.missingPageToolStripMenuItem1.Name = "missingPageToolStripMenuItem1";
+            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
+            this.missingPageToolStripMenuItem1.Text = "&Next Page Missing";
+            this.missingPageToolStripMenuItem1.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            // 
+            // previousPageMissingToolStripMenuItem
+            // 
+            this.previousPageMissingToolStripMenuItem.Name = "previousPageMissingToolStripMenuItem";
+            this.previousPageMissingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.previousPageMissingToolStripMenuItem.Text = "&Previous Page Missing";
+            this.previousPageMissingToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            // 
             // inImageListView
             // 
             this.inImageListView.AllowDrag = true;
@@ -324,10 +349,11 @@
             this.inImageListView.ContextMenuStrip = this.commentsContextMenu;
             this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inImageListView.Location = new System.Drawing.Point(0, 0);
+            this.inImageListView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.inImageListView.Name = "inImageListView";
             this.inImageListView.PersistentCacheDirectory = "";
             this.inImageListView.PersistentCacheSize = ((long)(0));
-            this.inImageListView.Size = new System.Drawing.Size(1000, 112);
+            this.inImageListView.Size = new System.Drawing.Size(1333, 142);
             this.inImageListView.TabIndex = 3;
             this.inImageListView.UseWIC = true;
             this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
@@ -337,6 +363,7 @@
             // 
             this.outSplitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outSplitContainer.Location = new System.Drawing.Point(0, 0);
+            this.outSplitContainer.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.outSplitContainer.Name = "outSplitContainer";
             this.outSplitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -347,8 +374,9 @@
             // outSplitContainer.Panel2
             // 
             this.outSplitContainer.Panel2.Controls.Add(this.outPreview);
-            this.outSplitContainer.Size = new System.Drawing.Size(1000, 203);
-            this.outSplitContainer.SplitterDistance = 42;
+            this.outSplitContainer.Size = new System.Drawing.Size(1333, 259);
+            this.outSplitContainer.SplitterDistance = 52;
+            this.outSplitContainer.SplitterWidth = 5;
             this.outSplitContainer.TabIndex = 0;
             this.outSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
@@ -360,10 +388,11 @@
             this.outImageListView.ContextMenuStrip = this.commentsContextMenu;
             this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outImageListView.Location = new System.Drawing.Point(0, 0);
+            this.outImageListView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.outImageListView.Name = "outImageListView";
             this.outImageListView.PersistentCacheDirectory = "";
             this.outImageListView.PersistentCacheSize = ((long)(100));
-            this.outImageListView.Size = new System.Drawing.Size(1000, 42);
+            this.outImageListView.Size = new System.Drawing.Size(1333, 52);
             this.outImageListView.TabIndex = 3;
             this.outImageListView.UseWIC = true;
             this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
@@ -375,9 +404,10 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outPreview.ContextMenuStrip = this.commentsContextMenu;
-            this.outPreview.Location = new System.Drawing.Point(2, 0);
+            this.outPreview.Location = new System.Drawing.Point(3, 0);
+            this.outPreview.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.outPreview.Name = "outPreview";
-            this.outPreview.Size = new System.Drawing.Size(998, 157);
+            this.outPreview.Size = new System.Drawing.Size(1331, 202);
             this.outPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.outPreview.TabIndex = 0;
             this.outPreview.TabStop = false;
@@ -403,10 +433,13 @@
             this.tooggleLayout,
             this.toolStripSeparator1,
             this.rotateLeft,
-            this.rotateRight});
+            this.rotateRight,
+            this.toolStripSeparator5,
+            this.duplexToggle,
+            this.coverToggle});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(363, 25);
+            this.toolStrip.Size = new System.Drawing.Size(446, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -550,27 +583,39 @@
             this.rotateRight.Text = "rotateRight";
             this.rotateRight.Click += new System.EventHandler(this.rotateRight_Click);
             // 
-            // missingPageToolStripMenuItem1
+            // toolStripSeparator5
             // 
-            this.missingPageToolStripMenuItem1.Name = "missingPageToolStripMenuItem1";
-            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
-            this.missingPageToolStripMenuItem1.Text = "&Next Page Missing";
-            this.missingPageToolStripMenuItem1.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
             // 
-            // previousPageMissingToolStripMenuItem
+            // duplexToggle
             // 
-            this.previousPageMissingToolStripMenuItem.Name = "previousPageMissingToolStripMenuItem";
-            this.previousPageMissingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.previousPageMissingToolStripMenuItem.Text = "&Previous Page Missing";
-            this.previousPageMissingToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            this.duplexToggle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.duplexToggle.Image = ((System.Drawing.Image)(resources.GetObject("duplexToggle.Image")));
+            this.duplexToggle.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.duplexToggle.Name = "duplexToggle";
+            this.duplexToggle.Size = new System.Drawing.Size(23, 22);
+            this.duplexToggle.Text = "Toggle Duplex Mode";
+            this.duplexToggle.Click += new System.EventHandler(this.duplexToggle_Click);
+            // 
+            // coverToggle
+            // 
+            this.coverToggle.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.coverToggle.Image = ((System.Drawing.Image)(resources.GetObject("coverToggle.Image")));
+            this.coverToggle.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.coverToggle.Name = "coverToggle";
+            this.coverToggle.Size = new System.Drawing.Size(23, 22);
+            this.coverToggle.Text = "Toggle Missing Cover";
+            this.coverToggle.Click += new System.EventHandler(this.coverToggle_Click);
             // 
             // pageSorterForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1000, 521);
+            this.ClientSize = new System.Drawing.Size(1333, 641);
             this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.mainMenu);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "pageSorterForm";
             this.Text = "Page Sorter";
             this.Load += new System.EventHandler(this.pageSorterForm_Load);
@@ -655,6 +700,9 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem missingPageToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem previousPageMissingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton duplexToggle;
+        private System.Windows.Forms.ToolStripButton coverToggle;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
     }
 }
 
