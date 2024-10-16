@@ -36,6 +36,8 @@
             this.openFolderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.topToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.rightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -69,8 +71,6 @@
             this.verticalButton = new System.Windows.Forms.ToolStripButton();
             this.horizontalButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.clearThumbsToolStripButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.tooggleLayout = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.rotateLeft = new System.Windows.Forms.ToolStripButton();
@@ -78,6 +78,11 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.duplexToggle = new System.Windows.Forms.ToolStripButton();
             this.coverToggle = new System.Windows.Forms.ToolStripButton();
+            this.rightCorrectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateBy90ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.missingCoverToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -105,7 +110,9 @@
             // mainMenu
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.fileToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.editToolStripMenuItem,
+            this.selectionToolStripMenuItem});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Size = new System.Drawing.Size(1000, 24);
@@ -150,6 +157,24 @@
             this.exitMenuItem.Size = new System.Drawing.Size(139, 22);
             this.exitMenuItem.Text = "&Exit";
             this.exitMenuItem.Click += new System.EventHandler(this.exitMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.rotateLeftToolStripMenuItem,
+            this.rightCorrectionToolStripMenuItem,
+            this.rotateBy90ToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "&Edit";
+            // 
+            // rotateLeftToolStripMenuItem
+            // 
+            this.rotateLeftToolStripMenuItem.Name = "rotateLeftToolStripMenuItem";
+            this.rotateLeftToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Left)));
+            this.rotateLeftToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.rotateLeftToolStripMenuItem.Text = "&Left Correction";
+            this.rotateLeftToolStripMenuItem.Click += new System.EventHandler(this.rotateLeft_Click);
             // 
             // BottomToolStripPanel
             // 
@@ -418,8 +443,6 @@
             this.verticalButton,
             this.horizontalButton,
             this.toolStripSeparator3,
-            this.clearThumbsToolStripButton,
-            this.toolStripSeparator4,
             this.tooggleLayout,
             this.toolStripSeparator1,
             this.rotateLeft,
@@ -429,7 +452,7 @@
             this.coverToggle});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(415, 25);
+            this.toolStrip.Size = new System.Drawing.Size(386, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
@@ -524,20 +547,6 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
             // 
-            // clearThumbsToolStripButton
-            // 
-            this.clearThumbsToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.clearThumbsToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("clearThumbsToolStripButton.Image")));
-            this.clearThumbsToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.clearThumbsToolStripButton.Name = "clearThumbsToolStripButton";
-            this.clearThumbsToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.clearThumbsToolStripButton.Text = "Clear Thumbnail Cache";
-            // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
             // tooggleLayout
             // 
             this.tooggleLayout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -597,6 +606,45 @@
             this.coverToggle.Size = new System.Drawing.Size(23, 22);
             this.coverToggle.Text = "Toggle Missing Cover";
             this.coverToggle.Click += new System.EventHandler(this.coverToggle_Click);
+            // 
+            // rightCorrectionToolStripMenuItem
+            // 
+            this.rightCorrectionToolStripMenuItem.Name = "rightCorrectionToolStripMenuItem";
+            this.rightCorrectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
+            this.rightCorrectionToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.rightCorrectionToolStripMenuItem.Text = "&Right Correction";
+            this.rightCorrectionToolStripMenuItem.Click += new System.EventHandler(this.rotateRight_Click);
+            // 
+            // rotateBy90ToolStripMenuItem
+            // 
+            this.rotateBy90ToolStripMenuItem.Name = "rotateBy90ToolStripMenuItem";
+            this.rotateBy90ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
+            this.rotateBy90ToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.rotateBy90ToolStripMenuItem.Text = "R&otate by 90";
+            this.rotateBy90ToolStripMenuItem.Click += new System.EventHandler(this.tooggleLayout_Click);
+            // 
+            // selectionToolStripMenuItem
+            // 
+            this.selectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.duplexToolStripMenuItem,
+            this.missingCoverToolStripMenuItem1});
+            this.selectionToolStripMenuItem.Name = "selectionToolStripMenuItem";
+            this.selectionToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.selectionToolStripMenuItem.Text = "&Selection";
+            // 
+            // duplexToolStripMenuItem
+            // 
+            this.duplexToolStripMenuItem.Name = "duplexToolStripMenuItem";
+            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duplexToolStripMenuItem.Text = "&Duplex";
+            this.duplexToolStripMenuItem.Click += new System.EventHandler(this.duplexToggle_Click);
+            // 
+            // missingCoverToolStripMenuItem1
+            // 
+            this.missingCoverToolStripMenuItem1.Name = "missingCoverToolStripMenuItem1";
+            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.missingCoverToolStripMenuItem1.Text = "&Missing Cover";
+            this.missingCoverToolStripMenuItem1.Click += new System.EventHandler(this.coverToggle_Click);
             // 
             // pageSorterForm
             // 
@@ -667,8 +715,6 @@
         private System.Windows.Forms.ToolStripButton verticalButton;
         private System.Windows.Forms.ToolStripButton horizontalButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripButton clearThumbsToolStripButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripButton openFileToolStripButton;
         private System.Windows.Forms.ToolStripButton openFolderToolStripButton;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
@@ -692,6 +738,13 @@
         private System.Windows.Forms.ToolStripButton duplexToggle;
         private System.Windows.Forms.ToolStripButton coverToggle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateLeftToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rightCorrectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem rotateBy90ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem selectionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem duplexToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem missingCoverToolStripMenuItem1;
     }
 }
 

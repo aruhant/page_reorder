@@ -34,6 +34,9 @@ namespace Scanned_Page_Sorter
             setupImageListStyles(outImageListView);
             coverToggle.Checked = AppConfig.Instance.HasCover;
             duplexToggle.Checked = AppConfig.Instance.DuplexSelectMode;
+                duplexToolStripMenuItem.Checked = AppConfig.Instance.DuplexSelectMode;
+            missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.HasCover;
+            missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.HasCover;
             Application.DoEvents();
             loadLayout();
         }
@@ -507,12 +510,15 @@ namespace Scanned_Page_Sorter
         {
             AppConfig.Instance.DuplexSelectMode = !AppConfig.Instance.DuplexSelectMode;
             duplexToggle.Checked = AppConfig.Instance.DuplexSelectMode;
+            duplexToolStripMenuItem.Checked = AppConfig.Instance.DuplexSelectMode;
         }
 
         private void coverToggle_Click(object sender, EventArgs e)
         {
             AppConfig.Instance.HasCover = !AppConfig.Instance.HasCover;
-            coverToggle.Checked = AppConfig.Instance.HasCover;
+            coverToggle.Checked = AppConfig.Instance.HasCover;            
+            missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.HasCover;
+            missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.HasCover;
         }
 
         private void inImageListView_SelectionChanged(object sender, EventArgs e)
