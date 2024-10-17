@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Scanned_Page_Sorter
@@ -54,7 +55,10 @@ namespace Scanned_Page_Sorter
         {
             ImageListView dropTarget = sender as ImageListView;
             ImageListView dragSource = sender == inImageListView ? outImageListView : inImageListView;
-            foreach (ImageListViewItem item in dragSource.SelectedItems)
+            var selectedItems = new List<ImageListViewItem>();
+            foreach (var d in dragSource.SelectedItems) selectedItems.Add(d);
+            dragSource.ClearSelection();
+            foreach (ImageListViewItem item in selectedItems)
             {
                 dragSource.Items.Remove(item);
             }
@@ -525,18 +529,18 @@ namespace Scanned_Page_Sorter
         {
             if ((inImageListView.SelectedItems.Count > 0) && AppConfig.Instance.DuplexSelectMode)
             {
-                int coverNotSeen = 1 ;
+                int coverNotSeen = 1;
                 Console.WriteLine($"{coverNotSeen}");
                 for (int i = 0; i < inImageListView.Items.Count; i++)
                 {
-                    if (i==0 && AppConfig.Instance.HasCover /*&& coverNotSeen !=0*/ && inImageListView.Items[i].Text == "000.jpg"){ coverNotSeen =  0; if (AppConfig.Instance.HasCover)  continue; }
+                    if (i == 0 && AppConfig.Instance.HasCover /*&& coverNotSeen !=0*/ && inImageListView.Items[i].Text == "000.jpg") { coverNotSeen = 0; if (AppConfig.Instance.HasCover) continue; }
                     if (!inImageListView.Items[i].Selected) continue;
-                    if (((coverNotSeen+ i) % 2 == 1) )
+                    if (((coverNotSeen + i) % 2 == 1))
                     {
                         if (i < inImageListView.Items.Count - 1 && !inImageListView.Items[i + 1].Selected) inImageListView.Items[i + 1].Selected = true;
                         i++;
                     }
-                    else if ((coverNotSeen+ i) % 2 == 0)
+                    else if ((coverNotSeen + i) % 2 == 0)
                     {
                         if (i >= 1) inImageListView.Items[i - 1].Selected = true;
                     }
@@ -545,6 +549,28 @@ namespace Scanned_Page_Sorter
 
             }
 
+        }
+        private void outImageListView_SelectionChanged(object sender, EventArgs e)
+        {
+            if ((outImageListView.SelectedItems.Count > 0) && AppConfig.Instance.DuplexSelectMode)
+            {
+                int coverNotSeen = 1;
+                Console.WriteLine($"{coverNotSeen}");
+                for (int i = 0; i < outImageListView.Items.Count; i++)
+                {
+                    if (i == 0 && AppConfig.Instance.HasCover /*&& coverNotSeen !=0*/ && outImageListView.Items[i].Text == "000.jpg") { coverNotSeen = 0; if (AppConfig.Instance.HasCover) continue; }
+                    if (!outImageListView.Items[i].Selected) continue;
+                    if (((coverNotSeen + i) % 2 == 1))
+                    {
+                        if (i < outImageListView.Items.Count - 1 && !outImageListView.Items[i + 1].Selected) outImageListView.Items[i + 1].Selected = true;
+                        i++;
+                    }
+                    else if ((coverNotSeen + i) % 2 == 0)
+                    {
+                        if (i >= 1) outImageListView.Items[i - 1].Selected = true;
+                    }
+                }
+            }
         }
     }
 }

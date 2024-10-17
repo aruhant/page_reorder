@@ -38,6 +38,11 @@
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotateLeftToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rightCorrectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.rotateBy90ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.selectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.duplexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.missingCoverToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.BottomToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.topToolStripPanel = new System.Windows.Forms.ToolStripPanel();
             this.rightToolStripPanel = new System.Windows.Forms.ToolStripPanel();
@@ -78,11 +83,6 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.duplexToggle = new System.Windows.Forms.ToolStripButton();
             this.coverToggle = new System.Windows.Forms.ToolStripButton();
-            this.rightCorrectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.rotateBy90ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.selectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.duplexToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.missingCoverToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMenu.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer1.ContentPanel.SuspendLayout();
@@ -175,6 +175,45 @@
             this.rotateLeftToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.rotateLeftToolStripMenuItem.Text = "&Left Correction";
             this.rotateLeftToolStripMenuItem.Click += new System.EventHandler(this.rotateLeft_Click);
+            // 
+            // rightCorrectionToolStripMenuItem
+            // 
+            this.rightCorrectionToolStripMenuItem.Name = "rightCorrectionToolStripMenuItem";
+            this.rightCorrectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
+            this.rightCorrectionToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.rightCorrectionToolStripMenuItem.Text = "&Right Correction";
+            this.rightCorrectionToolStripMenuItem.Click += new System.EventHandler(this.rotateRight_Click);
+            // 
+            // rotateBy90ToolStripMenuItem
+            // 
+            this.rotateBy90ToolStripMenuItem.Name = "rotateBy90ToolStripMenuItem";
+            this.rotateBy90ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
+            this.rotateBy90ToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
+            this.rotateBy90ToolStripMenuItem.Text = "R&otate by 90";
+            this.rotateBy90ToolStripMenuItem.Click += new System.EventHandler(this.tooggleLayout_Click);
+            // 
+            // selectionToolStripMenuItem
+            // 
+            this.selectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.duplexToolStripMenuItem,
+            this.missingCoverToolStripMenuItem1});
+            this.selectionToolStripMenuItem.Name = "selectionToolStripMenuItem";
+            this.selectionToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
+            this.selectionToolStripMenuItem.Text = "&Selection";
+            // 
+            // duplexToolStripMenuItem
+            // 
+            this.duplexToolStripMenuItem.Name = "duplexToolStripMenuItem";
+            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.duplexToolStripMenuItem.Text = "&Duplex";
+            this.duplexToolStripMenuItem.Click += new System.EventHandler(this.duplexToggle_Click);
+            // 
+            // missingCoverToolStripMenuItem1
+            // 
+            this.missingCoverToolStripMenuItem1.Name = "missingCoverToolStripMenuItem1";
+            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(149, 22);
+            this.missingCoverToolStripMenuItem1.Text = "&Missing Cover";
+            this.missingCoverToolStripMenuItem1.Click += new System.EventHandler(this.coverToggle_Click);
             // 
             // BottomToolStripPanel
             // 
@@ -412,6 +451,7 @@
             this.outImageListView.UseWIC = true;
             this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
             this.outImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateOutPreview);
+            this.outImageListView.SelectionChanged += new System.EventHandler(this.outImageListView_SelectionChanged);
             // 
             // outPreview
             // 
@@ -606,45 +646,6 @@
             this.coverToggle.Size = new System.Drawing.Size(23, 22);
             this.coverToggle.Text = "Toggle Missing Cover";
             this.coverToggle.Click += new System.EventHandler(this.coverToggle_Click);
-            // 
-            // rightCorrectionToolStripMenuItem
-            // 
-            this.rightCorrectionToolStripMenuItem.Name = "rightCorrectionToolStripMenuItem";
-            this.rightCorrectionToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
-            this.rightCorrectionToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.rightCorrectionToolStripMenuItem.Text = "&Right Correction";
-            this.rightCorrectionToolStripMenuItem.Click += new System.EventHandler(this.rotateRight_Click);
-            // 
-            // rotateBy90ToolStripMenuItem
-            // 
-            this.rotateBy90ToolStripMenuItem.Name = "rotateBy90ToolStripMenuItem";
-            this.rotateBy90ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
-            this.rotateBy90ToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
-            this.rotateBy90ToolStripMenuItem.Text = "R&otate by 90";
-            this.rotateBy90ToolStripMenuItem.Click += new System.EventHandler(this.tooggleLayout_Click);
-            // 
-            // selectionToolStripMenuItem
-            // 
-            this.selectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.duplexToolStripMenuItem,
-            this.missingCoverToolStripMenuItem1});
-            this.selectionToolStripMenuItem.Name = "selectionToolStripMenuItem";
-            this.selectionToolStripMenuItem.Size = new System.Drawing.Size(67, 20);
-            this.selectionToolStripMenuItem.Text = "&Selection";
-            // 
-            // duplexToolStripMenuItem
-            // 
-            this.duplexToolStripMenuItem.Name = "duplexToolStripMenuItem";
-            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.duplexToolStripMenuItem.Text = "&Duplex";
-            this.duplexToolStripMenuItem.Click += new System.EventHandler(this.duplexToggle_Click);
-            // 
-            // missingCoverToolStripMenuItem1
-            // 
-            this.missingCoverToolStripMenuItem1.Name = "missingCoverToolStripMenuItem1";
-            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.missingCoverToolStripMenuItem1.Text = "&Missing Cover";
-            this.missingCoverToolStripMenuItem1.Click += new System.EventHandler(this.coverToggle_Click);
             // 
             // pageSorterForm
             // 
