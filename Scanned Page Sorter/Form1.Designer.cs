@@ -187,7 +187,7 @@
             // rotateBy90ToolStripMenuItem
             // 
             this.rotateBy90ToolStripMenuItem.Name = "rotateBy90ToolStripMenuItem";
-            this.rotateBy90ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.R)));
+            this.rotateBy90ToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.N)));
             this.rotateBy90ToolStripMenuItem.Size = new System.Drawing.Size(203, 22);
             this.rotateBy90ToolStripMenuItem.Text = "R&otate by 90";
             this.rotateBy90ToolStripMenuItem.Click += new System.EventHandler(this.tooggleLayout_Click);
@@ -204,14 +204,14 @@
             // duplexToolStripMenuItem
             // 
             this.duplexToolStripMenuItem.Name = "duplexToolStripMenuItem";
-            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.duplexToolStripMenuItem.Text = "&Duplex";
             this.duplexToolStripMenuItem.Click += new System.EventHandler(this.duplexToggle_Click);
             // 
             // missingCoverToolStripMenuItem1
             // 
             this.missingCoverToolStripMenuItem1.Name = "missingCoverToolStripMenuItem1";
-            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(149, 22);
+            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.missingCoverToolStripMenuItem1.Text = "&Missing Cover";
             this.missingCoverToolStripMenuItem1.Click += new System.EventHandler(this.coverToggle_Click);
             // 
