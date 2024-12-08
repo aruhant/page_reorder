@@ -51,10 +51,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestCertificateThumbprint>A7B677F5654ADAA6EB684C5FF061758B6ED7E8BA</ManifestCertificateThumbprint>
+    <ManifestCertificateThumbprint>B675AD5E8FCBC5557B33C42E37A1411DD91D3058</ManifestCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup>
-    <ManifestKeyFile>Scanned Page Sorter_TemporaryKey.pfx</ManifestKeyFile>
+    <ManifestKeyFile>Scanned Page Sorter_1_TemporaryKey.pfx</ManifestKeyFile>
   </PropertyGroup>
   <PropertyGroup>
     <GenerateManifests>true</GenerateManifests>
@@ -211,6 +211,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Scanned Page Sorter_1_TemporaryKey.pfx" />
     <None Include="Scanned Page Sorter_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
