@@ -33,11 +33,11 @@ namespace Scanned_Page_Sorter
         {
             setupImageListStyles(inImageListView);
             setupImageListStyles(outImageListView);
-            coverToggle.Checked = AppConfig.Instance.HasCover;
-            duplexToggle.Checked = AppConfig.Instance.DuplexSelectMode;
-                duplexToolStripMenuItem.Checked = AppConfig.Instance.DuplexSelectMode;
-            missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.HasCover;
-            missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.HasCover;
+            coverToggle.Checked = AppConfig.Instance.enableDocumentWithCoverMode;
+            duplexToggle.Checked = AppConfig.Instance.enableDuplexSelectionMode;
+                duplexToolStripMenuItem.Checked = AppConfig.Instance.enableDuplexSelectionMode;
+            missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
+            missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
             Application.DoEvents();
             loadLayout();
         }
@@ -512,28 +512,28 @@ namespace Scanned_Page_Sorter
 
         private void duplexToggle_Click(object sender, EventArgs e)
         {
-            AppConfig.Instance.DuplexSelectMode = !AppConfig.Instance.DuplexSelectMode;
-            duplexToggle.Checked = AppConfig.Instance.DuplexSelectMode;
-            duplexToolStripMenuItem.Checked = AppConfig.Instance.DuplexSelectMode;
+            AppConfig.Instance.enableDuplexSelectionMode = !AppConfig.Instance.enableDuplexSelectionMode;
+            duplexToggle.Checked = AppConfig.Instance.enableDuplexSelectionMode;
+            duplexToolStripMenuItem.Checked = AppConfig.Instance.enableDuplexSelectionMode;
         }
 
         private void coverToggle_Click(object sender, EventArgs e)
         {
-            AppConfig.Instance.HasCover = !AppConfig.Instance.HasCover;
-            coverToggle.Checked = AppConfig.Instance.HasCover;            
-            missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.HasCover;
-            missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.HasCover;
+            AppConfig.Instance.enableDocumentWithCoverMode = !AppConfig.Instance.enableDocumentWithCoverMode;
+            coverToggle.Checked = AppConfig.Instance.enableDocumentWithCoverMode;            
+            missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
+            missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
         }
 
         private void inImageListView_SelectionChanged(object sender, EventArgs e)
         {
-            if ((inImageListView.SelectedItems.Count > 0) && AppConfig.Instance.DuplexSelectMode)
+            if ((inImageListView.SelectedItems.Count > 0) && AppConfig.Instance.enableDuplexSelectionMode)
             {
                 int coverNotSeen = 1;
                 Console.WriteLine($"{coverNotSeen}");
                 for (int i = 0; i < inImageListView.Items.Count; i++)
                 {
-                    if (i == 0 && AppConfig.Instance.HasCover /*&& coverNotSeen !=0*/ && inImageListView.Items[i].Text == "000.jpg") { coverNotSeen = 0; if (AppConfig.Instance.HasCover) continue; }
+                    if (i == 0 && AppConfig.Instance.enableDocumentWithCoverMode /*&& coverNotSeen !=0*/ && inImageListView.Items[i].Text == "000.jpg") { coverNotSeen = 0; if (AppConfig.Instance.enableDocumentWithCoverMode) continue; }
                     if (!inImageListView.Items[i].Selected) continue;
                     if (((coverNotSeen + i) % 2 == 1))
                     {
@@ -552,13 +552,13 @@ namespace Scanned_Page_Sorter
         }
         private void outImageListView_SelectionChanged(object sender, EventArgs e)
         {
-            if ((outImageListView.SelectedItems.Count > 0) && AppConfig.Instance.DuplexSelectMode)
+            if ((outImageListView.SelectedItems.Count > 0) && AppConfig.Instance.enableDuplexSelectionMode)
             {
                 int coverNotSeen = 1;
                 Console.WriteLine($"{coverNotSeen}");
                 for (int i = 0; i < outImageListView.Items.Count; i++)
                 {
-                    if (i == 0 && AppConfig.Instance.HasCover /*&& coverNotSeen !=0*/ && outImageListView.Items[i].Text == "000.jpg") { coverNotSeen = 0; if (AppConfig.Instance.HasCover) continue; }
+                    if (i == 0 && AppConfig.Instance.enableDocumentWithCoverMode /*&& coverNotSeen !=0*/ && outImageListView.Items[i].Text == "000.jpg") { coverNotSeen = 0; if (AppConfig.Instance.enableDocumentWithCoverMode) continue; }
                     if (!outImageListView.Items[i].Selected) continue;
                     if (((coverNotSeen + i) % 2 == 1))
                     {

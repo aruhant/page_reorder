@@ -174,8 +174,8 @@
     <Compile Include="PDFFunctions.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ThumbRenderer.cs" />
-    <Compile Include="Config.cs" />
+    <Compile Include="Forms\Widgets\ThumbRenderer.cs" />
+    <Compile Include="Lib\Config.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="LayoutFunctions.cs">
       <SubType>Form</SubType>
@@ -231,6 +231,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\85194-200.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Lib\PDF\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

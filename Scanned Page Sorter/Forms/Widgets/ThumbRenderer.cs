@@ -1,4 +1,5 @@
-﻿using Scanned_Page_Sorter;
+﻿using Manina.Windows.Forms;
+using Scanned_Page_Sorter;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,14 +7,12 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using View = Manina.Windows.Forms.View;
 
-namespace Manina.Windows.Forms.ImageListViewRenderers
-{
-    public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
+public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
     {
-        int padding = 6;
+        private int _padding = 6;
         internal ImageMetadataMap imageMetadataMap;
-
         internal ThumbnailRenderer(ImageMetadataMap imageMetadataMap) => this.imageMetadataMap = imageMetadataMap;
 
         public override void DrawItem(Graphics g, ImageListViewItem item, ItemState state, Rectangle bounds)
@@ -184,8 +183,8 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
             }
         }
 
-     
-        private Rectangle getRotatedRectangle(Rectangle rect, double angle)
+     /*
+        private Rectangle GetRotatedRectangle(Rectangle rect, double angle)
         {
             // Calculate the rotated rectangle's bounds
             PointF[] points = new PointF[4];
@@ -206,7 +205,7 @@ namespace Manina.Windows.Forms.ImageListViewRenderers
             float maxY = points.Max(p => p.Y);
 
             return new Rectangle((int)minX, (int)minY, (int)(maxX - minX), (int)(maxY - minY));
-        }
+        }*/
     }
-}
+
 

@@ -10,7 +10,7 @@ namespace Scanned_Page_Sorter
     public partial class pageSorterForm : Form
     {
         private SplitterPanelLayout? splitterPanelLayout = null;
-        private Configuration config = AppConfig.Instance.Config;
+        private Configuration config = AppConfig.Instance._config;
         private Debouncer debouncer = new Debouncer();
 
 
