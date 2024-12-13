@@ -6,6 +6,7 @@ using Manina.Windows.Forms;
 using Manina.Windows.Forms.ImageListViewRenderers;
 using Org.BouncyCastle.Asn1.Cms;
 using Scanned_Page_Sorter.Lib.Image;
+using Scanned_Page_Sorter.Lib.models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,14 +21,12 @@ namespace Scanned_Page_Sorter
     public partial class pageSorterForm : Form
     {
         #region private variables
-        private string currentlyOpenPDFfile;
-        private string currentlyOpenImageFolder;
         private ImageMetadataMap imageMetadataMap = new ImageMetadataMap();
+        private SourceDocument sourceDocument;
         #endregion
 
         #region intialize properties
         public pageSorterForm() => InitializeComponent();
-
 
 
         private void pageSorterForm_Load(object sender, EventArgs e)
@@ -81,9 +80,9 @@ namespace Scanned_Page_Sorter
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 // load the pdf file to the inList
-                currentlyOpenPDFfile = openFileDialog.FileName;
-                extractImages(currentlyOpenPDFfile);
-                this.Text = System.IO.Path.GetFileName(currentlyOpenPDFfile);
+                sourceDocument = new SourceDocument(openFileDialog.FileName);
+                extractImages(sourceDocument.PDFSaveAs);
+                this.Text = sourceDocument.Title;
             }
         }
 
@@ -99,10 +98,14 @@ namespace Scanned_Page_Sorter
             folderBrowser.FileName = "Folder Selection.";
             if (folderBrowser.ShowDialog() == DialogResult.OK)
             {
-                currentlyOpenImageFolder = Path.GetDirectoryName(folderBrowser.FileName);
-                loadImages(currentlyOpenImageFolder);
-                currentlyOpenPDFfile = currentlyOpenImageFolder + ".pdf";
-                this.Text = currentlyOpenImageFolder;
+                //currentlyOpenImageFolder = Path.GetDirectoryName(folderBrowser.FileName);
+                //loadImages(currentlyOpenImageFolder);
+                //currentlyOpenPDFfile = currentlyOpenImageFolder + ".pdf";
+                //this.Text = currentlyOpenImageFolder;
+                sourceDocument = new SourceDocument(folderBrowser.FileName);
+                loadImages(sourceDocument.FileLocation);
+                this.Text = sourceDocument.Title;
+
             }
         }
 
@@ -149,7 +152,7 @@ namespace Scanned_Page_Sorter
             string inputFolder = "../../images/";
             System.IO.Directory.CreateDirectory(inputFolder);
             string pdfFileName = System.IO.Path.GetFileNameWithoutExtension(pdfFile);
-            currentlyOpenImageFolder = inputFolder + pdfFileName + "/";
+            string  currentlyOpenImageFolder = inputFolder + pdfFileName + "/";
             // empty the output folder if it already exists else create it
             if (System.IO.Directory.Exists(currentlyOpenImageFolder))
             {
@@ -303,14 +306,13 @@ namespace Scanned_Page_Sorter
 
         private void exportPDF_Handler(object sender, EventArgs e)
         {
-            saveImagesToPDF(outImageListView, currentlyOpenPDFfile);
-            saveCommentsToTXT(imageMetadataMap, currentlyOpenPDFfile);
+            saveImagesToPDF(outImageListView, sourceDocument.PDFSaveAs);
+            saveCommentsToTXT(imageMetadataMap, sourceDocument.TXTSaveAs);
         }
 
-        private void saveCommentsToTXT(ImageMetadataMap imageMetadataMap, string inputPdf)
+        private void saveCommentsToTXT(ImageMetadataMap imageMetadataMap, string txtFile)
         {
-            string txtFile = System.IO.Path.GetDirectoryName(inputPdf) + "/Comments - " + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + ".txt";
-            using (StreamWriter sw = new StreamWriter(txtFile))
+             using (StreamWriter sw = new StreamWriter(txtFile))
             {
                 foreach (var item in imageMetadataMap.Values)
                 {

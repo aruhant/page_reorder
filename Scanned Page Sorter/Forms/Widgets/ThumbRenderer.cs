@@ -12,7 +12,6 @@ using View = Manina.Windows.Forms.View;
 
 public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
     {
-        private int _padding = 6;
         internal ImageMetadataMap imageMetadataMap;
         internal ThumbnailRenderer(ImageMetadataMap imageMetadataMap) => this.imageMetadataMap = imageMetadataMap;
 
