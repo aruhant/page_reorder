@@ -102,7 +102,7 @@ namespace Scanned_Page_Sorter
                 //loadImages(currentlyOpenImageFolder);
                 //currentlyOpenPDFfile = currentlyOpenImageFolder + ".pdf";
                 //this.Text = currentlyOpenImageFolder;
-                sourceDocument = new SourceDocument(folderBrowser.FileName);
+                sourceDocument = new SourceDocument(Path.GetDirectoryName(folderBrowser.FileName));
                 loadImages(sourceDocument.SourcePath);
                 this.Text = sourceDocument.Title;
 
