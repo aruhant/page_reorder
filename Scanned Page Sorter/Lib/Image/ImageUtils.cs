@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
-namespace Scanned_Page_Sorter.Lib.Image
+namespace Scanned_Page_Sorter.Lib
 {
     public static class ImageUtils
     {

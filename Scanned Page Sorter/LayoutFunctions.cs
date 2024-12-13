@@ -152,17 +152,6 @@ namespace Scanned_Page_Sorter
         }
 
         #endregion
-        private Rectangle ConvertToRectangle(PdfArray array)
-        {
-            if (array.Size() != 4)
-                throw new ArgumentException("Invalid MediaBox array size.");
-
-            float x = ((PdfNumber)array.Get(0)).FloatValue();
-            float y = ((PdfNumber)array.Get(1)).FloatValue();
-            float width = ((PdfNumber)array.Get(2)).FloatValue() - x;
-            float height = ((PdfNumber)array.Get(3)).FloatValue() - y;
-
-            return new Rectangle((int)x, (int)y, (int)width, (int)height);
-        }
+       
     }
 }
