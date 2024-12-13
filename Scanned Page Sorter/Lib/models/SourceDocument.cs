@@ -17,7 +17,7 @@ namespace Scanned_Page_Sorter.Lib.models
     {
          private string _source;
         private DocumentType _documentType;
-         public string FileLocation { get => _source; }
+         public string SourcePath { get => _source; }
         public DocumentType DocumentType { get => _documentType; }
         public ImageMetadataMap imageMetadataMap { get; }
 

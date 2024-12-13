@@ -81,7 +81,7 @@ namespace Scanned_Page_Sorter
             {
                 // load the pdf file to the inList
                 sourceDocument = new SourceDocument(openFileDialog.FileName);
-                extractImages(sourceDocument.PDFSaveAs);
+                extractImages(sourceDocument.SourcePath);
                 this.Text = sourceDocument.Title;
             }
         }
@@ -103,7 +103,7 @@ namespace Scanned_Page_Sorter
                 //currentlyOpenPDFfile = currentlyOpenImageFolder + ".pdf";
                 //this.Text = currentlyOpenImageFolder;
                 sourceDocument = new SourceDocument(folderBrowser.FileName);
-                loadImages(sourceDocument.FileLocation);
+                loadImages(sourceDocument.SourcePath);
                 this.Text = sourceDocument.Title;
 
             }
