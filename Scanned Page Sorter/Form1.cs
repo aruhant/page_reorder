@@ -181,71 +181,15 @@ namespace Scanned_Page_Sorter
 
         private void exportPDF_Handler(object sender, EventArgs e)
         {
-            saveImagesToPDF(outImageListView, sourceDocument.PDFSaveAs);
-            saveCommentsToTXT(imageMetadataMap, sourceDocument.TXTSaveAs);
+            PdfExporter  pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs , imageMetadataMap);
+            CommentsExporter commentsExporter = new CommentsExporter( sourceDocument.TXTSaveAs, imageMetadataMap);
+            pdfExporter.export();
+            commentsExporter.export();
         }
 
-        private void saveCommentsToTXT(ImageMetadataMap imageMetadataMap, string txtFile)
-        {
-             using (StreamWriter sw = new StreamWriter(txtFile))
-            {
-                foreach (var item in imageMetadataMap.Values)
-                {
-                    if (item.Comment != null && item.Comment.Length > 0)
-                    {
-                        string page = item.Title.Contains(".") ? item.Title.Split('.')[0] : item.Title;
-                        sw.WriteLine($"Page: {page} : {item.Comment}");
-                    }
-                }
-            }
-        }
+       
 
-        private void saveImagesToPDF(ImageListView outImageListView, string inputPdf)
-        {
-            string outputPdf = System.IO.Path.GetDirectoryName(inputPdf) + "/Reordered - " + System.IO.Path.GetFileNameWithoutExtension(inputPdf) + ".pdf";
-            using (PdfWriter writer = new PdfWriter(outputPdf))
-            {
-                using (PdfDocument pdf = new PdfDocument(writer))
-                {
-                    Document doc = new Document(pdf); // Create a Document instance
-                    doc.SetMargins(0, 0, 0, 0);
-                    if (imageMetadataMap["Cover"] != null)
-                        addPagewithText(pdf, doc, imageMetadataMap["Cover"].Comment);
-                    foreach (ImageListViewItem item in outImageListView.Items)
-                    {
-                        string path = Path.Combine(item.FilePath, item.FileName);
-                        ImageMetadata metadata = imageMetadataMap[item.Text];
-                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
-                        PdfPage page = pdf.AddNewPage(metadata.pageSize);
-                        ImageData imageData = ImageDataFactory.Create(path);
-                        iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);
-                        page.SetMediaBox(metadata.mediaBox);
-                        page.SetCropBox(metadata.clipBox);
-                        page.SetRotation(metadata.Orientation);
-                        image.SetRotationAngle(-metadata.Rotate * Math.PI / 180);
-                        doc.Add(image);
-                        Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
-                        if (metadata.Comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
-                    }
 
-                }
-                writer.Close();
-                MessageBox.Show("PDF saved successfully!", "Save PDF", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                System.Diagnostics.Process.Start(outputPdf);
-            }
-        }
-
-        private void addPagewithText(PdfDocument pdf, Document doc, string v, bool addBreak = true)
-        {
-            // Set page background color to cyan
-            // and write text with large black letters in the center.
-            //PdfPage page =  pdf.AddNewPage();
-            doc.Add(new iText.Layout.Element.Paragraph(v)
-                .SetBackgroundColor(iText.Kernel.Colors.ColorConstants.CYAN)
-.SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
-                .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                .SetFontSize(24f));
-        }
 
         #endregion
 
