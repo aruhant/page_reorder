@@ -5,6 +5,7 @@ using iText.Layout.Font;
 using Manina.Windows.Forms;
 using Manina.Windows.Forms.ImageListViewRenderers;
 using Org.BouncyCastle.Asn1.Cms;
+using Scanned_Page_Sorter.Lib.Image;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -243,7 +244,7 @@ namespace Scanned_Page_Sorter
                         var fileName = Path.Combine(outputFolder, title);
                         using (Image img = Image.FromStream(ms))
                         {
-                            var croppedImg = CropToBoundsAndRotate(img, clip, mediabox, 0);
+                            var croppedImg = ImageUtils.CropToBoundsAndRotate(img, clip, mediabox, 0);
                             croppedImg.Save(fileName, ImageFormat.Jpeg);
                         }
                     }

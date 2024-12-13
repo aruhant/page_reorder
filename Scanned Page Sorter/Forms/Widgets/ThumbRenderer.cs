@@ -1,5 +1,6 @@
 ﻿using Manina.Windows.Forms;
 using Scanned_Page_Sorter;
+using Scanned_Page_Sorter.Lib.Image;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
