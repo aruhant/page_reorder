@@ -8,14 +8,16 @@ using System.Threading.Tasks;
 
 namespace Scanned_Page_Sorter
 {
-    internal class ImageMetadata
+    internal class PageMetadata
     {
-        public string Comment { get; set; }
-        public float Rotate { get; set; }
-        public int Orientation { get; set; }
-        public string Title { get; }
+        public string comment;
+        public float rotate;
+        public int orientation;
+        public string title;
         public Rectangle clipRect;
         public Rectangle mediaRect;
+        public int pageNumber, originalPageNumber;
+
 
         public iText.Kernel.Geom.PageSize pageSize => clipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(mediaRect.Width, mediaRect.Height) : new iText.Kernel.Geom.PageSize(clipRect.Width, clipRect.Height);
         public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width == 0 ? mediaBox : new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
@@ -24,36 +26,36 @@ namespace Scanned_Page_Sorter
         private string parentFolder;
 
 
-        public ImageMetadata(string parentFolder)
+        public PageMetadata(string parentFolder)
         {
             this.parentFolder = parentFolder;
         }
 
-        public ImageMetadata(string parentFolder, string title) : this(parentFolder)
+        public PageMetadata(string parentFolder, string title) : this(parentFolder)
         {
-            Title = title;
-            Comment = "";
-            Rotate = 0;
-            Orientation = 0;
+            this.title = title;
+            comment = "";
+            rotate = 0;
+            orientation = 0;
         }
 
         //public Bitmap getRoatatedThumbnail() {        }
 
     }
-    internal class ImageMetadataMap
+    internal class PageMetadataMap
     {
         internal IEnumerable<string> Keys { get => map.Keys; }
-        internal IEnumerable<ImageMetadata> Values { get => map.Values; }
-        private Dictionary<string, ImageMetadata> map = new Dictionary<string, ImageMetadata>();
+        internal IEnumerable<PageMetadata> Values { get => map.Values; }
+        private Dictionary<string, PageMetadata> map = new Dictionary<string, PageMetadata>();
         internal void Clear()
         {
             map.Clear();
         }
-        public ImageMetadata this[string key]
+        public PageMetadata this[string key]
         {
             get
             {
-                if (!map.ContainsKey(key)) map[key] = new ImageMetadata(key);
+                if (!map.ContainsKey(key)) map[key] = new PageMetadata(key);
                 return map[key];
             }
             set

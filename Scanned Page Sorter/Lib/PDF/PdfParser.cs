@@ -15,13 +15,13 @@ namespace Scanned_Page_Sorter.Lib.PDF
 {
     internal class PdfParser
     {
-        public PdfParser(ImageMetadataMap imageMetadataMap, string sourcePdf, string outputFolder) {
+        public PdfParser(PageMetadataMap imageMetadataMap, string sourcePdf, string outputFolder) {
             _imageMetadataMap = imageMetadataMap;
             _sourcePdf = sourcePdf;
             _outputFolder = outputFolder;
         }
         private string _sourcePdf, _outputFolder;
-        private ImageMetadataMap _imageMetadataMap;
+        private PageMetadataMap _imageMetadataMap;
 
         private Hashtable processedObjects = new Hashtable();
         int rotation = 0;
@@ -104,11 +104,11 @@ namespace Scanned_Page_Sorter.Lib.PDF
                             croppedImg.Save(fileName, ImageFormat.Jpeg);
                         }
                     }
-                    ImageMetadata metadata = new ImageMetadata(outputFolder, title);
+                    PageMetadata metadata = new PageMetadata(outputFolder, title);
                     _imageMetadataMap[title] = metadata;
                     metadata.clipRect = clip;
                     metadata.mediaRect = mediabox;
-                    metadata.Orientation = rotation;
+                    metadata.orientation = rotation;
 
                     Console.WriteLine(name + " image: " + imageNumber + "Rotation: " + rotation + "Mediabox " + mediabox + " clipRect " + clip + " r ");
                     break;

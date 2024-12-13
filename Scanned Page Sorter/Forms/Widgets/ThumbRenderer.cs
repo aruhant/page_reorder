@@ -12,8 +12,8 @@ using View = Manina.Windows.Forms.View;
 
 public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
     {
-        internal ImageMetadataMap imageMetadataMap;
-        internal ThumbnailRenderer(ImageMetadataMap imageMetadataMap) => this.imageMetadataMap = imageMetadataMap;
+        internal PageMetadataMap imageMetadataMap;
+        internal ThumbnailRenderer(PageMetadataMap imageMetadataMap) => this.imageMetadataMap = imageMetadataMap;
 
         public override void DrawItem(Graphics g, ImageListViewItem item, ItemState state, Rectangle bounds)
         {
@@ -82,14 +82,14 @@ public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
                     if (img != null)
                     {
                         // orientation angle
-                        ImageMetadata metadata= imageMetadataMap[item.Text];
+                        PageMetadata metadata= imageMetadataMap[item.Text];
 
                         //float a = metadata.Rotate;
                         //// rotate image by angle a if a!=0
                         //Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));
                         //if ((a ) != 0) img = RotateImage(img, a );                        
                         //pos = getRotatedRectangle(pos, metadata.Orientation);
-                        if ((metadata.Rotate + metadata.Orientation)!=0) img = ImageUtils.RotateImage(img, metadata.Orientation, metadata.Rotate);
+                        if ((metadata.rotate + metadata.orientation)!=0) img = ImageUtils.RotateImage(img, metadata.orientation, metadata.rotate);
                         Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));                        
                         g.DrawImage(img, pos);
                         // Draw image border

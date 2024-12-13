@@ -15,8 +15,8 @@ namespace Scanned_Page_Sorter.Lib.PDF
     internal class CommentsExporter
     {
         private string _saveLocation;
-        private ImageMetadataMap _imageMetadataMap;
-        public CommentsExporter(  string saveLocation, ImageMetadataMap imageMetadataMap)
+        private PageMetadataMap _imageMetadataMap;
+        public CommentsExporter(  string saveLocation, PageMetadataMap imageMetadataMap)
         {
              this._saveLocation = saveLocation;
             _imageMetadataMap = imageMetadataMap;
@@ -29,10 +29,10 @@ namespace Scanned_Page_Sorter.Lib.PDF
             {
                 foreach (var item in _imageMetadataMap.Values)
                 {
-                    if (item.Comment != null && item.Comment.Length > 0)
+                    if (item.comment != null && item.comment.Length > 0)
                     {
-                        string page = item.Title.Contains(".") ? item.Title.Split('.')[0] : item.Title;
-                        sw.WriteLine($"Page: {page} : {item.Comment}");
+                        string page = item.title.Contains(".") ? item.title.Split('.')[0] : item.title;
+                        sw.WriteLine($"Page: {page} : {item.comment}");
                     }
                 }
             }

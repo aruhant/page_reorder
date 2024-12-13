@@ -22,7 +22,7 @@ namespace Scanned_Page_Sorter
     public partial class pageSorterForm : Form
     {
         #region private variables
-        private ImageMetadataMap imageMetadataMap = new ImageMetadataMap();
+        private PageMetadataMap imageMetadataMap = new PageMetadataMap();
         private SourceDocument sourceDocument;
         #endregion
 
@@ -236,10 +236,10 @@ namespace Scanned_Page_Sorter
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
             if (item == null) return;
-            ImageMetadata metadata = imageMetadataMap[item.Text];
+            PageMetadata metadata = imageMetadataMap[item.Text];
             preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
-            preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
+            preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.orientation, metadata.rotate);
         }
 
 
@@ -265,7 +265,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                imageMetadataMap[item.Text].Rotate += angle;
+                imageMetadataMap[item.Text].rotate += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
                 item.Update();
             }
@@ -275,7 +275,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                imageMetadataMap[item.Text].Orientation = (imageMetadataMap[item.Text].Orientation + angle) % 360;
+                imageMetadataMap[item.Text].orientation = (imageMetadataMap[item.Text].orientation + angle) % 360;
                 item.Update();
             }
         }
@@ -319,14 +319,14 @@ namespace Scanned_Page_Sorter
         {
             if (comment.Contains("Cover"))
             {
-                ImageMetadata imageMetadata = new ImageMetadata("Cover", "Cover");
-                imageMetadata.Comment = comment;
+                PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
+                imageMetadata.comment = comment;
                 imageMetadataMap["Cover"] = imageMetadata;
 
             }
             else
             {
-                imageMetadataMap[item.Text].Comment = comment;
+                imageMetadataMap[item.Text].comment = comment;
                 item.Update();
             }
 

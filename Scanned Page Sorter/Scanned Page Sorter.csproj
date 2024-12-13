@@ -170,7 +170,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Lib\models\ImageMetadata.cs" />
+    <Compile Include="Lib\models\PageMetadata.cs" />
     <Compile Include="Lib\Image\ImageUtils.cs" />
     <Compile Include="Lib\models\SourceDocument.cs" />
     <Compile Include="Lib\PDF\CommentsExporter.cs" />

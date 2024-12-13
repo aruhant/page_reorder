@@ -16,8 +16,8 @@ namespace Scanned_Page_Sorter.Lib.PDF
     {
         private ImageListView _outImageListView;
         private string _saveLocation;
-        private ImageMetadataMap _imageMetadataMap;
-        public PdfExporter(ImageListView outImageListView, string saveLocation, ImageMetadataMap imageMetadataMap)
+        private PageMetadataMap _imageMetadataMap;
+        public PdfExporter(ImageListView outImageListView, string saveLocation, PageMetadataMap imageMetadataMap)
         {
             this._outImageListView = outImageListView;
             this._saveLocation = saveLocation;
@@ -32,22 +32,22 @@ namespace Scanned_Page_Sorter.Lib.PDF
                     Document doc = new Document(pdf); // Create a Document instance
                     doc.SetMargins(0, 0, 0, 0);
                     if (_imageMetadataMap["Cover"] != null)
-                        addPagewithText(pdf, doc, _imageMetadataMap["Cover"].Comment);
+                        addPagewithText(pdf, doc, _imageMetadataMap["Cover"].comment);
                     foreach (ImageListViewItem item in _outImageListView.Items)
                     {
                         string path = Path.Combine(item.FilePath, item.FileName);
-                        ImageMetadata metadata = _imageMetadataMap[item.Text];
-                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
+                        PageMetadata metadata = _imageMetadataMap[item.Text];
+                        if (metadata.comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
                         PdfPage page = pdf.AddNewPage(metadata.pageSize);
                         ImageData imageData = ImageDataFactory.Create(path);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);
                         page.SetMediaBox(metadata.mediaBox);
                         page.SetCropBox(metadata.clipBox);
-                        page.SetRotation(metadata.Orientation);
-                        image.SetRotationAngle(-metadata.Rotate * Math.PI / 180);
+                        page.SetRotation(metadata.orientation);
+                        image.SetRotationAngle(-metadata.rotate * Math.PI / 180);
                         doc.Add(image);
-                        Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.Title}");
-                        if (metadata.Comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
+                        Console.WriteLine($"--->>>> {metadata.orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.title}");
+                        if (metadata.comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
                     }
 
                 }
