@@ -22,8 +22,7 @@ namespace Scanned_Page_Sorter
     public partial class pageSorterForm : Form
     {
         #region private variables
-        private PageMetadataMap imageMetadataMap = new PageMetadataMap();
-        private SourceDocument sourceDocument;
+         private SourceDocument sourceDocument;
         #endregion
 
         #region intialize properties
@@ -48,7 +47,7 @@ namespace Scanned_Page_Sorter
         #region imagelist event handlers and properties
         private void setupImageListStyles(ImageListView list)
         {
-            list.SetRenderer(new ThumbnailRenderer(imageMetadataMap));
+            //list.SetRenderer(new ThumbnailRenderer(sourceDocument.pageMetadataMap));
         }
 
 
@@ -167,7 +166,7 @@ namespace Scanned_Page_Sorter
             {
                 System.IO.Directory.CreateDirectory(currentlyOpenImageFolder);
             }
-            PdfParser pdfParser = new PdfParser(imageMetadataMap, pdfFile, currentlyOpenImageFolder);
+            PdfParser pdfParser = new PdfParser(sourceDocument.pageMetadataMap, pdfFile, currentlyOpenImageFolder);
             pdfParser.ExtractImages();
             loadImages(currentlyOpenImageFolder);
         }
@@ -181,8 +180,8 @@ namespace Scanned_Page_Sorter
 
         private void exportPDF_Handler(object sender, EventArgs e)
         {
-            PdfExporter  pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs , imageMetadataMap);
-            CommentsExporter commentsExporter = new CommentsExporter( sourceDocument.TXTSaveAs, imageMetadataMap);
+            PdfExporter  pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs , sourceDocument.pageMetadataMap);
+            CommentsExporter commentsExporter = new CommentsExporter( sourceDocument.TXTSaveAs, sourceDocument.pageMetadataMap);
             pdfExporter.export();
             commentsExporter.export();
         }
@@ -236,7 +235,7 @@ namespace Scanned_Page_Sorter
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
             if (item == null) return;
-            PageMetadata metadata = imageMetadataMap[item.Text];
+            PageMetadata metadata = sourceDocument.pageMetadataMap[item.Text];
             preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.orientation, metadata.rotate);
@@ -265,7 +264,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                imageMetadataMap[item.Text].rotate += angle;
+                sourceDocument.pageMetadataMap[item.Text].rotate += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
                 item.Update();
             }
@@ -275,7 +274,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                imageMetadataMap[item.Text].orientation = (imageMetadataMap[item.Text].orientation + angle) % 360;
+                sourceDocument.pageMetadataMap[item.Text].orientation = (sourceDocument.pageMetadataMap[item.Text].orientation + angle) % 360;
                 item.Update();
             }
         }
@@ -321,12 +320,12 @@ namespace Scanned_Page_Sorter
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
                 imageMetadata.comment = comment;
-                imageMetadataMap["Cover"] = imageMetadata;
+                sourceDocument.pageMetadataMap["Cover"] = imageMetadata;
 
             }
             else
             {
-                imageMetadataMap[item.Text].comment = comment;
+                sourceDocument.pageMetadataMap[item.Text].comment = comment;
                 item.Update();
             }
 

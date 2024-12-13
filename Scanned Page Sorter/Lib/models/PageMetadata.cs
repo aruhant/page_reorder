@@ -17,23 +17,18 @@ namespace Scanned_Page_Sorter
         public Rectangle clipRect;
         public Rectangle mediaRect;
         public int pageNumber, originalPageNumber;
+        public string fileName { get; }
 
 
         public iText.Kernel.Geom.PageSize pageSize => clipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(mediaRect.Width, mediaRect.Height) : new iText.Kernel.Geom.PageSize(clipRect.Width, clipRect.Height);
         public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width == 0 ? mediaBox : new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
         public iText.Kernel.Geom.Rectangle mediaBox => new iText.Kernel.Geom.Rectangle(mediaRect.Width, mediaRect.Height);
 
-        private string parentFolder;
 
-
-        public PageMetadata(string parentFolder)
-        {
-            this.parentFolder = parentFolder;
-        }
-
-        public PageMetadata(string parentFolder, string title) : this(parentFolder)
+        public PageMetadata( string fileName, string title=null)
         {
             this.title = title;
+            this.fileName = fileName;
             comment = "";
             rotate = 0;
             orientation = 0;
@@ -44,13 +39,14 @@ namespace Scanned_Page_Sorter
     }
     internal class PageMetadataMap
     {
+        private string _parentFolder;
+        public PageMetadataMap(string parentFolder)
+        {
+            _parentFolder = parentFolder;
+        }
         internal IEnumerable<string> Keys { get => map.Keys; }
         internal IEnumerable<PageMetadata> Values { get => map.Values; }
         private Dictionary<string, PageMetadata> map = new Dictionary<string, PageMetadata>();
-        internal void Clear()
-        {
-            map.Clear();
-        }
         public PageMetadata this[string key]
         {
             get
