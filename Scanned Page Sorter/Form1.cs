@@ -31,8 +31,7 @@ namespace Scanned_Page_Sorter
 
         private void pageSorterForm_Load(object sender, EventArgs e)
         {
-            setupImageListStyles(inImageListView);
-            setupImageListStyles(outImageListView);
+
             coverToggle.Checked = AppConfig.Instance.enableDocumentWithCoverMode;
             duplexToggle.Checked = AppConfig.Instance.enableDuplexSelectionMode;
                 duplexToolStripMenuItem.Checked = AppConfig.Instance.enableDuplexSelectionMode;
@@ -47,7 +46,7 @@ namespace Scanned_Page_Sorter
         #region imagelist event handlers and properties
         private void setupImageListStyles(ImageListView list)
         {
-            //list.SetRenderer(new ThumbnailRenderer(sourceDocument.pageMetadataMap));
+            list.SetRenderer(new ThumbnailRenderer(sourceDocument.pageMetadataMap));
         }
 
 
@@ -82,6 +81,8 @@ namespace Scanned_Page_Sorter
                 // load the pdf file to the inList
                 sourceDocument = new SourceDocument(openFileDialog.FileName);
                 extractImages(sourceDocument.SourcePath);
+                setupImageListStyles(inImageListView);
+                setupImageListStyles(outImageListView);
                 this.Text = sourceDocument.Title;
             }
         }
@@ -104,6 +105,8 @@ namespace Scanned_Page_Sorter
                 //this.Text = currentlyOpenImageFolder;
                 sourceDocument = new SourceDocument(Path.GetDirectoryName(folderBrowser.FileName));
                 loadImages(sourceDocument.SourcePath);
+                setupImageListStyles(inImageListView);
+                setupImageListStyles(outImageListView);
                 this.Text = sourceDocument.Title;
 
             }
