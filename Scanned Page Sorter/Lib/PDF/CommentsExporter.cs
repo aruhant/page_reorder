@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using iText.IO.Image;
 using iText.Kernel.Pdf;
-using Manina.Windows.Forms;
 using System.Windows.Forms;
 using iText.Layout;
 using System.IO;
@@ -29,6 +28,7 @@ namespace Scanned_Page_Sorter.Lib.PDF
             {
                 foreach (var item in _imageMetadataMap.Values)
                 {
+                    sw.WriteLine(item.ToString());
                     if (item.comment != null && item.comment.Length > 0)
                     {
                         string page = item.title.Contains(".") ? item.title.Split('.')[0] : item.title;

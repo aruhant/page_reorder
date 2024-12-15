@@ -162,7 +162,8 @@ namespace Scanned_Page_Sorter
                 System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(currentlyOpenImageFolder);
                 foreach (System.IO.FileInfo file in di.GetFiles())
                 {
-                    file.Delete();
+                    try { file.Delete(); }catch (Exception e) { }
+
                 }
             }
             else

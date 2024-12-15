@@ -34,6 +34,11 @@ namespace Scanned_Page_Sorter
             orientation = 0;
         }
 
+        public override string ToString()
+        {
+            return $"FileName: {fileName}, Title: {title}, Comment: {comment}, Rotate: {rotate}, Orientation: {orientation}, PageNumber: {pageNumber}, OriginalPageNumber: {originalPageNumber}, ClipRect: {clipRect}, MediaRect: {mediaRect}";
+        }
+
         //public Bitmap getRoatatedThumbnail() {        }
 
     }

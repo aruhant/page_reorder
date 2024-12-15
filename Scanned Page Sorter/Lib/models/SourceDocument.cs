@@ -23,7 +23,7 @@ namespace Scanned_Page_Sorter.Lib.models
 
         public string Title { get => Path.GetFileNameWithoutExtension(_source); }
         public string PDFSaveAs { get => _documentType == DocumentType.PDF ? Path.GetDirectoryName(_source) + "\\Reordered-" + Path.GetFileName(_source) : _source + ".pdf"; }
-        public string TXTSaveAs { get => _documentType == DocumentType.PDF ? Path.GetDirectoryName(_source) + "\\Reordered-" + Path.GetFileName(_source) : _source + ".txt"; }
+        public string TXTSaveAs { get => _documentType == DocumentType.PDF ? Path.GetDirectoryName(_source) + "\\Reordered-" + Path.GetFileNameWithoutExtension(_source) + ".txt" : _source + ".txt"; }
 
         public SourceDocument(string file)
         {
@@ -43,5 +43,5 @@ namespace Scanned_Page_Sorter.Lib.models
             }
                 pageMetadataMap = new PageMetadataMap(Path.GetDirectoryName(_source));
         }
-        } }
-
+        } 
+}
