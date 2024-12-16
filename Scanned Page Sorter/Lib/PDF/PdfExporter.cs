@@ -27,12 +27,12 @@ namespace Scanned_Page_Sorter.Lib.PDF
                 {
                     Document doc = new Document(pdf); // Create a Document instance
                     doc.SetMargins(0, 0, 0, 0);
-                    if (_imageMetadataMap[0] != null)
-                        addPagewithText(pdf, doc, _imageMetadataMap[0].Comment);
+                    if (_imageMetadataMap["Cover"] != null)
+                        addPagewithText(pdf, doc, _imageMetadataMap["Cover"].Comment);
                     foreach (ImageListViewItem item in _outImageListView.Items)
                     {
                         string path = Path.Combine(item.FilePath, item.FileName);
-                        PageMetadata metadata = _imageMetadataMap[(int)item.Tag];
+                        PageMetadata metadata = _imageMetadataMap[(string)item.Text];
                         if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
                         PdfPage page = pdf.AddNewPage(metadata.PageSize);
                         ImageData imageData = ImageDataFactory.Create(path);

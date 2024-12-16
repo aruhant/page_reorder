@@ -101,7 +101,7 @@ namespace Scanned_Page_Sorter.Lib.PDF
                         }
                     }
                     PageMetadata metadata = new PageMetadata(outputFolder, title, originalPageNumber: _imageNumber);
-                    _imageMetadataMap[_imageNumber] = metadata;
+                    _imageMetadataMap[title] = metadata;
                     metadata.ClipRect = _clip;
                     metadata.MediaRect = _mediabox;
                     metadata.Orientation = _rotation;

@@ -53,17 +53,13 @@ namespace Scanned_Page_Sorter
                 dragSource.Items.Remove(item);
             }
 
-            var pageNumbers = new List<int>();
-                foreach (var item in outImageListView.Items)
-                {
-                    if (item.Tag is int pageNumber)
-                    {
-                        pageNumbers.Add(pageNumber);
-                    }
-                }
-            
+            var tagList = new List<string>();
+            foreach (var item in outImageListView.Items)
+            {
+                tagList.Add(item.Text.ToString());
+            }         
 
-            sourceDocument.PageMetadataMap.SyncPageNumbers(pageNumbers);
+            sourceDocument.PageMetadataMap.SyncPageNumbers(tagList);
         }
 
 
@@ -145,7 +141,7 @@ namespace Scanned_Page_Sorter
                     // filename without extension
                     string title = Path.GetFileName(p.FullName);
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
-                    item.Tag = index++;
+                    item.Text = title;
                     inImageListView.Items.Add(item);
                 }
             }
@@ -246,8 +242,8 @@ namespace Scanned_Page_Sorter
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
             if (item == null) return;
-            PageMetadata metadata = sourceDocument.PageMetadataMap[(int)item.Tag];
-            preview.Tag = item;
+            PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
+            preview.Tag = item.Text;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
         }
@@ -275,7 +271,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.PageMetadataMap[(int)item.Tag].Rotate += angle;
+                sourceDocument.PageMetadataMap[(string)item.Text].Rotate += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
                 item.Update();
             }
@@ -285,7 +281,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.PageMetadataMap[(int)item.Tag].Orientation = (sourceDocument.PageMetadataMap[(int)item.Tag].Orientation + angle) % 360;
+                sourceDocument.PageMetadataMap[(string)item.Text].Orientation = (sourceDocument.PageMetadataMap[(string)item.Text].Orientation + angle) % 360;
                 item.Update();
             }
         }
@@ -331,12 +327,12 @@ namespace Scanned_Page_Sorter
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
                 imageMetadata.Comment = comment;
-                sourceDocument.PageMetadataMap[0] = imageMetadata;
+                sourceDocument.PageMetadataMap["Cover"] = imageMetadata;
 
             }
             else
             {
-                sourceDocument.PageMetadataMap[(int)item.Tag].Comment = comment;
+                sourceDocument.PageMetadataMap[(string)item.Text].Comment = comment;
                 item.Update();
             }
 

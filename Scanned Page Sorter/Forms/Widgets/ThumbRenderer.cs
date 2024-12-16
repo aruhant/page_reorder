@@ -80,7 +80,7 @@ public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
                 if (img != null)
                 {
                     // orientation angle
-                    PageMetadata metadata = imageMetadataMap[(int)item.Tag];
+                    PageMetadata metadata = imageMetadataMap[(string)item.Text];
 
                     //float a = metadata.Rotate;
                     //// rotate image by angle a if a!=0

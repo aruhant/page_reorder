@@ -60,26 +60,26 @@ namespace Scanned_Page_Sorter
         {
             _parentFolder = parentFolder;
         }
-        internal IEnumerable<int> Keys { get => map.Keys; }
+        internal IEnumerable<string> Keys { get => map.Keys; }
         internal IEnumerable<PageMetadata> Values { get => map.Values; }
-        private readonly Dictionary<int, PageMetadata> map = new Dictionary<int, PageMetadata>();
-        public PageMetadata this[int key]
+        private readonly Dictionary<string, PageMetadata> map = new Dictionary<string, PageMetadata>();
+        public PageMetadata this[string fileName]
         {
             get
             {
-                if (!map.ContainsKey(key)) map[key] = new PageMetadata(key.ToString());
-                return map[key];
+                //if (!map.ContainsKey(key)) map[key] = new PageMetadata(key.ToString());
+                return map[fileName];
             }
             set
             {
-                map[key] = value;
+                map[fileName] = value;
             }
         }
 
-        internal void SyncPageNumbers(List<int> pageNumbers)
+        internal void SyncPageNumbers(List<string> fileNames)
         {
             int i = 0;
-            foreach (int p  in pageNumbers)
+            foreach (string p  in fileNames)
             {
                 map[p].PageNumber = i++;
             }
