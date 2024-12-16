@@ -32,22 +32,22 @@ namespace Scanned_Page_Sorter.Lib.PDF
                     Document doc = new Document(pdf); // Create a Document instance
                     doc.SetMargins(0, 0, 0, 0);
                     if (_imageMetadataMap["Cover"] != null)
-                        addPagewithText(pdf, doc, _imageMetadataMap["Cover"].comment);
+                        addPagewithText(pdf, doc, _imageMetadataMap["Cover"].Comment);
                     foreach (ImageListViewItem item in _outImageListView.Items)
                     {
                         string path = Path.Combine(item.FilePath, item.FileName);
                         PageMetadata metadata = _imageMetadataMap[item.Text];
-                        if (metadata.comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
-                        PdfPage page = pdf.AddNewPage(metadata.pageSize);
+                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
+                        PdfPage page = pdf.AddNewPage(metadata.PageSize);
                         ImageData imageData = ImageDataFactory.Create(path);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);
-                        page.SetMediaBox(metadata.mediaBox);
-                        page.SetCropBox(metadata.clipBox);
-                        page.SetRotation(metadata.orientation);
-                        image.SetRotationAngle(-metadata.rotate * Math.PI / 180);
+                        page.SetMediaBox(metadata.MediaBox);
+                        page.SetCropBox(metadata.ClipBox);
+                        page.SetRotation(metadata.Orientation);
+                        image.SetRotationAngle(-metadata.Rotate * Math.PI / 180);
                         doc.Add(image);
-                        Console.WriteLine($"--->>>> {metadata.orientation} {metadata.clipRect} {metadata.mediaRect} {metadata.title}");
-                        if (metadata.comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
+                        Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.ClipRect} {metadata.MediaRect} {metadata.Title}");
+                        if (metadata.Comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
                     }
 
                 }

@@ -19,7 +19,7 @@ namespace Scanned_Page_Sorter.Lib.models
         private DocumentType _documentType;
          public string SourcePath { get => _source; }
         public DocumentType DocumentType { get => _documentType; }
-        public PageMetadataMap pageMetadataMap { get; }
+        public PageMetadataMap PageMetadataMap { get; }
 
         public string Title { get => Path.GetFileNameWithoutExtension(_source); }
         public string PDFSaveAs { get => _documentType == DocumentType.PDF ? Path.GetDirectoryName(_source) + "\\Reordered-" + Path.GetFileName(_source) : _source + ".pdf"; }
@@ -41,7 +41,7 @@ namespace Scanned_Page_Sorter.Lib.models
             {
                 MessageBox.Show("Invalid file path");
             }
-                pageMetadataMap = new PageMetadataMap(Path.GetDirectoryName(_source));
+                PageMetadataMap = new PageMetadataMap(Path.GetDirectoryName(_source));
         }
         } 
 }

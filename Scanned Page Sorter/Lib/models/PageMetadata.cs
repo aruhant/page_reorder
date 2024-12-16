@@ -8,35 +8,50 @@ using System.Threading.Tasks;
 
 namespace Scanned_Page_Sorter
 {
+
+    enum PageType
+    {
+        Cover,
+        Content,
+        BackCover,
+        Unknown
+    }
     internal class PageMetadata
     {
-        public string comment;
-        public float rotate;
-        public int orientation;
-        public string title;
-        public Rectangle clipRect;
-        public Rectangle mediaRect;
-        public int pageNumber, originalPageNumber;
-        public string fileName { get; }
+        public string Comment;
+        public float Rotate;
+        public int Orientation;
+        public string Title;
+        public Rectangle ClipRect;
+        public Rectangle MediaRect;
+        public PageType PageType;
+        public int PageNumber, OriginalPageNumber;
+        public string FileName { get; }
 
 
-        public iText.Kernel.Geom.PageSize pageSize => clipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(mediaRect.Width, mediaRect.Height) : new iText.Kernel.Geom.PageSize(clipRect.Width, clipRect.Height);
-        public iText.Kernel.Geom.Rectangle clipBox => clipRect.Width == 0 ? mediaBox : new iText.Kernel.Geom.Rectangle(clipRect.Width, clipRect.Height);
-        public iText.Kernel.Geom.Rectangle mediaBox => new iText.Kernel.Geom.Rectangle(mediaRect.Width, mediaRect.Height);
+        public iText.Kernel.Geom.PageSize PageSize => ClipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(MediaRect.Width, MediaRect.Height) : new iText.Kernel.Geom.PageSize(ClipRect.Width, ClipRect.Height);
+        public iText.Kernel.Geom.Rectangle ClipBox => ClipRect.Width == 0 ? MediaBox : new iText.Kernel.Geom.Rectangle(ClipRect.Width, ClipRect.Height);
+        public iText.Kernel.Geom.Rectangle MediaBox => new iText.Kernel.Geom.Rectangle(MediaRect.Width, MediaRect.Height);
 
 
-        public PageMetadata( string fileName, string title=null)
+        public PageMetadata( string fileName, string title=null, PageType pageType = PageType.Content, int pageNumber = -1, int originalPageNumber = -1
+            
+            )
         {
-            this.title = title;
-            this.fileName = fileName;
-            comment = "";
-            rotate = 0;
-            orientation = 0;
+            this.Title = title;
+            this.FileName = fileName;
+            Comment = "";
+            Rotate = 0;
+            Orientation = 0;
+            this.PageType = pageType;
+            this.PageNumber = pageNumber;
+
+            this.OriginalPageNumber = originalPageNumber;
         }
 
         public override string ToString()
         {
-            return $"FileName: {fileName}, Title: {title}, Comment: {comment}, Rotate: {rotate}, Orientation: {orientation}, PageNumber: {pageNumber}, OriginalPageNumber: {originalPageNumber}, ClipRect: {clipRect}, MediaRect: {mediaRect}";
+            return $"FileName: {FileName}, Title: {Title}, Comment: {Comment}, Rotate: {Rotate}, Orientation: {Orientation}, PageNumber: {PageNumber}, OriginalPageNumber: {OriginalPageNumber}, ClipRect: {ClipRect}, MediaRect: {MediaRect}";
         }
 
         //public Bitmap getRoatatedThumbnail() {        }

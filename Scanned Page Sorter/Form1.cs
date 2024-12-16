@@ -46,7 +46,7 @@ namespace Scanned_Page_Sorter
         #region imagelist event handlers and properties
         private void setupImageListStyles(ImageListView list)
         {
-            list.SetRenderer(new ThumbnailRenderer(sourceDocument.pageMetadataMap));
+            list.SetRenderer(new ThumbnailRenderer(sourceDocument.PageMetadataMap));
         }
 
 
@@ -57,9 +57,15 @@ namespace Scanned_Page_Sorter
             var selectedItems = new List<ImageListViewItem>();
             foreach (var d in dragSource.SelectedItems) selectedItems.Add(d);
             dragSource.ClearSelection();
+            int index = 0;
             foreach (ImageListViewItem item in selectedItems)
             {
                 dragSource.Items.Remove(item);
+                PageMetadata pageMetadata = sourceDocument.PageMetadataMap[ item.Tag.ToString() ];
+                
+                pageMetadata.PageNumber = index + // set pagenumber acording to where the items were dropped. the drop location may be in the middle of an existing list
+                Console.WriteLine("Updating " + pageMetadata.ToString());
+                index++;
             }
         }
 
@@ -140,7 +146,8 @@ namespace Scanned_Page_Sorter
                 {
                     // filename without extension
                     string title = Path.GetFileName(p.FullName);
-                    ImageListViewItem item = new ImageListViewItem(p.FullName, title);
+                    ImageListViewItem item = new ImageListViewItem(p.FullName, title  );
+                     item.Tag = title;
                     inImageListView.Items.Add(item);
                 }
             }
@@ -170,7 +177,7 @@ namespace Scanned_Page_Sorter
             {
                 System.IO.Directory.CreateDirectory(currentlyOpenImageFolder);
             }
-            PdfParser pdfParser = new PdfParser(sourceDocument.pageMetadataMap, pdfFile, currentlyOpenImageFolder);
+            PdfParser pdfParser = new PdfParser(sourceDocument.PageMetadataMap, pdfFile, currentlyOpenImageFolder);
             pdfParser.ExtractImages();
             loadImages(currentlyOpenImageFolder);
         }
@@ -184,8 +191,8 @@ namespace Scanned_Page_Sorter
 
         private void exportPDF_Handler(object sender, EventArgs e)
         {
-            PdfExporter  pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs , sourceDocument.pageMetadataMap);
-            CommentsExporter commentsExporter = new CommentsExporter( sourceDocument.TXTSaveAs, sourceDocument.pageMetadataMap);
+            PdfExporter  pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs , sourceDocument.PageMetadataMap);
+            CommentsExporter commentsExporter = new CommentsExporter( sourceDocument.TXTSaveAs, sourceDocument.PageMetadataMap);
             pdfExporter.export();
             commentsExporter.export();
         }
@@ -239,10 +246,10 @@ namespace Scanned_Page_Sorter
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
             if (item == null) return;
-            PageMetadata metadata = sourceDocument.pageMetadataMap[item.Text];
+            PageMetadata metadata = sourceDocument.PageMetadataMap[item.Text];
             preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
-            preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.orientation, metadata.rotate);
+            preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
         }
 
 
@@ -268,7 +275,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.pageMetadataMap[item.Text].rotate += angle;
+                sourceDocument.PageMetadataMap[item.Text].Rotate += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
                 item.Update();
             }
@@ -278,7 +285,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.pageMetadataMap[item.Text].orientation = (sourceDocument.pageMetadataMap[item.Text].orientation + angle) % 360;
+                sourceDocument.PageMetadataMap[item.Text].Orientation = (sourceDocument.PageMetadataMap[item.Text].Orientation + angle) % 360;
                 item.Update();
             }
         }
@@ -323,13 +330,13 @@ namespace Scanned_Page_Sorter
             if (comment.Contains("Cover"))
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
-                imageMetadata.comment = comment;
-                sourceDocument.pageMetadataMap["Cover"] = imageMetadata;
+                imageMetadata.Comment = comment;
+                sourceDocument.PageMetadataMap["Cover"] = imageMetadata;
 
             }
             else
             {
-                sourceDocument.pageMetadataMap[item.Text].comment = comment;
+                sourceDocument.PageMetadataMap[item.Text].Comment = comment;
                 item.Update();
             }
 

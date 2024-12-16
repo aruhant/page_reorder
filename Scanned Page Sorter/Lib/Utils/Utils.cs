@@ -8,20 +8,20 @@ namespace Scanned_Page_Sorter
 
     public class Debouncer : IDisposable
     {
-        private Thread thread;
-        private volatile Action action;
-        private volatile int delay = 0;
+        private Thread _thread;
+        private volatile Action _action;
+        private volatile int _delay = 0;
 
         public void Debounce(Action action, int delay = 1250)
         {
-            this.action = action;
-            this.delay = delay;
+            this._action = action;
+            this._delay = delay;
 
-            if (this.thread == null)
+            if (this._thread == null)
             {
-                this.thread = new Thread(() => this.RunThread());
-                this.thread.IsBackground = true;
-                this.thread.Start();
+                this._thread = new Thread(() => this.RunThread());
+                this._thread.IsBackground = true;
+                this._thread.Start();
             }
         }
 
@@ -29,23 +29,23 @@ namespace Scanned_Page_Sorter
         {
             while (true)
             {
-                int d = this.delay;
-                this.delay = 0;
+                int d = this._delay;
+                this._delay = 0;
                 Thread.Sleep(d);
-                if (this.delay == 0 && this.action != null)
+                if (this._delay == 0 && this._action != null)
                 {
-                    this.action();
-                    this.action = null;
+                    this._action();
+                    this._action = null;
                 }
             }
         }
 
         public void Dispose()
         {
-            if (this.thread != null)
+            if (this._thread != null)
             {
-                this.thread.Abort();
-                this.thread = null;
+                this._thread.Abort();
+                this._thread = null;
             }
         }
     }

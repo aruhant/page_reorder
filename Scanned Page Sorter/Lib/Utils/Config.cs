@@ -7,11 +7,10 @@
 
     public class AppConfig
     {
-        private static AppConfig instance;
-
-        public Configuration _config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-        private bool duplexSelectMode = false;
-        private bool hasCover = true;        
+        private static AppConfig _instance;
+        private Configuration _config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+        private bool DuplexSelectModeOn = false;
+        private bool HasCover = true;        
 
         private AppConfig()
         {
@@ -24,18 +23,18 @@
                 _config.AppSettings.Settings.Add("HasCover", "true");
             }
 
-            duplexSelectMode =  bool.Parse(_config.AppSettings.Settings["DuplexSelectMode"].Value);
-            hasCover =  bool.Parse(_config.AppSettings.Settings["HasCover"].Value);
-            instance = this;
+            DuplexSelectModeOn =  bool.Parse(_config.AppSettings.Settings["DuplexSelectMode"].Value);
+            HasCover =  bool.Parse(_config.AppSettings.Settings["HasCover"].Value);
+            _instance = this;
         }
 
-        public static AppConfig Instance { get { return instance ?? (instance = new AppConfig()); } }
-        public bool enableDuplexSelectionMode { get { return duplexSelectMode; } set { duplexSelectMode = value; Save();  } }
-        public bool enableDocumentWithCoverMode { get { return hasCover; } set { hasCover = value; Save(); } }
+        public static AppConfig Instance { get { return _instance ?? (_instance = new AppConfig()); } }
+        public bool enableDuplexSelectionMode { get { return DuplexSelectModeOn; } set { DuplexSelectModeOn = value; Save();  } }
+        public bool enableDocumentWithCoverMode { get { return HasCover; } set { HasCover = value; Save(); } }
         public void Save()
         {
-            _config.AppSettings.Settings["DuplexSelectMode"].Value = duplexSelectMode.ToString();
-            _config.AppSettings.Settings["HasCover"].Value = hasCover.ToString();
+            _config.AppSettings.Settings["DuplexSelectMode"].Value = DuplexSelectModeOn.ToString();
+            _config.AppSettings.Settings["HasCover"].Value = HasCover.ToString();
             _config.Save(ConfigurationSaveMode.Modified);
         }
         public void Dispose()

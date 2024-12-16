@@ -89,7 +89,7 @@ public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
                         //Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));
                         //if ((a ) != 0) img = RotateImage(img, a );                        
                         //pos = getRotatedRectangle(pos, metadata.Orientation);
-                        if ((metadata.rotate + metadata.orientation)!=0) img = ImageUtils.RotateImage(img, metadata.orientation, metadata.rotate);
+                        if ((metadata.Rotate + metadata.Orientation)!=0) img = ImageUtils.RotateImage(img, metadata.Orientation, metadata.Rotate);
                         Rectangle pos = Utility.GetSizedImageBounds(img, new Rectangle(bounds.Location + itemPadding, ImageListView.ThumbnailSize));                        
                         g.DrawImage(img, pos);
                         // Draw image border

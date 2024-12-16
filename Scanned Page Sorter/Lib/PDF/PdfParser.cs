@@ -23,23 +23,23 @@ namespace Scanned_Page_Sorter.Lib.PDF
         private string _sourcePdf, _outputFolder;
         private PageMetadataMap _imageMetadataMap;
 
-        private Hashtable processedObjects = new Hashtable();
-        int rotation = 0;
-        int imageNumber = 0;
-        private Rectangle clip = Rectangle.Empty;
-        private Rectangle mediabox = Rectangle.Empty;
+        private Hashtable _processedObjects = new Hashtable();
+        private int _rotation = 0;
+        private int _imageNumber = 0;
+        private Rectangle _clip = Rectangle.Empty;
+        private Rectangle _mediabox = Rectangle.Empty;
         public void ExtractImages()
         {
             PdfReader reader = new PdfReader(_sourcePdf);
             try
             {
                 PdfDocument pdfDoc = new PdfDocument(reader);
-                imageNumber = 0;
+                _imageNumber = 0;
                 for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)
                 {
                     var currentPage = pdfDoc.GetPage(i);
-                    rotation = currentPage.GetRotation();
-                    clip = Rectangle.Empty;
+                    _rotation = currentPage.GetRotation();
+                    _clip = Rectangle.Empty;
                     Console.WriteLine("GetPageSizeWithRotation " + currentPage.GetPageSizeWithRotation());
                     Console.WriteLine("GetPageSize " + currentPage.GetPageSize());
                     Console.WriteLine("GetRotation " + currentPage.GetRotation());
@@ -66,9 +66,9 @@ namespace Scanned_Page_Sorter.Lib.PDF
 
         private void ProcessPDFObject(PdfObject obj, string outputFolder, String name = null) // optional name parameter
         {
-            if (obj == null || (obj.GetIndirectReference() != null && processedObjects.ContainsKey(obj.GetIndirectReference()))) return;
+            if (obj == null || (obj.GetIndirectReference() != null && _processedObjects.ContainsKey(obj.GetIndirectReference()))) return;
             if (name != null) ProcessName(name, obj);
-            if (obj.GetIndirectReference() != null) processedObjects.Add(obj.GetIndirectReference(), obj);
+            if (obj.GetIndirectReference() != null) _processedObjects.Add(obj.GetIndirectReference(), obj);
             switch (obj.GetObjectType())
             {
                 case PdfObject.ARRAY:
@@ -94,23 +94,23 @@ namespace Scanned_Page_Sorter.Lib.PDF
                     PdfObject subtype = PDFStremObj.Get(PdfName.Subtype);
                     if ((subtype == null) || subtype.ToString() != PdfName.Image.ToString()) break;
                     byte[] data = (obj as PdfStream).GetBytes();
-                    string title = $"{imageNumber++:D3}.jpg";
+                    string title = $"{_imageNumber++:D3}.jpg";
                     using (MemoryStream ms = new MemoryStream(data))
                     {
                         var fileName = Path.Combine(outputFolder, title);
                         using (Image img = Image.FromStream(ms))
                         {
-                            var croppedImg = ImageUtils.CropToBoundsAndRotate(img, clip, mediabox, 0);
+                            var croppedImg = ImageUtils.CropToBoundsAndRotate(img, _clip, _mediabox, 0);
                             croppedImg.Save(fileName, ImageFormat.Jpeg);
                         }
                     }
-                    PageMetadata metadata = new PageMetadata(outputFolder, title);
+                    PageMetadata metadata = new PageMetadata(outputFolder, title, originalPageNumber: _imageNumber);
                     _imageMetadataMap[title] = metadata;
-                    metadata.clipRect = clip;
-                    metadata.mediaRect = mediabox;
-                    metadata.orientation = rotation;
+                    metadata.ClipRect = _clip;
+                    metadata.MediaRect = _mediabox;
+                    metadata.Orientation = _rotation;
 
-                    Console.WriteLine(name + " image: " + imageNumber + "Rotation: " + rotation + "Mediabox " + mediabox + " clipRect " + clip + " r ");
+                    Console.WriteLine(name + " image: " + _imageNumber + "Rotation: " + _rotation + "Mediabox " + _mediabox + " clipRect " + _clip + " r ");
                     break;
                 case PdfObject.NAME:
                     break;
@@ -129,21 +129,21 @@ namespace Scanned_Page_Sorter.Lib.PDF
             switch (name)
             {
                 case "/CropBox":
-                    clip = ConvertToRectangle(obj as PdfArray);
+                    _clip = ConvertToRectangle(obj as PdfArray);
                     return 1;
                 case "/MediaBox":
-                    mediabox = ConvertToRectangle(obj as PdfArray);
+                    _mediabox = ConvertToRectangle(obj as PdfArray);
                     return 1;
                 case "/Type":
                     if (obj.ToString() == "/Page")
                     {
-                        mediabox = Rectangle.Empty;
-                        rotation = 0;
-                        clip = Rectangle.Empty;
+                        _mediabox = Rectangle.Empty;
+                        _rotation = 0;
+                        _clip = Rectangle.Empty;
                     }
                     return 1;
                 case "/Rotate":
-                    rotation = int.Parse(obj.ToString());
+                    _rotation = int.Parse(obj.ToString());
                     return 1;
                 default:
                     return 0;
