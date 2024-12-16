@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows.Forms;
 
 namespace Scanned_Page_Sorter.Lib.models
@@ -15,9 +10,9 @@ namespace Scanned_Page_Sorter.Lib.models
     }
     internal class SourceDocument
     {
-         private string _source;
-        private DocumentType _documentType;
-         public string SourcePath { get => _source; }
+        private readonly string _source;
+        private readonly DocumentType _documentType;
+        public string SourcePath { get => _source; }
         public DocumentType DocumentType { get => _documentType; }
         public PageMetadataMap PageMetadataMap { get; }
 
@@ -41,7 +36,7 @@ namespace Scanned_Page_Sorter.Lib.models
             {
                 MessageBox.Show("Invalid file path");
             }
-                PageMetadataMap = new PageMetadataMap(Path.GetDirectoryName(_source));
+            PageMetadataMap = new PageMetadataMap(Path.GetDirectoryName(_source));
         }
-        } 
+    }
 }

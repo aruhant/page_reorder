@@ -1,10 +1,6 @@
-﻿using iText.Kernel.Pdf;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Scanned_Page_Sorter
 {
@@ -34,19 +30,19 @@ namespace Scanned_Page_Sorter
         public iText.Kernel.Geom.Rectangle MediaBox => new iText.Kernel.Geom.Rectangle(MediaRect.Width, MediaRect.Height);
 
 
-        public PageMetadata( string fileName, string title=null, PageType pageType = PageType.Content, int pageNumber = -1, int originalPageNumber = -1
-            
+        public PageMetadata(string fileName, string title = null, PageType pageType = PageType.Content, int pageNumber = -1, int originalPageNumber = -1
+
             )
         {
-            this.Title = title;
-            this.FileName = fileName;
+            Title = title;
+            FileName = fileName;
             Comment = "";
             Rotate = 0;
             Orientation = 0;
-            this.PageType = pageType;
-            this.PageNumber = pageNumber;
+            PageType = pageType;
+            PageNumber = pageNumber;
 
-            this.OriginalPageNumber = originalPageNumber;
+            OriginalPageNumber = originalPageNumber;
         }
 
         public override string ToString()
@@ -59,24 +55,33 @@ namespace Scanned_Page_Sorter
     }
     internal class PageMetadataMap
     {
-        private string _parentFolder;
+        private readonly string _parentFolder;
         public PageMetadataMap(string parentFolder)
         {
             _parentFolder = parentFolder;
         }
-        internal IEnumerable<string> Keys { get => map.Keys; }
+        internal IEnumerable<int> Keys { get => map.Keys; }
         internal IEnumerable<PageMetadata> Values { get => map.Values; }
-        private Dictionary<string, PageMetadata> map = new Dictionary<string, PageMetadata>();
-        public PageMetadata this[string key]
+        private readonly Dictionary<int, PageMetadata> map = new Dictionary<int, PageMetadata>();
+        public PageMetadata this[int key]
         {
             get
             {
-                if (!map.ContainsKey(key)) map[key] = new PageMetadata(key);
+                if (!map.ContainsKey(key)) map[key] = new PageMetadata(key.ToString());
                 return map[key];
             }
             set
             {
                 map[key] = value;
+            }
+        }
+
+        internal void SyncPageNumbers(List<int> pageNumbers)
+        {
+            int i = 0;
+            foreach (int p  in pageNumbers)
+            {
+                map[p].PageNumber = i++;
             }
         }
     }

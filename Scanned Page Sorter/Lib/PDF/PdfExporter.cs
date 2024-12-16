@@ -1,42 +1,38 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Forms;
 using iText.IO.Image;
 using iText.Kernel.Pdf;
-using Manina.Windows.Forms;
-using System.Windows.Forms;
 using iText.Layout;
-using System.IO;
+using Manina.Windows.Forms;
 
 namespace Scanned_Page_Sorter.Lib.PDF
 {
     internal class PdfExporter
     {
-        private ImageListView _outImageListView;
-        private string _saveLocation;
-        private PageMetadataMap _imageMetadataMap;
+        private readonly ImageListView _outImageListView;
+        private readonly string _saveLocation;
+        private readonly PageMetadataMap _imageMetadataMap;
         public PdfExporter(ImageListView outImageListView, string saveLocation, PageMetadataMap imageMetadataMap)
         {
-            this._outImageListView = outImageListView;
-            this._saveLocation = saveLocation;
-            this._imageMetadataMap = imageMetadataMap;
+            _outImageListView = outImageListView;
+            _saveLocation = saveLocation;
+            _imageMetadataMap = imageMetadataMap;
         }
         public void export()
         {
-             using (PdfWriter writer = new PdfWriter(_saveLocation))
+            using (PdfWriter writer = new PdfWriter(_saveLocation))
             {
                 using (PdfDocument pdf = new PdfDocument(writer))
                 {
                     Document doc = new Document(pdf); // Create a Document instance
                     doc.SetMargins(0, 0, 0, 0);
-                    if (_imageMetadataMap["Cover"] != null)
-                        addPagewithText(pdf, doc, _imageMetadataMap["Cover"].Comment);
+                    if (_imageMetadataMap[0] != null)
+                        addPagewithText(pdf, doc, _imageMetadataMap[0].Comment);
                     foreach (ImageListViewItem item in _outImageListView.Items)
                     {
                         string path = Path.Combine(item.FilePath, item.FileName);
-                        PageMetadata metadata = _imageMetadataMap[item.Text];
+                        PageMetadata metadata = _imageMetadataMap[(int)item.Tag];
                         if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
                         PdfPage page = pdf.AddNewPage(metadata.PageSize);
                         ImageData imageData = ImageDataFactory.Create(path);

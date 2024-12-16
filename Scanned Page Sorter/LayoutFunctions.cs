@@ -1,5 +1,4 @@
-﻿using iText.Kernel.Pdf;
-using System;
+﻿using System;
 using System.Configuration;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -10,8 +9,8 @@ namespace Scanned_Page_Sorter
     public partial class pageSorterForm : Form
     {
         private SplitterPanelLayout? splitterPanelLayout = null;
-        private Configuration config = AppConfig.Instance._config;
-        private Debouncer debouncer = new Debouncer();
+        private readonly Configuration config = AppConfig.Instance.config;
+        private readonly Debouncer debouncer = new Debouncer();
 
 
         private void saveLayout() => debouncer.Debounce(() => _SaveLayout());
@@ -23,15 +22,15 @@ namespace Scanned_Page_Sorter
             config.AppSettings.Settings["SplitterPanelLayout"].Value = splitterPanelLayout.ToString();
             if (splitterPanelLayout == SplitterPanelLayout.Horizontal)
             {
-                config.AppSettings.Settings[mainSplitContainer.Name + splitterPanelLayout.ToString()].Value = mainSplitContainer.SplitterDistance / (double)this.Height + "";
-                config.AppSettings.Settings[inSplitContainer.Name + splitterPanelLayout.ToString()].Value = inSplitContainer.SplitterDistance / (double)this.Height + "";
-                config.AppSettings.Settings[outSplitContainer.Name + splitterPanelLayout.ToString()].Value = outSplitContainer.SplitterDistance / (double)this.Height + "";
+                config.AppSettings.Settings[mainSplitContainer.Name + splitterPanelLayout.ToString()].Value = mainSplitContainer.SplitterDistance / (double)Height + "";
+                config.AppSettings.Settings[inSplitContainer.Name + splitterPanelLayout.ToString()].Value = inSplitContainer.SplitterDistance / (double)Height + "";
+                config.AppSettings.Settings[outSplitContainer.Name + splitterPanelLayout.ToString()].Value = outSplitContainer.SplitterDistance / (double)Height + "";
             }
             else
             {
-                config.AppSettings.Settings[mainSplitContainer.Name + splitterPanelLayout.ToString()].Value = mainSplitContainer.SplitterDistance / (double)this.Width + "";
-                config.AppSettings.Settings[inSplitContainer.Name + splitterPanelLayout.ToString()].Value = inSplitContainer.SplitterDistance / (double)this.Width + "";
-                config.AppSettings.Settings[outSplitContainer.Name + splitterPanelLayout.ToString()].Value = outSplitContainer.SplitterDistance / (double)this.Width + "";
+                config.AppSettings.Settings[mainSplitContainer.Name + splitterPanelLayout.ToString()].Value = mainSplitContainer.SplitterDistance / (double)Width + "";
+                config.AppSettings.Settings[inSplitContainer.Name + splitterPanelLayout.ToString()].Value = inSplitContainer.SplitterDistance / (double)Width + "";
+                config.AppSettings.Settings[outSplitContainer.Name + splitterPanelLayout.ToString()].Value = outSplitContainer.SplitterDistance / (double)Width + "";
             }
             printConfig();
             config.Save(ConfigurationSaveMode.Modified);
@@ -59,7 +58,7 @@ namespace Scanned_Page_Sorter
 
         private void loadLayout()
         {
-            if (this.WindowState == FormWindowState.Minimized) return;
+            if (WindowState == FormWindowState.Minimized) return;
             printConfig();
             if (splitterPanelLayout != null)
             {
@@ -141,17 +140,17 @@ namespace Scanned_Page_Sorter
                 double defaults = container == mainSplitContainer ? 0.5 : 0.25;
                 double panelRatio = string.IsNullOrEmpty(panelRatioString) ? defaults : double.Parse(panelRatioString);
                 if (panelRatio < 0 || panelRatio > 1) panelRatio = defaults;
-                container.SplitterDistance = (int)(layout == SplitterPanelLayout.Horizontal ? this.Height * panelRatio : this.Width * panelRatio);
+                container.SplitterDistance = (int)(layout == SplitterPanelLayout.Horizontal ? Height * panelRatio : Width * panelRatio);
                 Console.WriteLine(container.Name + " -- > " + panelRatio);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error restoring split pane layout: " + ex.Message);
             }
-             
+
         }
 
         #endregion
-       
+
     }
 }

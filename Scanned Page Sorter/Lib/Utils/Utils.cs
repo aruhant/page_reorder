@@ -1,9 +1,6 @@
-﻿using System.Windows.Forms;
-
-namespace Scanned_Page_Sorter
+﻿namespace Scanned_Page_Sorter
 {
     using System;
-    using System.Drawing;
     using System.Threading;
 
     public class Debouncer : IDisposable
@@ -14,14 +11,14 @@ namespace Scanned_Page_Sorter
 
         public void Debounce(Action action, int delay = 1250)
         {
-            this._action = action;
-            this._delay = delay;
+            _action = action;
+            _delay = delay;
 
-            if (this._thread == null)
+            if (_thread == null)
             {
-                this._thread = new Thread(() => this.RunThread());
-                this._thread.IsBackground = true;
-                this._thread.Start();
+                _thread = new Thread(() => RunThread());
+                _thread.IsBackground = true;
+                _thread.Start();
             }
         }
 
@@ -29,25 +26,25 @@ namespace Scanned_Page_Sorter
         {
             while (true)
             {
-                int d = this._delay;
-                this._delay = 0;
+                int d = _delay;
+                _delay = 0;
                 Thread.Sleep(d);
-                if (this._delay == 0 && this._action != null)
+                if (_delay == 0 && _action != null)
                 {
-                    this._action();
-                    this._action = null;
+                    _action();
+                    _action = null;
                 }
             }
         }
 
         public void Dispose()
         {
-            if (this._thread != null)
+            if (_thread != null)
             {
-                this._thread.Abort();
-                this._thread = null;
+                _thread.Abort();
+                _thread = null;
             }
         }
     }
-    
+
 }

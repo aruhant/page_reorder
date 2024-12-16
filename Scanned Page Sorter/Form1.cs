@@ -1,28 +1,19 @@
-﻿using iText.IO.Image;
-using iText.Kernel.Pdf;
-using iText.Layout;
-using iText.Layout.Font;
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 using Manina.Windows.Forms;
-using Manina.Windows.Forms.ImageListViewRenderers;
-using Org.BouncyCastle.Asn1.Cms;
 using Scanned_Page_Sorter.Lib;
 using Scanned_Page_Sorter.Lib.models;
 using Scanned_Page_Sorter.Lib.PDF;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace Scanned_Page_Sorter
 {
     public partial class pageSorterForm : Form
     {
         #region private variables
-         private SourceDocument sourceDocument;
+        private SourceDocument sourceDocument;
         #endregion
 
         #region intialize properties
@@ -34,7 +25,7 @@ namespace Scanned_Page_Sorter
 
             coverToggle.Checked = AppConfig.Instance.enableDocumentWithCoverMode;
             duplexToggle.Checked = AppConfig.Instance.enableDuplexSelectionMode;
-                duplexToolStripMenuItem.Checked = AppConfig.Instance.enableDuplexSelectionMode;
+            duplexToolStripMenuItem.Checked = AppConfig.Instance.enableDuplexSelectionMode;
             missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
             missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
             Application.DoEvents();
@@ -57,16 +48,22 @@ namespace Scanned_Page_Sorter
             var selectedItems = new List<ImageListViewItem>();
             foreach (var d in dragSource.SelectedItems) selectedItems.Add(d);
             dragSource.ClearSelection();
-            int index = 0;
             foreach (ImageListViewItem item in selectedItems)
             {
                 dragSource.Items.Remove(item);
-                PageMetadata pageMetadata = sourceDocument.PageMetadataMap[ item.Tag.ToString() ];
-                
-                pageMetadata.PageNumber = index + // set pagenumber acording to where the items were dropped. the drop location may be in the middle of an existing list
-                Console.WriteLine("Updating " + pageMetadata.ToString());
-                index++;
             }
+
+            var pageNumbers = new List<int>();
+                foreach (var item in outImageListView.Items)
+                {
+                    if (item.Tag is int pageNumber)
+                    {
+                        pageNumbers.Add(pageNumber);
+                    }
+                }
+            
+
+            sourceDocument.PageMetadataMap.SyncPageNumbers(pageNumbers);
         }
 
 
@@ -89,7 +86,7 @@ namespace Scanned_Page_Sorter
                 extractImages(sourceDocument.SourcePath);
                 setupImageListStyles(inImageListView);
                 setupImageListStyles(outImageListView);
-                this.Text = sourceDocument.Title;
+                Text = sourceDocument.Title;
             }
         }
 
@@ -113,7 +110,7 @@ namespace Scanned_Page_Sorter
                 loadImages(sourceDocument.SourcePath);
                 setupImageListStyles(inImageListView);
                 setupImageListStyles(outImageListView);
-                this.Text = sourceDocument.Title;
+                Text = sourceDocument.Title;
 
             }
         }
@@ -126,6 +123,7 @@ namespace Scanned_Page_Sorter
             inImageListView.Items.Clear();
             outImageListView.Items.Clear();
             inImageListView.SuspendLayout();
+            int index = 1;
             FileInfo[] files = new FileInfo[0];
             try
             {
@@ -146,8 +144,8 @@ namespace Scanned_Page_Sorter
                 {
                     // filename without extension
                     string title = Path.GetFileName(p.FullName);
-                    ImageListViewItem item = new ImageListViewItem(p.FullName, title  );
-                     item.Tag = title;
+                    ImageListViewItem item = new ImageListViewItem(p.FullName, title);
+                    item.Tag = index++;
                     inImageListView.Items.Add(item);
                 }
             }
@@ -162,14 +160,16 @@ namespace Scanned_Page_Sorter
             string inputFolder = "../../images/";
             System.IO.Directory.CreateDirectory(inputFolder);
             string pdfFileName = System.IO.Path.GetFileNameWithoutExtension(pdfFile);
-            string  currentlyOpenImageFolder = inputFolder + pdfFileName + "/";
+            string currentlyOpenImageFolder = inputFolder + pdfFileName + "/";
             // empty the output folder if it already exists else create it
             if (System.IO.Directory.Exists(currentlyOpenImageFolder))
             {
                 System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(currentlyOpenImageFolder);
                 foreach (System.IO.FileInfo file in di.GetFiles())
                 {
-                    try { file.Delete(); }catch (Exception e) { }
+                    try { file.Delete(); } catch (Exception e) {
+                    Console.WriteLine(e.Message);
+                    }
 
                 }
             }
@@ -191,13 +191,13 @@ namespace Scanned_Page_Sorter
 
         private void exportPDF_Handler(object sender, EventArgs e)
         {
-            PdfExporter  pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs , sourceDocument.PageMetadataMap);
-            CommentsExporter commentsExporter = new CommentsExporter( sourceDocument.TXTSaveAs, sourceDocument.PageMetadataMap);
+            PdfExporter pdfExporter = new PdfExporter(outImageListView, sourceDocument.PDFSaveAs, sourceDocument.PageMetadataMap);
+            CommentsExporter commentsExporter = new CommentsExporter(sourceDocument.TXTSaveAs, sourceDocument.PageMetadataMap);
             pdfExporter.export();
             commentsExporter.export();
         }
 
-       
+
 
 
 
@@ -246,7 +246,7 @@ namespace Scanned_Page_Sorter
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
             if (item == null) return;
-            PageMetadata metadata = sourceDocument.PageMetadataMap[item.Text];
+            PageMetadata metadata = sourceDocument.PageMetadataMap[(int)item.Tag];
             preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
@@ -275,7 +275,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.PageMetadataMap[item.Text].Rotate += angle;
+                sourceDocument.PageMetadataMap[(int)item.Tag].Rotate += angle;
                 Console.WriteLine("Rotating + " + item.FileName);
                 item.Update();
             }
@@ -285,7 +285,7 @@ namespace Scanned_Page_Sorter
             for (int i = 0; i < imageListView.SelectedItems.Count; i++)
             {
                 ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.PageMetadataMap[item.Text].Orientation = (sourceDocument.PageMetadataMap[item.Text].Orientation + angle) % 360;
+                sourceDocument.PageMetadataMap[(int)item.Tag].Orientation = (sourceDocument.PageMetadataMap[(int)item.Tag].Orientation + angle) % 360;
                 item.Update();
             }
         }
@@ -331,12 +331,12 @@ namespace Scanned_Page_Sorter
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
                 imageMetadata.Comment = comment;
-                sourceDocument.PageMetadataMap["Cover"] = imageMetadata;
+                sourceDocument.PageMetadataMap[0] = imageMetadata;
 
             }
             else
             {
-                sourceDocument.PageMetadataMap[item.Text].Comment = comment;
+                sourceDocument.PageMetadataMap[(int)item.Tag].Comment = comment;
                 item.Update();
             }
 
@@ -352,7 +352,7 @@ namespace Scanned_Page_Sorter
         private void coverToggle_Click(object sender, EventArgs e)
         {
             AppConfig.Instance.enableDocumentWithCoverMode = !AppConfig.Instance.enableDocumentWithCoverMode;
-            coverToggle.Checked = AppConfig.Instance.enableDocumentWithCoverMode;            
+            coverToggle.Checked = AppConfig.Instance.enableDocumentWithCoverMode;
             missingCoverToolStripMenuItem.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
             missingCoverToolStripMenuItem1.Checked = !AppConfig.Instance.enableDocumentWithCoverMode;
         }

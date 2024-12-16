@@ -1,29 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using iText.Kernel.Pdf;
-using System.Windows.Forms;
-using Scanned_Page_Sorter.Lib;
 using System.Collections;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Drawing;
- 
+using System.Windows.Forms;
+using iText.Kernel.Pdf;
+
 namespace Scanned_Page_Sorter.Lib.PDF
 {
     internal class PdfParser
     {
-        public PdfParser(PageMetadataMap imageMetadataMap, string sourcePdf, string outputFolder) {
+        public PdfParser(PageMetadataMap imageMetadataMap, string sourcePdf, string outputFolder)
+        {
             _imageMetadataMap = imageMetadataMap;
             _sourcePdf = sourcePdf;
             _outputFolder = outputFolder;
         }
-        private string _sourcePdf, _outputFolder;
-        private PageMetadataMap _imageMetadataMap;
+        private readonly string _sourcePdf, _outputFolder;
+        private readonly PageMetadataMap _imageMetadataMap;
 
-        private Hashtable _processedObjects = new Hashtable();
+        private readonly Hashtable _processedObjects = new Hashtable();
         private int _rotation = 0;
         private int _imageNumber = 0;
         private Rectangle _clip = Rectangle.Empty;
@@ -105,7 +101,7 @@ namespace Scanned_Page_Sorter.Lib.PDF
                         }
                     }
                     PageMetadata metadata = new PageMetadata(outputFolder, title, originalPageNumber: _imageNumber);
-                    _imageMetadataMap[title] = metadata;
+                    _imageMetadataMap[_imageNumber] = metadata;
                     metadata.ClipRect = _clip;
                     metadata.MediaRect = _mediabox;
                     metadata.Orientation = _rotation;
