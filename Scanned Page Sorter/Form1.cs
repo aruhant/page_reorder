@@ -111,44 +111,6 @@ namespace Scanned_Page_Sorter
             }
         }
 
-        private void loadImages(string inputFolder)
-        {
-            DirectoryInfo path = new DirectoryInfo(inputFolder);
-            statusMessage.Text = "One moment....";
-            Application.DoEvents();
-            inImageListView.Items.Clear();
-            outImageListView.Items.Clear();
-            inImageListView.SuspendLayout();
-            int index = 1;
-            FileInfo[] files = new FileInfo[0];
-            try
-            {
-
-                files = path.GetFiles("*.*");
-
-            }
-            catch
-            {
-                files = new FileInfo[0];
-            }
-            foreach (FileInfo p in files)
-            {
-                if (
-                    p.Name.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase) ||
-                    p.Name.EndsWith(".png", StringComparison.OrdinalIgnoreCase) ||
-                    p.Name.EndsWith(".jpeg", StringComparison.OrdinalIgnoreCase))
-                {
-                    // filename without extension
-                    string title = Path.GetFileName(p.FullName);
-                    ImageListViewItem item = new ImageListViewItem(p.FullName, title);
-                    item.Text = title;
-                    inImageListView.Items.Add(item);
-                }
-            }
-            inImageListView.ResumeLayout();
-            statusMessage.Text = "Ready...";
-        }
-
 
         private void extractImages(string pdfFile)
         {
@@ -234,57 +196,6 @@ namespace Scanned_Page_Sorter
 
         private void splitterMoved(object sender, SplitterEventArgs e) => saveLayout();
 
-        private void updateInPreview(object sender, ItemHoverEventArgs e) => updatePreview(inPreview, e.Item);
-
-        private void updateOutPreview(object sender, ItemHoverEventArgs e) => updatePreview(outPreview, e.Item);
-
-
-        private void updatePreview(PictureBox preview, ImageListViewItem item)
-        {
-            if (item == null) return;
-            PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
-            preview.Tag = item.Text;
-            string path = Path.Combine(item.FilePath, item.FileName);
-            preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
-        }
-
-
-        private void rotateLeft_Click(object sender, EventArgs e)
-        {
-            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-            { rotate(inImageListView, -1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
-            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            { rotate(outImageListView, -1); updatePreview(outPreview, outImageListView.SelectedItems[0]); }
-        }
-
-        private void rotateRight_Click(object sender, EventArgs e)
-        {
-            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-            { rotate(inImageListView, 1); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
-            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            { rotate(outImageListView, 1); updatePreview(outPreview, outImageListView.SelectedItems[0]); }
-
-        }
-
-        private void rotate(ImageListView imageListView, float angle)
-        {
-            for (int i = 0; i < imageListView.SelectedItems.Count; i++)
-            {
-                ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.PageMetadataMap[(string)item.Text].Rotate += angle;
-                Console.WriteLine("Rotating + " + item.FileName);
-                item.Update();
-            }
-        }
-        private void rotateLayout(ImageListView imageListView, int angle)
-        {
-            for (int i = 0; i < imageListView.SelectedItems.Count; i++)
-            {
-                ImageListViewItem item = imageListView.SelectedItems[i];
-                sourceDocument.PageMetadataMap[(string)item.Text].Orientation = (sourceDocument.PageMetadataMap[(string)item.Text].Orientation + angle) % 360;
-                item.Update();
-            }
-        }
 
         private void tooggleLayout_Click(object sender, EventArgs e)
         {
@@ -292,50 +203,6 @@ namespace Scanned_Page_Sorter
             { rotateLayout(inImageListView, 90); updatePreview(inPreview, inImageListView.SelectedItems[0]); }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
             { rotateLayout(outImageListView, 90); updatePreview(outPreview, outImageListView.SelectedItems[0]); }
-        }
-
-        private void commentsContextMenuItem_Click(object sender, EventArgs e)
-        {
-            string comment = sender.ToString().Replace("&", string.Empty);
-            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-            {
-                setComment(inImageListView, comment);
-                updatePreview(inPreview, inImageListView.SelectedItems[0]);
-            }
-            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            {
-                setComment(outImageListView, comment);
-                updatePreview(outPreview, outImageListView.SelectedItems[0]);
-            }
-            else if (inPreview.Focused)
-            {
-                setComment(inPreview.Tag as ImageListViewItem, comment);
-            }
-            else if (outPreview.Focused)
-            {
-                setComment(outPreview.Tag as ImageListViewItem, comment);
-            }
-        }
-
-        private void setComment(ImageListView imageListView, string comment)
-        {
-            foreach (var item in imageListView.SelectedItems) setComment(item, comment);
-        }
-        private void setComment(ImageListViewItem item, string comment)
-        {
-            if (comment.Contains("Cover"))
-            {
-                PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
-                imageMetadata.Comment = comment;
-                sourceDocument.PageMetadataMap["Cover"] = imageMetadata;
-
-            }
-            else
-            {
-                sourceDocument.PageMetadataMap[(string)item.Text].Comment = comment;
-                item.Update();
-            }
-
         }
 
         private void duplexToggle_Click(object sender, EventArgs e)

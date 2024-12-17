@@ -67,7 +67,10 @@ namespace Scanned_Page_Sorter
         {
             get
             {
-                //if (!map.ContainsKey(key)) map[key] = new PageMetadata(key.ToString());
+                if (!map.ContainsKey(fileName))
+                {
+                    map[fileName] = new PageMetadata(fileName);
+                }
                 return map[fileName];
             }
             set

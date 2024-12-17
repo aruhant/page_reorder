@@ -170,6 +170,12 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Forms\Widgets\ImageListFunctions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\Widgets\PreviewFunctions.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Lib\models\PageMetadata.cs" />
     <Compile Include="Lib\Image\ImageUtils.cs" />
     <Compile Include="Lib\models\SourceDocument.cs" />
