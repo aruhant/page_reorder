@@ -77,10 +77,10 @@ public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
             {
                 // Draw the image
                 Image img = item.GetCachedImage(CachedImageType.Thumbnail);
+                PageMetadata metadata = imageMetadataMap[(string)item.Text];
                 if (img != null)
                 {
                     // orientation angle
-                    PageMetadata metadata = imageMetadataMap[(string)item.Text];
 
                     //float a = metadata.Rotate;
                     //// rotate image by angle a if a!=0
@@ -120,7 +120,8 @@ public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
                     else
                         foreColor = ImageListView.Colors.UnFocusedForeColor;
                 }
-                string label = Path.GetFileNameWithoutExtension(item.Text);
+                //string label = Path.GetFileNameWithoutExtension(item.Text);
+                string label = metadata.Flags;
                 Size szt = TextRenderer.MeasureText(item.Text, ImageListView.Font);
                 Rectangle rt = new Rectangle(bounds.Left + itemPadding.Width, bounds.Top + 2 * itemPadding.Height + ImageListView.ThumbnailSize.Height, ImageListView.ThumbnailSize.Width, szt.Height);
                 TextRenderer.DrawText(g, label, ImageListView.Font, rt, foreColor,

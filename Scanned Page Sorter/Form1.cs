@@ -38,6 +38,7 @@ namespace Scanned_Page_Sorter
         private void setupImageListStyles(ImageListView list)
         {
             list.SetRenderer(new ThumbnailRenderer(sourceDocument.PageMetadataMap));
+            list.Font = new Font("Ariel", 6);
         }
 
 

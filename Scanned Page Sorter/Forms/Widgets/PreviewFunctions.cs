@@ -62,18 +62,25 @@ namespace Scanned_Page_Sorter
         }
         private void setComment(ImageListViewItem item, string comment)
         {
-            if (comment.Contains("Cover"))
+            if (comment.ToLower().Contains("blurred"))
+            {
+                sourceDocument.PageMetadataMap[(string)item.Text].Blurred = 1 - sourceDocument.PageMetadataMap[(string)item.Text].Blurred;
+            }
+            else if (comment.ToLower().Contains("missing"))
+            {
+                sourceDocument.PageMetadataMap[(string)item.Text].MissingPage = 1 - sourceDocument.PageMetadataMap[(string)item.Text].MissingPage;
+            }
+            else if (comment.Contains("Cover"))
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");
                 imageMetadata.Comment = comment;
                 sourceDocument.PageMetadataMap["Cover"] = imageMetadata;
-
             }
             else
             {
                 sourceDocument.PageMetadataMap[(string)item.Text].Comment = comment;
-                item.Update();
             }
+                item.Update();
 
         }
 
