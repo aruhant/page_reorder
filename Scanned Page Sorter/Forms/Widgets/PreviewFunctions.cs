@@ -11,7 +11,6 @@ using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
 
-
 namespace Scanned_Page_Sorter
 {
     partial class pageSorterForm
@@ -36,27 +35,31 @@ namespace Scanned_Page_Sorter
         private void commentsContextMenuItem_Click(object sender, EventArgs e)
         {
             string comment = sender.ToString().Replace("&", string.Empty);
-            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+            if (comment.ToLower().Contains( "comment"))
             {
-                setComment(inImageListView, comment);
-                updatePreview(inPreview, inImageListView.SelectedItems[0]);
+                comment = Prompt.ShowDialog("Enter Comment", "Comment");
             }
-            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            {
-                setComment(outImageListView, comment);
-                updatePreview(outPreview, outImageListView.SelectedItems[0]);
+                if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+                {
+                    setComment(inImageListView, comment);
+                    updatePreview(inPreview, inImageListView.SelectedItems[0]);
+                }
+                else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
+                {
+                    setComment(outImageListView, comment);
+                    updatePreview(outPreview, outImageListView.SelectedItems[0]);
+                }
+                else if (inPreview.Focused)
+                {
+                    setComment(inPreview.Tag as ImageListViewItem, comment);
+                }
+                else if (outPreview.Focused)
+                {
+                    setComment(outPreview.Tag as ImageListViewItem, comment);
+                }
             }
-            else if (inPreview.Focused)
-            {
-                setComment(inPreview.Tag as ImageListViewItem, comment);
-            }
-            else if (outPreview.Focused)
-            {
-                setComment(outPreview.Tag as ImageListViewItem, comment);
-            }
-        }
 
-        private void setComment(ImageListView imageListView, string comment)
+                    private void setComment(ImageListView imageListView, string comment)
         {
             foreach (var item in imageListView.SelectedItems) setComment(item, comment);
         }
@@ -80,9 +83,34 @@ namespace Scanned_Page_Sorter
             {
                 sourceDocument.PageMetadataMap[(string)item.Text].Comment = comment;
             }
-                item.Update();
+            item.Update();
 
         }
 
+    }
+
+    public static class Prompt
+    {
+        public static string ShowDialog(string text, string caption)
+        {
+            Form prompt = new Form()
+            {
+                Width = 500,
+                Height = 150,
+                FormBorderStyle = FormBorderStyle.FixedDialog,
+                Text = caption,
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
+            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
+            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
+            confirmation.Click += (sender, e) => { prompt.Close(); };
+            prompt.Controls.Add(textBox);
+            prompt.Controls.Add(confirmation);
+            prompt.Controls.Add(textLabel);
+            prompt.AcceptButton = confirmation;
+
+            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+        }
     }
 }

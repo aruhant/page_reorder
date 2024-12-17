@@ -24,7 +24,7 @@ namespace Scanned_Page_Sorter
         public int PageNumber, OriginalPageNumber;
         public int Blurred=0;
         public int MissingPage=0;
-        public string Flags { get => (Blurred == 0 ? "" : "Blurred ") + (MissingPage ==0 ?"" : "Missing Page" ) + (Comment==null||Comment =="" ? "": "⭐") ; }
+        public string Flags { get => (Blurred == 0 ? "" : "Blurred ") + (MissingPage ==0 ?"" : "Missing Page" ) + (Comment==null||Comment =="" ? "": Comment) ; }
 
         public string FileName { get; }
 
