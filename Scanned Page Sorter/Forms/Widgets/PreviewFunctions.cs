@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
+using iText.StyledXmlParser.Jsoup.Nodes;
 using Manina.Windows.Forms;
 using Scanned_Page_Sorter.Lib;
 
@@ -21,65 +22,76 @@ namespace Scanned_Page_Sorter
             if (item == null) return;
             PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
             if (metadata.PageType == PageType.MissingContent) return;
-            preview.Tag = item.Text;
+            preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
         }
 
+        private void inContextMenuItem_Click(object sender, EventArgs e)
+        {
+            string operation = sender.ToString().Replace("&", string.Empty);
+            //var selectedItems = (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused) ?
+            //    new List<ImageListViewItem>(inImageListView.SelectedItems) :
+            //    new List<ImageListViewItem> { (ImageListViewItem)inPreview.Tag };
+            //contextMenuItem_Click(comment, inImageListView, selectedItems);
+            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+            {
+                contextMenuItem_Click(operation, inImageListView, inImageListView.SelectedItems);
+            }
+            else
+            {
+                contextMenuItem_Click(operation, inImageListView, new List<ImageListViewItem> { (ImageListViewItem)inPreview.Tag });
+            }
+        }
 
 
         private void outContextMenuItem_Click(object sender, EventArgs e)
         {
-            string comment = sender.ToString().Replace("&", string.Empty);
-            // If Comment is selected, prompt for comment
-            if (comment.ToLower().Contains("comment"))
+            string operation = sender.ToString().Replace("&", string.Empty);
+            if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
             {
-                comment = Prompt.ShowDialog("Enter Comment", "Comment");
-            }
-            // Find the source of the event
-            ImageListView imageListView = null;
-            IEnumerable<ImageListViewItem> selectedItems = new List<ImageListViewItem>();
-            PictureBox preview = null;
-
-            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-            {
-                imageListView = inImageListView;
-                selectedItems = inImageListView.SelectedItems;
-                preview = inPreview;
-            }
-            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-            {
-                imageListView = outImageListView;
-                selectedItems = outImageListView.SelectedItems;
-                preview = outPreview;
-            }
-            else if (inPreview.Focused)
-            {
-                imageListView = inImageListView;
-                selectedItems = new List<ImageListViewItem> { inPreview.Tag as ImageListViewItem };
-                preview = inPreview;
-            }
-            else if (outPreview.Focused)
-            {
-                imageListView = outImageListView;
-                selectedItems = new List<ImageListViewItem> { outPreview.Tag as ImageListViewItem };
-                preview = outPreview;
-            }
-
-            setComments(imageListView, selectedItems, comment);
-            //updatePreview(preview, selectedItems.First());
-        }
-
-        private void setComments(ImageListView imageListView, IEnumerable<ImageListViewItem> imageListViewItems, string comment)
-        {
-            if (comment.ToLower().Contains("missing"))
-            {
-                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent));
-
+                contextMenuItem_Click(operation, outImageListView, outImageListView.SelectedItems);
             }
             else
-                foreach (var item in imageListViewItems) setComment(item, comment);
+            {
+                contextMenuItem_Click(operation, outImageListView, new List<ImageListViewItem> { (ImageListViewItem)outPreview.Tag });
+            }
         }
+        private void contextMenuItem_Click(string operation, ImageListView imageListView,  IEnumerable<ImageListViewItem> imageListViewItems)
+        {
+            
+
+            if (operation.ToLower().Contains("comment"))
+            {
+                string comment  = Prompt.ShowDialog("Enter Comment", "Comment");
+                foreach (var item in imageListViewItems) setComment(item, comment);
+            } else if (operation.ToLower().Contains("rotate"))
+            {
+                foreach (var item in imageListViewItems)
+                {
+                    sourceDocument.PageMetadataMap[(string)item.Text].Orientation = ( sourceDocument.PageMetadataMap[(string)item.Text].Orientation +90 ) % 360;
+                    item.Update();
+                }
+            }
+            else if (operation.ToLower().Contains("blur"))
+            {
+                foreach (var item in imageListViewItems)
+                {
+                    sourceDocument.PageMetadataMap[(string)item.Text].Blurred = 1 - sourceDocument.PageMetadataMap[(string)item.Text].Blurred;
+                    item.Update();
+                }
+            }
+            else if (operation.ToLower().Contains("cover"))
+            {
+                
+            }
+            else if (operation.ToLower().Contains("missing"))
+            {
+                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent));
+            }
+           //updatePreview(preview, selectedItems.First());
+        }
+
 
         private ImageListViewItem CreateNewPage(string v, PageType content)
         {

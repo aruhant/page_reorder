@@ -362,28 +362,29 @@
             this.toolStripMenuItem2,
             this.toolStripMenuItem3});
             this.inContextMenu.Name = "contextMenuStrip1";
-            this.inContextMenu.Size = new System.Drawing.Size(149, 70);
+            this.inContextMenu.Size = new System.Drawing.Size(181, 92);
+            this.inContextMenu.Click += new System.EventHandler(this.inContextMenuItem_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem1.Text = "&Blurred Image";
-            this.toolStripMenuItem1.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.inContextMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(148, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem2.Text = "&Comment...";
-            this.toolStripMenuItem2.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.inContextMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(148, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
             this.toolStripMenuItem3.Text = "&Rotate 90";
-            this.toolStripMenuItem3.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.inContextMenuItem_Click);
             // 
             // inImageListView
             // 
@@ -451,41 +452,40 @@
             this.missingPageToolStripMenuItem1,
             this.rotate90ToolStripMenuItem});
             this.outContextMenu.Name = "contextMenuStrip1";
-            this.outContextMenu.Size = new System.Drawing.Size(181, 136);
-            this.outContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.outContextMenu_Opening);
+            this.outContextMenu.Size = new System.Drawing.Size(150, 114);
             // 
             // blurredImageToolStripMenuItem
             // 
             this.blurredImageToolStripMenuItem.Name = "blurredImageToolStripMenuItem";
-            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.blurredImageToolStripMenuItem.Text = "&Blurred Image";
             this.blurredImageToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // commentToolStripMenuItem
             // 
             this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
-            this.commentToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.commentToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.commentToolStripMenuItem.Text = "&Comment...";
             this.commentToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // missingCoverToolStripMenuItem
             // 
             this.missingCoverToolStripMenuItem.Name = "missingCoverToolStripMenuItem";
-            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.missingCoverToolStripMenuItem.Text = "Missing &Cover";
             this.missingCoverToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // missingPageToolStripMenuItem1
             // 
             this.missingPageToolStripMenuItem1.Name = "missingPageToolStripMenuItem1";
-            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(149, 22);
             this.missingPageToolStripMenuItem1.Text = "&Missing Page";
             this.missingPageToolStripMenuItem1.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // rotate90ToolStripMenuItem
             // 
             this.rotate90ToolStripMenuItem.Name = "rotate90ToolStripMenuItem";
-            this.rotate90ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.rotate90ToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.rotate90ToolStripMenuItem.Text = "&Rotate 90";
             this.rotate90ToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
