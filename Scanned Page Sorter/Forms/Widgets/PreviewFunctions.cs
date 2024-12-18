@@ -33,7 +33,7 @@ namespace Scanned_Page_Sorter
 
 
 
-        private void commentsContextMenuItem_Click(object sender, EventArgs e)
+        private void outContextMenuItem_Click(object sender, EventArgs e)
         {
             string comment = sender.ToString().Replace("&", string.Empty);
             // If Comment is selected, prompt for comment
@@ -79,7 +79,7 @@ namespace Scanned_Page_Sorter
         {
             if ( comment.ToLower().Contains("missing") )
             {
-                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random() , PageType.MissingContent));
+                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random().Next() , PageType.MissingContent));
                 
             } else
             foreach (var item in imageListViewItems) setComment(item, comment);

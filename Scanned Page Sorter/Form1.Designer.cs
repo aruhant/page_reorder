@@ -54,15 +54,20 @@
             this.mainSplitContainer = new System.Windows.Forms.SplitContainer();
             this.inSplitContainer = new System.Windows.Forms.SplitContainer();
             this.inPreview = new System.Windows.Forms.PictureBox();
-            this.commentsContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.inContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.inImageListView = new Manina.Windows.Forms.ImageListView();
+            this.outSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.outImageListView = new Manina.Windows.Forms.ImageListView();
+            this.outContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.blurredImageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missingCoverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missingPageToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.previousPageMissingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.inImageListView = new Manina.Windows.Forms.ImageListView();
-            this.outSplitContainer = new System.Windows.Forms.SplitContainer();
-            this.outImageListView = new Manina.Windows.Forms.ImageListView();
+            this.rotate90ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outPreview = new System.Windows.Forms.PictureBox();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -98,11 +103,12 @@
             this.inSplitContainer.Panel2.SuspendLayout();
             this.inSplitContainer.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.inPreview)).BeginInit();
-            this.commentsContextMenu.SuspendLayout();
+            this.inContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outSplitContainer)).BeginInit();
             this.outSplitContainer.Panel1.SuspendLayout();
             this.outSplitContainer.Panel2.SuspendLayout();
             this.outSplitContainer.SuspendLayout();
+            this.outContextMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.outPreview)).BeginInit();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -204,14 +210,14 @@
             // duplexToolStripMenuItem
             // 
             this.duplexToolStripMenuItem.Name = "duplexToolStripMenuItem";
-            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.duplexToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.duplexToolStripMenuItem.Text = "&Duplex";
             this.duplexToolStripMenuItem.Click += new System.EventHandler(this.duplexToggle_Click);
             // 
             // missingCoverToolStripMenuItem1
             // 
             this.missingCoverToolStripMenuItem1.Name = "missingCoverToolStripMenuItem1";
-            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.missingCoverToolStripMenuItem1.Size = new System.Drawing.Size(149, 22);
             this.missingCoverToolStripMenuItem1.Text = "&Missing Cover";
             this.missingCoverToolStripMenuItem1.Click += new System.EventHandler(this.coverToggle_Click);
             // 
@@ -342,7 +348,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.inPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.inPreview.ContextMenuStrip = this.commentsContextMenu;
+            this.inPreview.ContextMenuStrip = this.inContextMenu;
             this.inPreview.Location = new System.Drawing.Point(0, 0);
             this.inPreview.Name = "inPreview";
             this.inPreview.Size = new System.Drawing.Size(998, 124);
@@ -350,51 +356,35 @@
             this.inPreview.TabIndex = 0;
             this.inPreview.TabStop = false;
             // 
-            // commentsContextMenu
+            // inContextMenu
             // 
-            this.commentsContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.blurredImageToolStripMenuItem,
-            this.commentToolStripMenuItem,
-            this.missingCoverToolStripMenuItem,
-            this.missingPageToolStripMenuItem1,
-            this.previousPageMissingToolStripMenuItem});
-            this.commentsContextMenu.Name = "contextMenuStrip1";
-            this.commentsContextMenu.Size = new System.Drawing.Size(193, 114);
+            this.inContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3});
+            this.inContextMenu.Name = "contextMenuStrip1";
+            this.inContextMenu.Size = new System.Drawing.Size(181, 92);
             // 
-            // blurredImageToolStripMenuItem
+            // toolStripMenuItem1
             // 
-            this.blurredImageToolStripMenuItem.Name = "blurredImageToolStripMenuItem";
-            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.blurredImageToolStripMenuItem.Text = "&Blurred Image";
-            this.blurredImageToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "&Blurred Image";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
-            // commentToolStripMenuItem
+            // toolStripMenuItem2
             // 
-            this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
-            this.commentToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.commentToolStripMenuItem.Text = "&Comment...";
-            this.commentToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "&Comment...";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
-            // missingCoverToolStripMenuItem
+            // toolStripMenuItem3
             // 
-            this.missingCoverToolStripMenuItem.Name = "missingCoverToolStripMenuItem";
-            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.missingCoverToolStripMenuItem.Text = "M&issing Cover";
-            this.missingCoverToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
-            // 
-            // missingPageToolStripMenuItem1
-            // 
-            this.missingPageToolStripMenuItem1.Name = "missingPageToolStripMenuItem1";
-            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
-            this.missingPageToolStripMenuItem1.Text = "&Next Page Missing";
-            this.missingPageToolStripMenuItem1.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
-            // 
-            // previousPageMissingToolStripMenuItem
-            // 
-            this.previousPageMissingToolStripMenuItem.Name = "previousPageMissingToolStripMenuItem";
-            this.previousPageMissingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.previousPageMissingToolStripMenuItem.Text = "&Previous Page Missing";
-            this.previousPageMissingToolStripMenuItem.Click += new System.EventHandler(this.commentsContextMenuItem_Click);
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Text = "&Rotate 90";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // inImageListView
             // 
@@ -403,7 +393,7 @@
             this.inImageListView.AutoRotateThumbnails = false;
             this.inImageListView.CacheLimit = "0";
             this.inImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
-            this.inImageListView.ContextMenuStrip = this.commentsContextMenu;
+            this.inImageListView.ContextMenuStrip = this.inContextMenu;
             this.inImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.inImageListView.Location = new System.Drawing.Point(0, 0);
             this.inImageListView.Name = "inImageListView";
@@ -440,7 +430,7 @@
             this.outImageListView.AllowDrag = true;
             this.outImageListView.AllowDrop = true;
             this.outImageListView.CheckBoxAlignment = System.Drawing.ContentAlignment.TopLeft;
-            this.outImageListView.ContextMenuStrip = this.commentsContextMenu;
+            this.outImageListView.ContextMenuStrip = this.outContextMenu;
             this.outImageListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.outImageListView.Location = new System.Drawing.Point(0, 0);
             this.outImageListView.Name = "outImageListView";
@@ -453,13 +443,67 @@
             this.outImageListView.ItemHover += new Manina.Windows.Forms.ItemHoverEventHandler(this.updateOutPreview);
             this.outImageListView.SelectionChanged += new System.EventHandler(this.outImageListView_SelectionChanged);
             // 
+            // outContextMenu
+            // 
+            this.outContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.blurredImageToolStripMenuItem,
+            this.commentToolStripMenuItem,
+            this.missingCoverToolStripMenuItem,
+            this.missingPageToolStripMenuItem1,
+            this.previousPageMissingToolStripMenuItem,
+            this.rotate90ToolStripMenuItem});
+            this.outContextMenu.Name = "contextMenuStrip1";
+            this.outContextMenu.Size = new System.Drawing.Size(193, 136);
+            // 
+            // blurredImageToolStripMenuItem
+            // 
+            this.blurredImageToolStripMenuItem.Name = "blurredImageToolStripMenuItem";
+            this.blurredImageToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.blurredImageToolStripMenuItem.Text = "&Blurred Image";
+            this.blurredImageToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            // 
+            // commentToolStripMenuItem
+            // 
+            this.commentToolStripMenuItem.Name = "commentToolStripMenuItem";
+            this.commentToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.commentToolStripMenuItem.Text = "&Comment...";
+            this.commentToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            // 
+            // missingCoverToolStripMenuItem
+            // 
+            this.missingCoverToolStripMenuItem.Name = "missingCoverToolStripMenuItem";
+            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.missingCoverToolStripMenuItem.Text = "M&issing Cover";
+            this.missingCoverToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            // 
+            // missingPageToolStripMenuItem1
+            // 
+            this.missingPageToolStripMenuItem1.Name = "missingPageToolStripMenuItem1";
+            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
+            this.missingPageToolStripMenuItem1.Text = "&Next Page Missing";
+            this.missingPageToolStripMenuItem1.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            // 
+            // previousPageMissingToolStripMenuItem
+            // 
+            this.previousPageMissingToolStripMenuItem.Name = "previousPageMissingToolStripMenuItem";
+            this.previousPageMissingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.previousPageMissingToolStripMenuItem.Text = "&Previous Page Missing";
+            this.previousPageMissingToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            // 
+            // rotate90ToolStripMenuItem
+            // 
+            this.rotate90ToolStripMenuItem.Name = "rotate90ToolStripMenuItem";
+            this.rotate90ToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.rotate90ToolStripMenuItem.Text = "&Rotate 90";
+            this.rotate90ToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
+            // 
             // outPreview
             // 
             this.outPreview.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outPreview.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.outPreview.ContextMenuStrip = this.commentsContextMenu;
+            this.outPreview.ContextMenuStrip = this.outContextMenu;
             this.outPreview.Location = new System.Drawing.Point(2, 0);
             this.outPreview.Name = "outPreview";
             this.outPreview.Size = new System.Drawing.Size(998, 158);
@@ -590,7 +634,7 @@
             // tooggleLayout
             // 
             this.tooggleLayout.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tooggleLayout.Image = global::Scanned_Page_Sorter.Properties.Resources._85194_200;
+            this.tooggleLayout.Image = global::Scanned_Page_Sorter.Properties.Resources.toggleLayout;
             this.tooggleLayout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tooggleLayout.Name = "tooggleLayout";
             this.tooggleLayout.Size = new System.Drawing.Size(23, 22);
@@ -678,11 +722,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.inSplitContainer)).EndInit();
             this.inSplitContainer.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.inPreview)).EndInit();
-            this.commentsContextMenu.ResumeLayout(false);
+            this.inContextMenu.ResumeLayout(false);
             this.outSplitContainer.Panel1.ResumeLayout(false);
             this.outSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.outSplitContainer)).EndInit();
             this.outSplitContainer.ResumeLayout(false);
+            this.outContextMenu.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.outPreview)).EndInit();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
@@ -728,7 +773,7 @@
         private System.Windows.Forms.PictureBox outPreview;
         private System.Windows.Forms.ToolStripButton rotateLeft;
         private System.Windows.Forms.ToolStripButton rotateRight;
-        private System.Windows.Forms.ContextMenuStrip commentsContextMenu;
+        private System.Windows.Forms.ContextMenuStrip outContextMenu;
         private System.Windows.Forms.ToolStripMenuItem blurredImageToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commentToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem missingCoverToolStripMenuItem;
@@ -746,6 +791,11 @@
         private System.Windows.Forms.ToolStripMenuItem selectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem duplexToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem missingCoverToolStripMenuItem1;
+        private System.Windows.Forms.ContextMenuStrip inContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem rotate90ToolStripMenuItem;
     }
 }
 
