@@ -63,9 +63,19 @@ namespace Scanned_Page_Sorter.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap _85194_200 {
+        internal static System.Drawing.Bitmap missing {
             get {
-                object obj = ResourceManager.GetObject("85194-200", resourceCulture);
+                object obj = ResourceManager.GetObject("missing", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap toggleLayout {
+            get {
+                object obj = ResourceManager.GetObject("toggleLayout", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

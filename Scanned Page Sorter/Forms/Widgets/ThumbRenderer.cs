@@ -2,6 +2,9 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
+using System.Reflection;
+using System.Resources;
+using System.Runtime.Versioning;
 using System.Windows.Forms;
 using Manina.Windows.Forms;
 using Scanned_Page_Sorter;
@@ -11,6 +14,10 @@ using View = Manina.Windows.Forms.View;
 public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
 {
     internal PageMetadataMap imageMetadataMap;
+     
+    private ResourceManager resources = new ResourceManager("Scanned_Page_Sorter.Properties.Resources", Assembly.GetExecutingAssembly());
+
+
     internal ThumbnailRenderer(PageMetadataMap imageMetadataMap) => this.imageMetadataMap = imageMetadataMap;
 
     public override void DrawItem(Graphics g, ImageListViewItem item, ItemState state, Rectangle bounds)
@@ -75,9 +82,14 @@ public class ThumbnailRenderer : ImageListView.ImageListViewRenderer
 
             if (ImageListView.View != View.Details)
             {
-                // Draw the image
-                Image img = item.GetCachedImage(CachedImageType.Thumbnail);
+                
                 PageMetadata metadata = imageMetadataMap[(string)item.Text];
+                Image img = null;
+                if ( metadata.PageType == PageType.MissingContent)
+                {
+                    img = (Image)resources.GetObject("missing");
+                } else
+                img = item.GetCachedImage(CachedImageType.Thumbnail);
                 if (img != null)
                 {
                     // orientation angle

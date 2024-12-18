@@ -23,8 +23,9 @@ namespace Scanned_Page_Sorter
 
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
-            if (item == null) return;
+            if (item == null  ) return;
             PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
+            if (metadata.PageType == PageType.MissingContent) return;
             preview.Tag = item.Text;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
@@ -35,44 +36,69 @@ namespace Scanned_Page_Sorter
         private void commentsContextMenuItem_Click(object sender, EventArgs e)
         {
             string comment = sender.ToString().Replace("&", string.Empty);
-            if (comment.ToLower().Contains( "comment"))
+            // If Comment is selected, prompt for comment
+            if (comment.ToLower().Contains("comment"))
             {
                 comment = Prompt.ShowDialog("Enter Comment", "Comment");
             }
-                if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
-                {
-                    setComment(inImageListView, comment);
-                    updatePreview(inPreview, inImageListView.SelectedItems[0]);
-                }
-                else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
-                {
-                    setComment(outImageListView, comment);
-                    updatePreview(outPreview, outImageListView.SelectedItems[0]);
-                }
-                else if (inPreview.Focused)
-                {
-                    setComment(inPreview.Tag as ImageListViewItem, comment);
-                }
-                else if (outPreview.Focused)
-                {
-                    setComment(outPreview.Tag as ImageListViewItem, comment);
-                }
+            // Find the source of the event
+            ImageListView imageListView = null;
+            IEnumerable<ImageListViewItem> selectedItems = new List<ImageListViewItem>();
+            PictureBox preview = null;
+
+            if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
+            {
+                imageListView = inImageListView;
+                selectedItems = inImageListView.SelectedItems ;
+                preview = inPreview;
+            }
+            else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
+            {
+                imageListView = outImageListView;
+                selectedItems = outImageListView.SelectedItems ;
+                preview = outPreview;
+            }
+            else if (inPreview.Focused)
+            {
+                imageListView = inImageListView;
+                selectedItems = new List<ImageListViewItem> { inPreview.Tag as ImageListViewItem };
+                preview = inPreview;                    
+            }
+            else if (outPreview.Focused)
+            {
+                imageListView = outImageListView;
+                selectedItems = new List<ImageListViewItem> { outPreview.Tag as ImageListViewItem };
+                preview = outPreview;
             }
 
-                    private void setComment(ImageListView imageListView, string comment)
-        {
-            foreach (var item in imageListView.SelectedItems) setComment(item, comment);
+            setComments(imageListView, selectedItems, comment);
+            //updatePreview(preview, selectedItems.First());
         }
+
+        private void setComments(ImageListView imageListView, IEnumerable<ImageListViewItem> imageListViewItems,  string comment)
+        {
+            if ( comment.ToLower().Contains("missing") )
+            {
+                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random() , PageType.MissingContent));
+                
+            } else
+            foreach (var item in imageListViewItems) setComment(item, comment);
+        }
+
+        private ImageListViewItem CreateNewPage(string v,  PageType content)
+        {
+            ImageListViewItem item = new ImageListViewItem(v  );
+            sourceDocument.PageMetadataMap[v] = new PageMetadata("", v, content);
+            return item;
+
+        }
+
         private void setComment(ImageListViewItem item, string comment)
         {
             if (comment.ToLower().Contains("blurred"))
             {
                 sourceDocument.PageMetadataMap[(string)item.Text].Blurred = 1 - sourceDocument.PageMetadataMap[(string)item.Text].Blurred;
-            }
-            else if (comment.ToLower().Contains("missing"))
-            {
-                sourceDocument.PageMetadataMap[(string)item.Text].MissingPage = 1 - sourceDocument.PageMetadataMap[(string)item.Text].MissingPage;
-            }
+            }            
             else if (comment.Contains("Cover"))
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");

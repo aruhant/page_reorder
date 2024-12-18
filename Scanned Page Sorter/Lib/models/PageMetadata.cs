@@ -9,6 +9,7 @@ namespace Scanned_Page_Sorter
     {
         Cover,
         Content,
+        MissingContent,
         BackCover,
         Unknown
     }
@@ -23,8 +24,7 @@ namespace Scanned_Page_Sorter
         public PageType PageType;
         public int PageNumber, OriginalPageNumber;
         public int Blurred=0;
-        public int MissingPage=0;
-        public string Flags { get => (Blurred == 0 ? "" : "Blurred ") + (MissingPage ==0 ?"" : "Missing Page" ) + (Comment==null||Comment =="" ? "": Comment) ; }
+         public string Flags { get => (Blurred == 0 ? "" : "Blurred ")   + (Comment==null||Comment =="" ? "": Comment) ; }
 
         public string FileName { get; }
 
