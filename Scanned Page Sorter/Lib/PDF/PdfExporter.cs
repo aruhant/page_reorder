@@ -31,9 +31,9 @@ namespace Scanned_Page_Sorter.Lib.PDF
                         addPagewithText(pdf, doc, _imageMetadataMap["Cover"].Comment);
                     foreach (ImageListViewItem item in _outImageListView.Items)
                     {
-                        string path = Path.Combine(item.FilePath, item.FileName);
                         PageMetadata metadata = _imageMetadataMap[(string)item.Text];
-                        if (metadata.Comment.Contains("Previous")) addPagewithText(pdf, doc, "Missing Page");
+                        if (metadata.PageType == PageType.MissingContent) { addPagewithText(pdf, doc, "Missing Page"); } else{
+                        string path = Path.Combine(item.FilePath, item.FileName);                        
                         PdfPage page = pdf.AddNewPage(metadata.PageSize);
                         ImageData imageData = ImageDataFactory.Create(path);
                         iText.Layout.Element.Image image = new iText.Layout.Element.Image(imageData);
@@ -42,8 +42,8 @@ namespace Scanned_Page_Sorter.Lib.PDF
                         page.SetRotation(metadata.Orientation);
                         image.SetRotationAngle(-metadata.Rotate * Math.PI / 180);
                         doc.Add(image);
-                        Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.ClipRect} {metadata.MediaRect} {metadata.Title}");
-                        if (metadata.Comment.Contains("Next")) addPagewithText(pdf, doc, "Missing Page");
+                            Console.WriteLine($"--->>>> {metadata.Orientation} {metadata.ClipRect} {metadata.MediaRect} {metadata.Title}");
+                        }
                     }
 
                 }
