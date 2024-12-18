@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using Scanned_Page_Sorter.Lib;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
 
 namespace Scanned_Page_Sorter
 {
@@ -28,7 +32,17 @@ namespace Scanned_Page_Sorter
         public string FileName { get; }
 
 
-        public iText.Kernel.Geom.PageSize PageSize => ClipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(MediaRect.Width, MediaRect.Height) : new iText.Kernel.Geom.PageSize(ClipRect.Width, ClipRect.Height);
+        public iText.Kernel.Geom.PageSize PageSizeWithoutRotation => ClipRect.Width == 0 ? new iText.Kernel.Geom.PageSize(MediaRect.Width, MediaRect.Height) : new iText.Kernel.Geom.PageSize(ClipRect.Width, ClipRect.Height);
+        public iText.Kernel.Geom.PageSize PageSize
+        {
+            get
+            {
+                iText.Kernel.Geom.PageSize p = PageSizeWithoutRotation;
+               Rectangle r = ImageUtils.GetBoundingRectangleAfterRotation( new Rectangle((int)p.GetLeft(), (int)p.GetRight(), (int)p.GetWidth(),(int)p.GetHeight())  ,  - Rotate );
+                return new iText.Kernel.Geom.PageSize(r.Width, r.Height);
+            }
+        }
+
         public iText.Kernel.Geom.Rectangle ClipBox => ClipRect.Width == 0 ? MediaBox : new iText.Kernel.Geom.Rectangle(ClipRect.Width, ClipRect.Height);
         public iText.Kernel.Geom.Rectangle MediaBox => new iText.Kernel.Geom.Rectangle(MediaRect.Width, MediaRect.Height);
 

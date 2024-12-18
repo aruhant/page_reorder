@@ -86,5 +86,17 @@ namespace Scanned_Page_Sorter.Lib
 
             return rotatedBitmap;
         }
+
+        public static Rectangle GetBoundingRectangleAfterRotation(Rectangle rectangle, double angle)
+        {
+            double radianAngle = angle / 180.0 * Math.PI;
+            double cosA = Math.Abs(Math.Cos(radianAngle));
+            double sinA = Math.Abs(Math.Sin(radianAngle));
+
+            int newWidth = (int)(cosA * rectangle.Width + sinA * rectangle.Height);
+            int newHeight = (int)(cosA * rectangle.Height + sinA * rectangle.Width);
+
+            return new Rectangle(rectangle.X, rectangle.Y, newWidth, newHeight);
+        }
     }
 }
