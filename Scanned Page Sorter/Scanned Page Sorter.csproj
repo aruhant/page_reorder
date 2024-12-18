@@ -239,12 +239,17 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\cover.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\toggleLayout.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\missing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\check.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

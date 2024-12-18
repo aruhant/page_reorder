@@ -66,7 +66,6 @@
             this.commentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missingCoverToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.missingPageToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.previousPageMissingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rotate90ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.outPreview = new System.Windows.Forms.PictureBox();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
@@ -273,7 +272,7 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.Controls.Add(this.mainSplitContainer);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1000, 450);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(1000, 436);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 24);
@@ -318,8 +317,8 @@
             // mainSplitContainer.Panel2
             // 
             this.mainSplitContainer.Panel2.Controls.Add(this.outSplitContainer);
-            this.mainSplitContainer.Size = new System.Drawing.Size(1000, 450);
-            this.mainSplitContainer.SplitterDistance = 241;
+            this.mainSplitContainer.Size = new System.Drawing.Size(1000, 436);
+            this.mainSplitContainer.SplitterDistance = 233;
             this.mainSplitContainer.TabIndex = 2;
             this.mainSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
@@ -337,8 +336,8 @@
             // inSplitContainer.Panel2
             // 
             this.inSplitContainer.Panel2.Controls.Add(this.inImageListView);
-            this.inSplitContainer.Size = new System.Drawing.Size(1000, 241);
-            this.inSplitContainer.SplitterDistance = 125;
+            this.inSplitContainer.Size = new System.Drawing.Size(1000, 233);
+            this.inSplitContainer.SplitterDistance = 120;
             this.inSplitContainer.TabIndex = 0;
             this.inSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
@@ -351,7 +350,7 @@
             this.inPreview.ContextMenuStrip = this.inContextMenu;
             this.inPreview.Location = new System.Drawing.Point(0, 0);
             this.inPreview.Name = "inPreview";
-            this.inPreview.Size = new System.Drawing.Size(998, 124);
+            this.inPreview.Size = new System.Drawing.Size(998, 119);
             this.inPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.inPreview.TabIndex = 0;
             this.inPreview.TabStop = false;
@@ -363,26 +362,26 @@
             this.toolStripMenuItem2,
             this.toolStripMenuItem3});
             this.inContextMenu.Name = "contextMenuStrip1";
-            this.inContextMenu.Size = new System.Drawing.Size(181, 92);
+            this.inContextMenu.Size = new System.Drawing.Size(149, 70);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(148, 22);
             this.toolStripMenuItem1.Text = "&Blurred Image";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(148, 22);
             this.toolStripMenuItem2.Text = "&Comment...";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(148, 22);
             this.toolStripMenuItem3.Text = "&Rotate 90";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
@@ -399,7 +398,7 @@
             this.inImageListView.Name = "inImageListView";
             this.inImageListView.PersistentCacheDirectory = "";
             this.inImageListView.PersistentCacheSize = ((long)(0));
-            this.inImageListView.Size = new System.Drawing.Size(1000, 112);
+            this.inImageListView.Size = new System.Drawing.Size(1000, 109);
             this.inImageListView.TabIndex = 3;
             this.inImageListView.UseWIC = true;
             this.inImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
@@ -420,8 +419,8 @@
             // outSplitContainer.Panel2
             // 
             this.outSplitContainer.Panel2.Controls.Add(this.outPreview);
-            this.outSplitContainer.Size = new System.Drawing.Size(1000, 205);
-            this.outSplitContainer.SplitterDistance = 41;
+            this.outSplitContainer.Size = new System.Drawing.Size(1000, 199);
+            this.outSplitContainer.SplitterDistance = 39;
             this.outSplitContainer.TabIndex = 0;
             this.outSplitContainer.SplitterMoved += new System.Windows.Forms.SplitterEventHandler(this.splitterMoved);
             // 
@@ -436,7 +435,7 @@
             this.outImageListView.Name = "outImageListView";
             this.outImageListView.PersistentCacheDirectory = "";
             this.outImageListView.PersistentCacheSize = ((long)(100));
-            this.outImageListView.Size = new System.Drawing.Size(1000, 41);
+            this.outImageListView.Size = new System.Drawing.Size(1000, 39);
             this.outImageListView.TabIndex = 3;
             this.outImageListView.UseWIC = true;
             this.outImageListView.DropComplete += new Manina.Windows.Forms.DropCompleteEventHandler(this.dropComplete_Handler);
@@ -450,10 +449,10 @@
             this.commentToolStripMenuItem,
             this.missingCoverToolStripMenuItem,
             this.missingPageToolStripMenuItem1,
-            this.previousPageMissingToolStripMenuItem,
             this.rotate90ToolStripMenuItem});
             this.outContextMenu.Name = "contextMenuStrip1";
-            this.outContextMenu.Size = new System.Drawing.Size(193, 136);
+            this.outContextMenu.Size = new System.Drawing.Size(181, 136);
+            this.outContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.outContextMenu_Opening);
             // 
             // blurredImageToolStripMenuItem
             // 
@@ -472,23 +471,16 @@
             // missingCoverToolStripMenuItem
             // 
             this.missingCoverToolStripMenuItem.Name = "missingCoverToolStripMenuItem";
-            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.missingCoverToolStripMenuItem.Text = "M&issing Cover";
+            this.missingCoverToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.missingCoverToolStripMenuItem.Text = "Missing &Cover";
             this.missingCoverToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // missingPageToolStripMenuItem1
             // 
             this.missingPageToolStripMenuItem1.Name = "missingPageToolStripMenuItem1";
-            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
-            this.missingPageToolStripMenuItem1.Text = "&Next Page Missing";
+            this.missingPageToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.missingPageToolStripMenuItem1.Text = "&Missing Page";
             this.missingPageToolStripMenuItem1.Click += new System.EventHandler(this.outContextMenuItem_Click);
-            // 
-            // previousPageMissingToolStripMenuItem
-            // 
-            this.previousPageMissingToolStripMenuItem.Name = "previousPageMissingToolStripMenuItem";
-            this.previousPageMissingToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.previousPageMissingToolStripMenuItem.Text = "&Previous Page Missing";
-            this.previousPageMissingToolStripMenuItem.Click += new System.EventHandler(this.outContextMenuItem_Click);
             // 
             // rotate90ToolStripMenuItem
             // 
@@ -506,7 +498,7 @@
             this.outPreview.ContextMenuStrip = this.outContextMenu;
             this.outPreview.Location = new System.Drawing.Point(2, 0);
             this.outPreview.Name = "outPreview";
-            this.outPreview.Size = new System.Drawing.Size(998, 158);
+            this.outPreview.Size = new System.Drawing.Size(998, 154);
             this.outPreview.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.outPreview.TabIndex = 0;
             this.outPreview.TabStop = false;
@@ -515,6 +507,7 @@
             // 
             this.toolStrip.AllowDrop = true;
             this.toolStrip.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip.ImageScalingSize = new System.Drawing.Size(32, 32);
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.openFileToolStripButton,
@@ -536,13 +529,13 @@
             this.coverToggle});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(386, 25);
+            this.toolStrip.Size = new System.Drawing.Size(542, 39);
             this.toolStrip.TabIndex = 0;
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(39, 22);
+            this.toolStripLabel1.Size = new System.Drawing.Size(39, 36);
             this.toolStripLabel1.Text = "Open:";
             // 
             // openFileToolStripButton
@@ -551,7 +544,7 @@
             this.openFileToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openFileToolStripButton.Image")));
             this.openFileToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openFileToolStripButton.Name = "openFileToolStripButton";
-            this.openFileToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.openFileToolStripButton.Size = new System.Drawing.Size(36, 36);
             this.openFileToolStripButton.Text = "File";
             this.openFileToolStripButton.Click += new System.EventHandler(this.openFile_Handler);
             // 
@@ -561,7 +554,7 @@
             this.openFolderToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("openFolderToolStripButton.Image")));
             this.openFolderToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openFolderToolStripButton.Name = "openFolderToolStripButton";
-            this.openFolderToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.openFolderToolStripButton.Size = new System.Drawing.Size(36, 36);
             this.openFolderToolStripButton.Text = "Folder";
             this.openFolderToolStripButton.Click += new System.EventHandler(this.openFolder_Handler);
             // 
@@ -571,19 +564,19 @@
             this.exportToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportToolStripButton.Image")));
             this.exportToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.exportToolStripButton.Name = "exportToolStripButton";
-            this.exportToolStripButton.Size = new System.Drawing.Size(23, 22);
+            this.exportToolStripButton.Size = new System.Drawing.Size(36, 36);
             this.exportToolStripButton.Text = "Folder";
             this.exportToolStripButton.Click += new System.EventHandler(this.exportPDF_Handler);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
             // rendererToolStripLabel
             // 
             this.rendererToolStripLabel.Name = "rendererToolStripLabel";
-            this.rendererToolStripLabel.Size = new System.Drawing.Size(35, 22);
+            this.rendererToolStripLabel.Size = new System.Drawing.Size(35, 36);
             this.rendererToolStripLabel.Text = "View:";
             // 
             // verticalTButton
@@ -592,7 +585,7 @@
             this.verticalTButton.Image = ((System.Drawing.Image)(resources.GetObject("verticalTButton.Image")));
             this.verticalTButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.verticalTButton.Name = "verticalTButton";
-            this.verticalTButton.Size = new System.Drawing.Size(23, 22);
+            this.verticalTButton.Size = new System.Drawing.Size(36, 36);
             this.verticalTButton.Text = "verticalNoPreview";
             this.verticalTButton.Click += new System.EventHandler(this.setVerticalThumbs);
             // 
@@ -602,7 +595,7 @@
             this.horizontalTButton.Image = ((System.Drawing.Image)(resources.GetObject("horizontalTButton.Image")));
             this.horizontalTButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.horizontalTButton.Name = "horizontalTButton";
-            this.horizontalTButton.Size = new System.Drawing.Size(23, 22);
+            this.horizontalTButton.Size = new System.Drawing.Size(36, 36);
             this.horizontalTButton.Text = "horizontalNoPreview";
             this.horizontalTButton.Click += new System.EventHandler(this.setHorizontalThumbs);
             // 
@@ -612,7 +605,7 @@
             this.verticalButton.Image = ((System.Drawing.Image)(resources.GetObject("verticalButton.Image")));
             this.verticalButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.verticalButton.Name = "verticalButton";
-            this.verticalButton.Size = new System.Drawing.Size(23, 22);
+            this.verticalButton.Size = new System.Drawing.Size(36, 36);
             this.verticalButton.Text = "Vertical";
             this.verticalButton.Click += new System.EventHandler(this.setVertical);
             // 
@@ -622,14 +615,14 @@
             this.horizontalButton.Image = ((System.Drawing.Image)(resources.GetObject("horizontalButton.Image")));
             this.horizontalButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.horizontalButton.Name = "horizontalButton";
-            this.horizontalButton.Size = new System.Drawing.Size(23, 22);
+            this.horizontalButton.Size = new System.Drawing.Size(36, 36);
             this.horizontalButton.Text = "Horizontal";
             this.horizontalButton.Click += new System.EventHandler(this.setHorizontal);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
             // tooggleLayout
             // 
@@ -637,14 +630,14 @@
             this.tooggleLayout.Image = global::Scanned_Page_Sorter.Properties.Resources.toggleLayout;
             this.tooggleLayout.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.tooggleLayout.Name = "tooggleLayout";
-            this.tooggleLayout.Size = new System.Drawing.Size(23, 22);
+            this.tooggleLayout.Size = new System.Drawing.Size(36, 36);
             this.tooggleLayout.Text = "rotateLeft";
             this.tooggleLayout.Click += new System.EventHandler(this.tooggleLayout_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
             // rotateLeft
             // 
@@ -652,7 +645,7 @@
             this.rotateLeft.Image = ((System.Drawing.Image)(resources.GetObject("rotateLeft.Image")));
             this.rotateLeft.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rotateLeft.Name = "rotateLeft";
-            this.rotateLeft.Size = new System.Drawing.Size(23, 22);
+            this.rotateLeft.Size = new System.Drawing.Size(36, 36);
             this.rotateLeft.Text = "rotateLeft";
             this.rotateLeft.Click += new System.EventHandler(this.rotateLeft_Click);
             // 
@@ -662,14 +655,14 @@
             this.rotateRight.Image = ((System.Drawing.Image)(resources.GetObject("rotateRight.Image")));
             this.rotateRight.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.rotateRight.Name = "rotateRight";
-            this.rotateRight.Size = new System.Drawing.Size(23, 22);
+            this.rotateRight.Size = new System.Drawing.Size(36, 36);
             this.rotateRight.Text = "rotateRight";
             this.rotateRight.Click += new System.EventHandler(this.rotateRight_Click);
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 39);
             // 
             // duplexToggle
             // 
@@ -677,7 +670,7 @@
             this.duplexToggle.Image = ((System.Drawing.Image)(resources.GetObject("duplexToggle.Image")));
             this.duplexToggle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.duplexToggle.Name = "duplexToggle";
-            this.duplexToggle.Size = new System.Drawing.Size(23, 22);
+            this.duplexToggle.Size = new System.Drawing.Size(36, 36);
             this.duplexToggle.Text = "Toggle Duplex Mode";
             this.duplexToggle.Click += new System.EventHandler(this.duplexToggle_Click);
             // 
@@ -687,7 +680,7 @@
             this.coverToggle.Image = ((System.Drawing.Image)(resources.GetObject("coverToggle.Image")));
             this.coverToggle.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.coverToggle.Name = "coverToggle";
-            this.coverToggle.Size = new System.Drawing.Size(23, 22);
+            this.coverToggle.Size = new System.Drawing.Size(36, 36);
             this.coverToggle.Text = "Toggle Missing Cover";
             this.coverToggle.Click += new System.EventHandler(this.coverToggle_Click);
             // 
@@ -780,7 +773,6 @@
         private System.Windows.Forms.ToolStripButton tooggleLayout;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem missingPageToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem previousPageMissingToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton duplexToggle;
         private System.Windows.Forms.ToolStripButton coverToggle;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;

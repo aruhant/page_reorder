@@ -269,5 +269,10 @@ namespace Scanned_Page_Sorter
                 }
             }
         }
+
+        private void outContextMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+
+        }
     }
 }
