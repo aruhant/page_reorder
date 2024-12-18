@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Manina.Windows.Forms;
-using Scanned_Page_Sorter.Lib.models;
-using Scanned_Page_Sorter.Lib;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-using System.Windows.Forms;
 using System.Drawing;
 using System.IO;
+using System.Windows.Forms;
+using Manina.Windows.Forms;
+using Scanned_Page_Sorter.Lib;
 
 namespace Scanned_Page_Sorter
 {
@@ -23,7 +18,7 @@ namespace Scanned_Page_Sorter
 
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
-            if (item == null  ) return;
+            if (item == null) return;
             PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
             if (metadata.PageType == PageType.MissingContent) return;
             preview.Tag = item.Text;
@@ -49,20 +44,20 @@ namespace Scanned_Page_Sorter
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
             {
                 imageListView = inImageListView;
-                selectedItems = inImageListView.SelectedItems ;
+                selectedItems = inImageListView.SelectedItems;
                 preview = inPreview;
             }
             else if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
             {
                 imageListView = outImageListView;
-                selectedItems = outImageListView.SelectedItems ;
+                selectedItems = outImageListView.SelectedItems;
                 preview = outPreview;
             }
             else if (inPreview.Focused)
             {
                 imageListView = inImageListView;
                 selectedItems = new List<ImageListViewItem> { inPreview.Tag as ImageListViewItem };
-                preview = inPreview;                    
+                preview = inPreview;
             }
             else if (outPreview.Focused)
             {
@@ -75,19 +70,20 @@ namespace Scanned_Page_Sorter
             //updatePreview(preview, selectedItems.First());
         }
 
-        private void setComments(ImageListView imageListView, IEnumerable<ImageListViewItem> imageListViewItems,  string comment)
+        private void setComments(ImageListView imageListView, IEnumerable<ImageListViewItem> imageListViewItems, string comment)
         {
-            if ( comment.ToLower().Contains("missing") )
+            if (comment.ToLower().Contains("missing"))
             {
-                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random().Next() , PageType.MissingContent));
-                
-            } else
-            foreach (var item in imageListViewItems) setComment(item, comment);
+                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent));
+
+            }
+            else
+                foreach (var item in imageListViewItems) setComment(item, comment);
         }
 
-        private ImageListViewItem CreateNewPage(string v,  PageType content)
+        private ImageListViewItem CreateNewPage(string v, PageType content)
         {
-            ImageListViewItem item = new ImageListViewItem(v  );
+            ImageListViewItem item = new ImageListViewItem(v);
             sourceDocument.PageMetadataMap[v] = new PageMetadata("", v, content);
             return item;
 
@@ -98,7 +94,7 @@ namespace Scanned_Page_Sorter
             if (comment.ToLower().Contains("blurred"))
             {
                 sourceDocument.PageMetadataMap[(string)item.Text].Blurred = 1 - sourceDocument.PageMetadataMap[(string)item.Text].Blurred;
-            }            
+            }
             else if (comment.Contains("Cover"))
             {
                 PageMetadata imageMetadata = new PageMetadata("Cover", "Cover");

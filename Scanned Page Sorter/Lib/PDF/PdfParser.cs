@@ -28,7 +28,7 @@ namespace Scanned_Page_Sorter.Lib.PDF
         {
             try
             {
-            PdfReader reader = new PdfReader(_sourcePdf);
+                PdfReader reader = new PdfReader(_sourcePdf);
                 PdfDocument pdfDoc = new PdfDocument(reader);
                 _imageNumber = 0;
                 for (int i = 1; i <= pdfDoc.GetNumberOfPages(); i++)

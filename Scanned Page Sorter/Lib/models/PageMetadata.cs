@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 
 namespace Scanned_Page_Sorter
@@ -23,8 +22,8 @@ namespace Scanned_Page_Sorter
         public Rectangle MediaRect;
         public PageType PageType;
         public int PageNumber, OriginalPageNumber;
-        public int Blurred=0;
-         public string Flags { get => (Blurred == 0 ? "" : "Blurred ")   + (Comment==null||Comment =="" ? "": Comment) ; }
+        public int Blurred = 0;
+        public string Flags { get => (Blurred == 0 ? "" : "Blurred ") + (Comment == null || Comment == "" ? "" : Comment); }
 
         public string FileName { get; }
 
@@ -86,7 +85,7 @@ namespace Scanned_Page_Sorter
         internal void SyncPageNumbers(List<string> fileNames)
         {
             int i = 0;
-            foreach (string p  in fileNames)
+            foreach (string p in fileNames)
             {
                 map[p].PageNumber = i++;
             }

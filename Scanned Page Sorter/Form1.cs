@@ -4,7 +4,6 @@ using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Manina.Windows.Forms;
-using Scanned_Page_Sorter.Lib;
 using Scanned_Page_Sorter.Lib.models;
 using Scanned_Page_Sorter.Lib.PDF;
 
@@ -58,7 +57,7 @@ namespace Scanned_Page_Sorter
             foreach (var item in outImageListView.Items)
             {
                 tagList.Add(item.Text.ToString());
-            }         
+            }
 
             sourceDocument.PageMetadataMap.SyncPageNumbers(tagList);
         }
@@ -126,8 +125,10 @@ namespace Scanned_Page_Sorter
                 System.IO.DirectoryInfo di = new System.IO.DirectoryInfo(currentlyOpenImageFolder);
                 foreach (System.IO.FileInfo file in di.GetFiles())
                 {
-                    try { file.Delete(); } catch (Exception e) {
-                    Console.WriteLine(e.Message);
+                    try { file.Delete(); }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
                     }
 
                 }
