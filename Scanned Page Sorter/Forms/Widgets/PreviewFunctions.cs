@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 using iText.StyledXmlParser.Jsoup.Nodes;
 using Manina.Windows.Forms;
@@ -87,16 +88,40 @@ namespace Scanned_Page_Sorter
             }
             else if (operation.ToLower().Contains("missing"))
             {
-                imageListView.Items.Add(CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent));
-            }
+                bool found = false;
+                int pos = 0;
+                List<PageMetadata> pagesAfterInsertion = new List<PageMetadata>();
+                foreach (var item in imageListView.Items)
+                {
+                    if (item == outPreview.Tag)
+                    {
+                        found = true;
+                    }
+                    if (found)
+                    {
+                        pagesAfterInsertion.Add(sourceDocument.PageMetadataMap[(string)item.Text]);
+                    }
+                    else
+                    {
+                        pos++;
+                    }
+                }
+                var missingPage = CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent, pagesAfterInsertion.First().PageNumber );
+                imageListView.Items.Insert(pos, missingPage);
+
+                foreach (var page in pagesAfterInsertion)
+                {
+                    page.PageNumber++;
+                }
+                }
            //updatePreview(preview, selectedItems.First());
         }
 
 
-        private ImageListViewItem CreateNewPage(string v, PageType content)
+        private ImageListViewItem CreateNewPage(string v, PageType content, int pageNumber)
         {
             ImageListViewItem item = new ImageListViewItem(v);
-            sourceDocument.PageMetadataMap[v] = new PageMetadata("", v, content);
+            sourceDocument.PageMetadataMap[v] = new PageMetadata("", v, content, pageNumber: pageNumber);
             return item;
 
         }
