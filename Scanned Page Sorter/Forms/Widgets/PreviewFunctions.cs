@@ -4,6 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using iText.Layout.Font;
 using iText.StyledXmlParser.Jsoup.Nodes;
 using Manina.Windows.Forms;
 using Scanned_Page_Sorter.Lib;
@@ -47,13 +48,13 @@ namespace Scanned_Page_Sorter
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            List<string> fileList = new List<string>();
             foreach (var item in sourceDocument.PageMetadataMap.Values)
             {
-                fileList.Add(Path.Combine( item.FileName  ));
+                item.Rotate = ImageUtils.AutoDeskew(item.FileName);
+                statusMessage.Text = "Deskewed " + item.FileName + " to " + item.Rotate.ToString();
             }
-            ImageUtils.AutoDeskew(fileList);
-
+            inImageListView.Refresh();
+            outImageListView.Refresh();
         }
 
         private void outContextMenuItem_Click(object sender, EventArgs e)

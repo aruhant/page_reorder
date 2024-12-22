@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices.WindowsRuntime;
 using Scanned_Page_Sorter.Lib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
@@ -86,7 +87,9 @@ namespace Scanned_Page_Sorter
             {
                 if (!map.ContainsKey(fileName))
                 {
-                    map[fileName] = new PageMetadata(fileName);
+                    //map[fileName] = new PageMetadata(fileName);
+                    Console.WriteLine("Not found " + fileName);
+                    return null;
                 }
                 return map[fileName];
             }
@@ -104,5 +107,6 @@ namespace Scanned_Page_Sorter
                 map[p].PageNumber = i++;
             }
         }
+
     }
 }

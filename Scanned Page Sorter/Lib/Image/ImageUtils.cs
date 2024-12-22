@@ -101,15 +101,25 @@ namespace Scanned_Page_Sorter.Lib
             return new Rectangle(rectangle.X, rectangle.Y, newWidth, newHeight);
         }
 
-        public static void AutoDeskew(List<string> fileNames)
+        public static float AutoDeskew(string fileName)
         {
-            for (int i = 0; i < fileNames.Count; i++)
+            Console.WriteLine($"Processing {fileName}");
+            string output = Utils.RunExternalExe("deskew.exe", fileName);
+            Console.WriteLine(output);
+            try
             {
-                string fileName = fileNames[i];
-                Console.WriteLine($"Processing {fileName}");
-
+                string angleString = output.Split(':')[1].Trim();
+                if (float.TryParse(angleString, out float parsedAngle))
+                {
+                    return parsedAngle;
+                }
             }
-
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error processing {fileName}: {ex.Message}");
+            }
+            
+            return 0;
         }
 
 

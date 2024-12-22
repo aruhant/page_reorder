@@ -37,6 +37,14 @@ namespace Scanned_Page_Sorter
                     // filename without extension
                     string title = Path.GetFileName(p.FullName);
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
+                    if (sourceDocument.PageMetadataMap[title]==null)
+                    {
+                        sourceDocument.PageMetadataMap[title] = new PageMetadata(p.FullName, title, PageType.Content, index, index);
+                        Console.WriteLine("Creating " + sourceDocument.PageMetadataMap[title]);
+                    }
+                    else {
+                        Console.WriteLine("Exists " + sourceDocument.PageMetadataMap[title]);
+                    }
                     inImageListView.Items.Add(item);
                 }
             }
