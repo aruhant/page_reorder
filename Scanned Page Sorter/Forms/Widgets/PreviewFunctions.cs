@@ -45,6 +45,16 @@ namespace Scanned_Page_Sorter
             }
         }
 
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            List<string> fileList = new List<string>();
+            foreach (var item in sourceDocument.PageMetadataMap.Values)
+            {
+                fileList.Add(Path.Combine( item.FileName  ));
+            }
+            ImageUtils.AutoDeskew(fileList);
+
+        }
 
         private void outContextMenuItem_Click(object sender, EventArgs e)
         {
@@ -147,6 +157,7 @@ namespace Scanned_Page_Sorter
         }
 
     }
+         
 
     public static class Prompt
     {

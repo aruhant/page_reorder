@@ -91,16 +91,17 @@ namespace Scanned_Page_Sorter.Lib.PDF
                     if ((subtype == null) || subtype.ToString() != PdfName.Image.ToString()) break;
                     byte[] data = (obj as PdfStream).GetBytes();
                     string title = $"{_imageNumber++:D3}.jpg";
+                    string fileName;
                     using (MemoryStream ms = new MemoryStream(data))
                     {
-                        var fileName = Path.Combine(outputFolder, title);
+                        fileName = Path.Combine(outputFolder, title);
                         using (Image img = Image.FromStream(ms))
                         {
                             var croppedImg = ImageUtils.CropToBoundsAndRotate(img, _clip, _mediabox, 0);
                             croppedImg.Save(fileName, ImageFormat.Jpeg);
                         }
                     }
-                    PageMetadata metadata = new PageMetadata(outputFolder, title, originalPageNumber: _imageNumber);
+                    PageMetadata metadata = new PageMetadata(fileName, title, originalPageNumber: _imageNumber);
                     _imageMetadataMap[title] = metadata;
                     metadata.ClipRect = _clip;
                     metadata.MediaRect = _mediabox;

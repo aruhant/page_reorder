@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using iText.Layout.Element;
 
 
 namespace Scanned_Page_Sorter.Lib
@@ -98,5 +100,18 @@ namespace Scanned_Page_Sorter.Lib
 
             return new Rectangle(rectangle.X, rectangle.Y, newWidth, newHeight);
         }
+
+        public static void AutoDeskew(List<string> fileNames)
+        {
+            for (int i = 0; i < fileNames.Count; i++)
+            {
+                string fileName = fileNames[i];
+                Console.WriteLine($"Processing {fileName}");
+
+            }
+
+        }
+
+
     }
 }
