@@ -33,7 +33,7 @@ namespace Scanned_Page_Sorter.Lib.PDF
                     {
                         PageMetadata metadata = _imageMetadataMap[(string)item.Text];
                         if (metadata.PageType == PageType.MissingContent) { addPagewithText(pdf, doc, "Missing Page"); } else{
-                        string path = Path.Combine(item.FilePath, item.FileName);
+                        string path = metadata.FileName;
                         var p = metadata.PageSize;
                         PdfPage page = pdf.AddNewPage(p);
                         ImageData imageData = ImageDataFactory.Create(path);
@@ -60,7 +60,7 @@ namespace Scanned_Page_Sorter.Lib.PDF
             //PdfPage page =  pdf.AddNewPage();
             doc.Add(new iText.Layout.Element.Paragraph(v)
                 .SetBackgroundColor(iText.Kernel.Colors.ColorConstants.CYAN)
-.SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
+                .SetFontColor(iText.Kernel.Colors.ColorConstants.BLACK)
                 .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
                 .SetFontSize(24f));
         }

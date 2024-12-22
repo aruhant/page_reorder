@@ -50,7 +50,7 @@ namespace Scanned_Page_Sorter
         {
             foreach (var item in sourceDocument.PageMetadataMap.Values)
             {
-                item.Rotate = ImageUtils.AutoDeskew(item.FileName);
+                item.Rotate =  -ImageUtils.AutoDeskew(item.FileName);
                 statusMessage.Text = "Deskewed " + item.FileName + " to " + item.Rotate.ToString();
             }
             inImageListView.Refresh();

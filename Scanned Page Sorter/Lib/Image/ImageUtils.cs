@@ -122,6 +122,21 @@ namespace Scanned_Page_Sorter.Lib
             return 0;
         }
 
-
+        internal static Rectangle getImageRect(string fullName)
+        {
+            Rectangle imageRect = new Rectangle();
+            try
+            {
+                using (var image = System.Drawing.Image.FromFile(fullName))
+                {
+                    imageRect = new Rectangle(0, 0, image.Width, image.Height);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error processing {fullName}: {ex.Message}");
+            }
+            return imageRect;
+        }
     }
 }

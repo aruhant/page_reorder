@@ -2,6 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using Manina.Windows.Forms;
+using Scanned_Page_Sorter.Lib;
 
 namespace Scanned_Page_Sorter
 {
@@ -39,7 +40,11 @@ namespace Scanned_Page_Sorter
                     ImageListViewItem item = new ImageListViewItem(p.FullName, title);
                     if (sourceDocument.PageMetadataMap[title]==null)
                     {
-                        sourceDocument.PageMetadataMap[title] = new PageMetadata(p.FullName, title, PageType.Content, index, index);
+                        PageMetadata pageMetadata = new PageMetadata(p.FullName, title, PageType.Content, index, index);
+                        sourceDocument.PageMetadataMap[title] = pageMetadata;
+                        
+                        pageMetadata.MediaRect = ImageUtils.getImageRect(p.FullName);
+                        index++;                        
                         Console.WriteLine("Creating " + sourceDocument.PageMetadataMap[title]);
                     }
                     else {

@@ -48,9 +48,7 @@ namespace Scanned_Page_Sorter
         public iText.Kernel.Geom.Rectangle MediaBox => new iText.Kernel.Geom.Rectangle(MediaRect.Width, MediaRect.Height);
 
 
-        public PageMetadata(string fileName, string title = null, PageType pageType = PageType.Content, int pageNumber = -1, int originalPageNumber = -1
-
-            )
+        public PageMetadata(string fileName, string title = null, PageType pageType = PageType.Content, int pageNumber = -1, int originalPageNumber = -1)
         {
             Title = title;
             FileName = fileName;
@@ -59,7 +57,6 @@ namespace Scanned_Page_Sorter
             Orientation = 0;
             PageType = pageType;
             PageNumber = pageNumber;
-
             OriginalPageNumber = originalPageNumber;
         }
 
