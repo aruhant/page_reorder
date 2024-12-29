@@ -65,7 +65,7 @@ public static string RunExternalExe(string filename, string arguments = "")
             process.StartInfo.FileName = filename;
             if (!string.IsNullOrEmpty(arguments))
             {
-                process.StartInfo.Arguments = arguments;
+            process.StartInfo.Arguments = "\"" + arguments + "\"";
             }
 
             process.StartInfo.CreateNoWindow = true;

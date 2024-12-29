@@ -23,7 +23,7 @@ namespace Scanned_Page_Sorter
         {
             if (item == null) return;
             PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
-            if (metadata.PageType == PageType.MissingContent) return;
+            if (metadata==null || metadata.PageType == PageType.MissingContent) return;
             preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
