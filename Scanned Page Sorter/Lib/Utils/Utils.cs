@@ -56,7 +56,7 @@ namespace Scanned_Page_Sorter
 
     }
 
-public class Utils { 
+public class RunUtils { 
     
 public static string RunExternalExe(string filename, string arguments = "")
         {

@@ -3,12 +3,13 @@ using System.Windows.Forms;
 
 namespace Scanned_Page_Sorter.Lib.models
 {
-    enum DocumentType
+    public enum DocumentType
     {
         PDF,
         ImageFolder
     }
-    internal class SourceDocument
+    
+    public class SourceDocument
     {
         private readonly string _source;
         private readonly DocumentType _documentType;

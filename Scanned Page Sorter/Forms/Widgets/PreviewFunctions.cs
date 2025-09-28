@@ -8,80 +8,85 @@ using iText.Layout.Font;
 using iText.StyledXmlParser.Jsoup.Nodes;
 using Manina.Windows.Forms;
 using Scanned_Page_Sorter.Lib;
+using Scanned_Page_Sorter.Lib.Utils;
 
 namespace Scanned_Page_Sorter
 {
     partial class pageSorterForm
     {
-
+        #region Preview Update Methods
+        /// <summary>
+        /// Updates the preview for the input image list view
+        /// </summary>
         private void updateInPreview(object sender, ItemHoverEventArgs e) => updatePreview(inPreview, e.Item);
 
+        /// <summary>
+        /// Updates the preview for the output image list view
+        /// </summary>
         private void updateOutPreview(object sender, ItemHoverEventArgs e) => updatePreview(outPreview, e.Item);
 
-
+        /// <summary>
+        /// Updates the preview image in the specified PictureBox
+        /// </summary>
         private void updatePreview(PictureBox preview, ImageListViewItem item)
         {
             if (item == null) return;
             PageMetadata metadata = sourceDocument.PageMetadataMap[(string)item.Text];
-            if (metadata==null || metadata.PageType == PageType.MissingContent) return;
+            if (metadata == null || metadata.PageType == PageType.MissingContent) return;
             preview.Tag = item;
             string path = Path.Combine(item.FilePath, item.FileName);
             preview.Image = ImageUtils.RotateImage(Image.FromFile(path), metadata.Orientation, metadata.Rotate);
         }
+        #endregion
 
+        #region Context Menu Handlers
+        /// <summary>
+        /// Handles context menu actions for the input image list view
+        /// </summary>
         private void inContextMenuItem_Click(object sender, EventArgs e)
         {
             string operation = sender.ToString().Replace("&", string.Empty);
-            //var selectedItems = (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused) ?
-            //    new List<ImageListViewItem>(inImageListView.SelectedItems) :
-            //    new List<ImageListViewItem> { (ImageListViewItem)inPreview.Tag };
-            //contextMenuItem_Click(comment, inImageListView, selectedItems);
             if (inImageListView.SelectedItems.Count > 0 && inImageListView.Focused)
             {
-                contextMenuItem_Click(operation, inImageListView, inImageListView.SelectedItems);
+                HandleContextMenuAction(operation, inImageListView, inImageListView.SelectedItems);
             }
             else
             {
-                contextMenuItem_Click(operation, inImageListView, new List<ImageListViewItem> { (ImageListViewItem)inPreview.Tag });
+                HandleContextMenuAction(operation, inImageListView, new List<ImageListViewItem> { (ImageListViewItem)inPreview.Tag });
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            foreach (var item in sourceDocument.PageMetadataMap.Values)
-            {
-                item.Rotate =  -ImageUtils.AutoDeskew(item.FileName);
-                statusMessage.Text = "Deskewed " + item.FileName + " to " + item.Rotate.ToString();
-            }
-            inImageListView.Refresh();
-            outImageListView.Refresh();
-        }
-
+        /// <summary>
+        /// Handles context menu actions for the output image list view
+        /// </summary>
         private void outContextMenuItem_Click(object sender, EventArgs e)
         {
             string operation = sender.ToString().Replace("&", string.Empty);
             if (outImageListView.SelectedItems.Count > 0 && outImageListView.Focused)
             {
-                contextMenuItem_Click(operation, outImageListView, outImageListView.SelectedItems);
+                HandleContextMenuAction(operation, outImageListView, outImageListView.SelectedItems);
             }
             else
             {
-                contextMenuItem_Click(operation, outImageListView, new List<ImageListViewItem> { (ImageListViewItem)outPreview.Tag });
+                HandleContextMenuAction(operation, outImageListView, new List<ImageListViewItem> { (ImageListViewItem)outPreview.Tag });
             }
         }
-        private void contextMenuItem_Click(string operation, ImageListView imageListView,  IEnumerable<ImageListViewItem> imageListViewItems)
-        {
-            
 
+        /// <summary>
+        /// Handles context menu actions for image list view items
+        /// </summary>
+        private void HandleContextMenuAction(string operation, ImageListView imageListView, IEnumerable<ImageListViewItem> imageListViewItems)
+        {
             if (operation.ToLower().Contains("comment"))
             {
-                string comment  = Prompt.ShowDialog("Enter Comment", "Comment");
+                string comment = Prompt.ShowDialog("Enter Comment", "Comment");
                 foreach (var item in imageListViewItems) setComment(item, comment);
-            } else if (operation.ToLower().Contains("rotate"))
+            }
+            else if (operation.ToLower().Contains("rotate"))
             {
                 foreach (var item in imageListViewItems)
                 {
-                    sourceDocument.PageMetadataMap[(string)item.Text].Orientation = ( sourceDocument.PageMetadataMap[(string)item.Text].Orientation +90 ) % 360;
+                    sourceDocument.PageMetadataMap[(string)item.Text].Orientation = (sourceDocument.PageMetadataMap[(string)item.Text].Orientation + 90) % 360;
                     item.Update();
                 }
             }
@@ -95,7 +100,7 @@ namespace Scanned_Page_Sorter
             }
             else if (operation.ToLower().Contains("cover"))
             {
-                
+                // Cover logic placeholder
             }
             else if (operation.ToLower().Contains("missing"))
             {
@@ -117,26 +122,31 @@ namespace Scanned_Page_Sorter
                         pos++;
                     }
                 }
-                var missingPage = CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent, pagesAfterInsertion.First().PageNumber );
+                var missingPage = CreateNewPage("Missing Page ~" + new Random().Next(), PageType.MissingContent, pagesAfterInsertion.First().PageNumber);
                 imageListView.Items.Insert(pos, missingPage);
 
                 foreach (var page in pagesAfterInsertion)
                 {
                     page.PageNumber++;
                 }
-                }
-           //updatePreview(preview, selectedItems.First());
+            }
         }
+        #endregion
 
-
+        #region Utility Methods
+        /// <summary>
+        /// Creates a new ImageListViewItem for a missing or cover page
+        /// </summary>
         private ImageListViewItem CreateNewPage(string v, PageType content, int pageNumber)
         {
             ImageListViewItem item = new ImageListViewItem(v);
             sourceDocument.PageMetadataMap[v] = new PageMetadata("", v, content, pageNumber: pageNumber);
             return item;
-
         }
 
+        /// <summary>
+        /// Sets a comment for the specified image list view item
+        /// </summary>
         private void setComment(ImageListViewItem item, string comment)
         {
             if (comment.ToLower().Contains("blurred"))
@@ -154,34 +164,23 @@ namespace Scanned_Page_Sorter
                 sourceDocument.PageMetadataMap[(string)item.Text].Comment = comment;
             }
             item.Update();
-
         }
+        #endregion
 
-    }
-         
-
-    public static class Prompt
-    {
-        public static string ShowDialog(string text, string caption)
+        #region Deskew Button Handler
+        /// <summary>
+        /// Deskews all images in the document
+        /// </summary>
+        private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            Form prompt = new Form()
+            foreach (var item in sourceDocument.PageMetadataMap.Values)
             {
-                Width = 500,
-                Height = 150,
-                FormBorderStyle = FormBorderStyle.FixedDialog,
-                Text = caption,
-                StartPosition = FormStartPosition.CenterScreen
-            };
-            Label textLabel = new Label() { Left = 50, Top = 20, Text = text };
-            TextBox textBox = new TextBox() { Left = 50, Top = 50, Width = 400 };
-            Button confirmation = new Button() { Text = "Ok", Left = 350, Width = 100, Top = 70, DialogResult = DialogResult.OK };
-            confirmation.Click += (sender, e) => { prompt.Close(); };
-            prompt.Controls.Add(textBox);
-            prompt.Controls.Add(confirmation);
-            prompt.Controls.Add(textLabel);
-            prompt.AcceptButton = confirmation;
-
-            return prompt.ShowDialog() == DialogResult.OK ? textBox.Text : "";
+                item.Rotate = -ImageUtils.AutoDeskew(item.FileName);
+                statusMessage.Text = "Deskewed " + item.FileName + " to " + item.Rotate.ToString();
+            }
+            inImageListView.Refresh();
+            outImageListView.Refresh();
         }
+        #endregion
     }
 }

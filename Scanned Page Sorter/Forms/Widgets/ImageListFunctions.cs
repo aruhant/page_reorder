@@ -43,7 +43,7 @@ namespace Scanned_Page_Sorter
                         PageMetadata pageMetadata = new PageMetadata(p.FullName, title, PageType.Content, index, index);
                         sourceDocument.PageMetadataMap[title] = pageMetadata;
                         
-                        pageMetadata.MediaRect = ImageUtils.getImageRect(p.FullName);
+                        pageMetadata.MediaRect = ImageUtils.GetImageRect(p.FullName);
                         index++;                        
                         Console.WriteLine("Creating " + sourceDocument.PageMetadataMap[title]);
                     }
