@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>ScanSort</RootNamespace>
+    <AssemblyName>ScanSort</AssemblyName>
+    <!-- <ApplicationIcon>Resources\icons\app.ico</ApplicationIcon> -->
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PDFsharp" Version="6.2.4" />
+    <PackageReference Include="OpenCvSharp4" Version="4.13.0.20260330" />
+    <PackageReference Include="OpenCvSharp4.Extensions" Version="4.13.0.20260318" />
+    <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.13.0.20260302" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\lib\ImageListView\**\*.cs" LinkBase="Lib\ImageListView" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\lib\ImageListView\ImageListViewResources.resx"
+                      LogicalName="Manina.Windows.Forms.ImageListViewResources.resources"
+                      Link="Lib\ImageListView\ImageListViewResources.resx" />
+    <EmbeddedResource Include="..\..\lib\ImageListView\ImageListViewResources.de.resx"
+                      LogicalName="Manina.Windows.Forms.ImageListViewResources.de.resources"
+                      Link="Lib\ImageListView\ImageListViewResources.de.resx" />
+    <EmbeddedResource Include="..\..\lib\ImageListView\ImageListViewResources.tr.resx"
+                      LogicalName="Manina.Windows.Forms.ImageListViewResources.tr.resources"
+                      Link="Lib\ImageListView\ImageListViewResources.tr.resx" />
+  </ItemGroup>
+
+</Project>
