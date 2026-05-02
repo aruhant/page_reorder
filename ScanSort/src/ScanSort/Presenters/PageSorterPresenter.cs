@@ -1,3 +1,4 @@
+using System.Drawing;
 using Manina.Windows.Forms;
 using ScanSort.Commands;
 using ScanSort.Controls;
@@ -54,6 +55,7 @@ public class PageSorterPresenter
         _view.DuplexToggled += (s, e) => OnDuplexToggle();
         _view.CoverToggled += (s, e) => OnCoverToggle();
         _view.AutoDeskewRequested += async (s, e) => await OnAutoDeskew();
+        _view.FullScreenRequested += (s, e) => OnFullScreenPreview();
         _view.UndoRequested += (s, e) => OnUndo();
         _view.RedoRequested += (s, e) => OnRedo();
         _view.LayoutModeChanged += (s, mode) => OnLayoutModeChanged(mode);
@@ -397,6 +399,32 @@ public class PageSorterPresenter
         _commandHistory.Redo();
         _view.InputPanel.ListView.Refresh();
         _view.OutputPanel.ListView.Refresh();
+    }
+
+    private void OnFullScreenPreview()
+    {
+        if (_document == null) return;
+
+        var (panel, items) = GetFocusedSelection();
+        if (panel == null) return;
+
+        var item = items.Count > 0 ? items[0] : panel.Preview.Tag as ImageListViewItem;
+        if (item == null) return;
+
+        var metadata = _document.PageMetadataMap[item.Text];
+        if (metadata == null || metadata.PageType == PageType.MissingContent) return;
+
+        try
+        {
+            string path = Path.Combine(item.FilePath, item.FileName);
+            using var original = Image.FromFile(path);
+            var previewImage = _imageService.RotateImage(original, metadata.Orientation, metadata.Rotate);
+            _view.ShowFullScreenPreview(previewImage, item.Text);
+        }
+        catch
+        {
+            _view.StatusText = "Unable to open full screen preview.";
+        }
     }
 
     #endregion

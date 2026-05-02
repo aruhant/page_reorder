@@ -1,3 +1,4 @@
+using System.Drawing;
 using ScanSort.Controls;
 
 namespace ScanSort.Views;
@@ -28,6 +29,7 @@ public interface IPageSorterView
     event EventHandler DuplexToggled;
     event EventHandler CoverToggled;
     event EventHandler AutoDeskewRequested;
+    event EventHandler FullScreenRequested;
 
     // Events — layout
     event EventHandler<string> LayoutModeChanged;
@@ -50,6 +52,9 @@ public interface IPageSorterView
     // Progress
     void ShowProgress(int current, int total, string message);
     void HideProgress();
+
+    // Full screen preview
+    void ShowFullScreenPreview(Image image, string title);
 
     // Helpers
     void InvokeOnUI(Action action);

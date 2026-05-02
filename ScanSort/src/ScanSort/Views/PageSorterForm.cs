@@ -38,6 +38,7 @@ public class PageSorterForm : Form, IPageSorterView
     public event EventHandler? DuplexToggled;
     public event EventHandler? CoverToggled;
     public event EventHandler? AutoDeskewRequested;
+    public event EventHandler? FullScreenRequested;
     public event EventHandler? UndoRequested;
     public event EventHandler? RedoRequested;
     public event EventHandler<ContextMenuAction>? ContextMenuClicked;
@@ -230,6 +231,7 @@ public class PageSorterForm : Form, IPageSorterView
     private const string IcoDuplex     = "\uE89A";
     private const string IcoCover      = "\uE7BC";
     private const string IcoDeskew     = "\uE90F";
+    private const string IcoFullScreen = "\uE740";
 
     /// <summary>Render an MDL2 glyph to a bitmap for use as a ToolStripButton image.</summary>
     private static Image GlyphIcon(string glyph, Color color, int size = 20)
@@ -311,6 +313,7 @@ public class PageSorterForm : Form, IPageSorterView
 
         // Deskew
         strip.Items.Add(Tb("Deskew", IcoDeskew, (s, e) => AutoDeskewRequested?.Invoke(this, e), "Auto-deskew all pages"));
+        strip.Items.Add(Tb("Full", IcoFullScreen, (s, e) => FullScreenRequested?.Invoke(this, e), "Toggle full screen preview"));
 
         return strip;
     }
@@ -484,6 +487,36 @@ public class PageSorterForm : Form, IPageSorterView
             Invoke(action);
         else
             action();
+    }
+
+    public void ShowFullScreenPreview(Image image, string title)
+    {
+        var previewForm = new Form
+        {
+            Text = title,
+            WindowState = FormWindowState.Maximized,
+            FormBorderStyle = FormBorderStyle.None,
+            BackColor = Color.Black,
+            StartPosition = FormStartPosition.CenterScreen,
+            KeyPreview = true
+        };
+
+        var pictureBox = new PictureBox
+        {
+            Dock = DockStyle.Fill,
+            SizeMode = PictureBoxSizeMode.Zoom,
+            BackColor = Color.Black,
+            Image = image
+        };
+
+        previewForm.Controls.Add(pictureBox);
+        previewForm.KeyDown += (s, e) =>
+        {
+            if (e.KeyCode == Keys.Escape)
+                previewForm.Close();
+        };
+        previewForm.FormClosed += (s, e) => pictureBox.Image.Dispose();
+        previewForm.Show(this);
     }
 
     private SplitContainer? GetSplitterByName(string name) => name switch
