@@ -371,22 +371,41 @@ public class PageSorterForm : Form, IPageSorterView
     public void SetLayoutMode(string mode, Orientation mainOrientation, Orientation subOrientation,
         Manina.Windows.Forms.View listViewMode, bool showPreviews)
     {
-        SuspendLayout();
-        MainSplitContainer.SuspendLayout();
+        if (IsDisposed || MainSplitContainer.IsDisposed || InputPanel.IsDisposed || OutputPanel.IsDisposed)
+            return;
 
-        MainSplitContainer.Orientation = mainOrientation;
-        InputPanel.Splitter.Orientation = subOrientation;
-        OutputPanel.Splitter.Orientation = subOrientation;
+        if (InvokeRequired)
+        {
+            if (IsHandleCreated)
+                BeginInvoke(() => SetLayoutMode(mode, mainOrientation, subOrientation, listViewMode, showPreviews));
+            return;
+        }
 
-        InputPanel.CollapsePreview(!showPreviews);
-        OutputPanel.CollapsePreview(!showPreviews);
+        try
+        {
+            SuspendLayout();
+            MainSplitContainer.SuspendLayout();
 
-        InputPanel.ListView.View = listViewMode;
-        OutputPanel.ListView.View = listViewMode;
+            ApplyOrientationSafe(MainSplitContainer, mainOrientation);
+            ApplyOrientationSafe(InputPanel.Splitter, subOrientation);
+            ApplyOrientationSafe(OutputPanel.Splitter, subOrientation);
 
-        MainSplitContainer.ResumeLayout();
-        ResumeLayout();
-        PerformLayout();
+            InputPanel.CollapsePreview(!showPreviews);
+            OutputPanel.CollapsePreview(!showPreviews);
+
+            InputPanel.ListView.View = listViewMode;
+            OutputPanel.ListView.View = listViewMode;
+        }
+        catch (InvalidOperationException)
+        {
+            // Ignore transient layout exceptions (e.g., during resize/dispose).
+        }
+        finally
+        {
+            try { MainSplitContainer.ResumeLayout(); } catch { }
+            try { ResumeLayout(); } catch { }
+            try { PerformLayout(); } catch { }
+        }
     }
 
     public void SetSplitterRatio(string containerName, double ratio)
@@ -474,6 +493,56 @@ public class PageSorterForm : Form, IPageSorterView
         "output" => OutputPanel.Splitter,
         _ => null
     };
+
+    private static void ApplyOrientationSafe(SplitContainer container, Orientation target)
+    {
+        if (container.IsDisposed)
+            return;
+
+        int panel1Min = container.Panel1MinSize;
+        int panel2Min = container.Panel2MinSize;
+
+        try
+        {
+            NormalizeSplitterDistance(container, target);
+            container.Orientation = target;
+        }
+        catch (InvalidOperationException)
+        {
+            // Temporarily relax min sizes to avoid invalid SplitterDistance on orientation swap.
+            container.Panel1MinSize = 0;
+            container.Panel2MinSize = 0;
+            if (NormalizeSplitterDistance(container, target))
+                container.Orientation = target;
+        }
+        finally
+        {
+            container.Panel1MinSize = panel1Min;
+            container.Panel2MinSize = panel2Min;
+        }
+    }
+
+    private static bool NormalizeSplitterDistance(SplitContainer container, Orientation target)
+    {
+        int maxCurrent = GetMaxSplitterDistance(container, container.Orientation);
+        int maxTarget = GetMaxSplitterDistance(container, target);
+        int max = Math.Min(maxCurrent, maxTarget);
+        int min = container.Panel1MinSize;
+
+        if (max < min || max < 0)
+            return false;
+
+        int distance = Math.Clamp(container.SplitterDistance, min, max);
+        if (distance != container.SplitterDistance)
+            container.SplitterDistance = distance;
+        return true;
+    }
+
+    private static int GetMaxSplitterDistance(SplitContainer container, Orientation orientation)
+    {
+        int dimension = orientation == Orientation.Horizontal ? container.Height : container.Width;
+        return dimension - container.Panel2MinSize - container.SplitterWidth;
+    }
 
     private void DebounceSplitterSave()
     {
