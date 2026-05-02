@@ -358,6 +358,8 @@ public class PageSorterForm : Form, IPageSorterView
             ContextMenuClicked?.Invoke(this, new ContextMenuAction(panel, "comment"))));
         menu.Items.Add(new ToolStripMenuItem("&Rotate 90\u00B0", null, (s, e) =>
             ContextMenuClicked?.Invoke(this, new ContextMenuAction(panel, "rotate90"))));
+        menu.Items.Add(new ToolStripMenuItem("&Full Screen", null, (s, e) =>
+            ContextMenuClicked?.Invoke(this, new ContextMenuAction(panel, "fullscreen"))));
 
         if (isOutput)
         {

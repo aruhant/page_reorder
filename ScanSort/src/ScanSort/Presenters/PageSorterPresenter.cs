@@ -306,6 +306,10 @@ public class PageSorterPresenter
                 }
                 break;
 
+            case "fullscreen":
+                ShowFullScreenPreview(items[0]);
+                break;
+
             case "comment":
                 string comment = PromptDialog.Show("Enter Comment", "Comment");
                 if (string.IsNullOrEmpty(comment)) break;
@@ -411,7 +415,12 @@ public class PageSorterPresenter
         var item = items.Count > 0 ? items[0] : panel.Preview.Tag as ImageListViewItem;
         if (item == null) return;
 
-        var metadata = _document.PageMetadataMap[item.Text];
+        ShowFullScreenPreview(item);
+    }
+
+    private void ShowFullScreenPreview(ImageListViewItem item)
+    {
+        var metadata = _document?.PageMetadataMap[item.Text];
         if (metadata == null || metadata.PageType == PageType.MissingContent) return;
 
         try
