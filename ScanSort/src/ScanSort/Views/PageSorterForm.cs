@@ -503,70 +503,300 @@ public class PageSorterForm : Form, IPageSorterView
             KeyPreview = true
         };
 
-        var panel = new Panel
+        var viewer = new ZoomableImageBox
         {
             Dock = DockStyle.Fill,
-            AutoScroll = true,
-            BackColor = Color.Black
-        };
-
-        var pictureBox = new PictureBox
-        {
-            SizeMode = PictureBoxSizeMode.StretchImage,
             BackColor = Color.Black,
             Image = image
         };
 
-        panel.Controls.Add(pictureBox);
-        previewForm.Controls.Add(panel);
-
-        var imageSize = image.Size;
-        float zoomFactor = 1f;
-
-        void UpdateZoom()
-        {
-            var clientSize = panel.ClientSize;
-            if (clientSize.Width <= 0 || clientSize.Height <= 0)
-                return;
-
-            float baseScale = Math.Min(
-                (float)clientSize.Width / imageSize.Width,
-                (float)clientSize.Height / imageSize.Height);
-            baseScale = Math.Max(baseScale, 0.01f);
-            float scale = baseScale * zoomFactor;
-
-            var size = new Size(
-                Math.Max(1, (int)Math.Round(imageSize.Width * scale)),
-                Math.Max(1, (int)Math.Round(imageSize.Height * scale)));
-
-            pictureBox.Size = size;
-            pictureBox.Location = new Point(
-                Math.Max((clientSize.Width - size.Width) / 2, 0),
-                Math.Max((clientSize.Height - size.Height) / 2, 0));
-        }
-
-        void ApplyZoomDelta(int delta)
-        {
-            zoomFactor = Math.Clamp(zoomFactor * (float)Math.Pow(1.0015, delta), 0.1f, 10f);
-            UpdateZoom();
-        }
-
-        panel.MouseWheel += (s, e) => ApplyZoomDelta(e.Delta);
-        pictureBox.MouseWheel += (s, e) => ApplyZoomDelta(e.Delta);
-        previewForm.MouseWheel += (s, e) => ApplyZoomDelta(e.Delta);
-        panel.Resize += (s, e) => UpdateZoom();
-        previewForm.Shown += (s, e) =>
-        {
-            panel.Focus();
-            UpdateZoom();
-        };
+        previewForm.Controls.Add(viewer);
         previewForm.KeyDown += (s, e) =>
         {
             if (e.KeyCode == Keys.Escape)
                 previewForm.Close();
+            else if (viewer.TryPan(e.KeyCode))
+                e.Handled = true;
         };
-        previewForm.FormClosed += (s, e) => pictureBox.Image.Dispose();
+        previewForm.Shown += (s, e) => viewer.Focus();
+        previewForm.FormClosed += (s, e) => viewer.Image?.Dispose();
         previewForm.Show(this);
+    }
+
+    private sealed class ZoomableImageBox : Control
+    {
+        private Image? _image;
+        private float _zoom = 1f;
+        private float _targetZoom = 1f;
+        private const float _minZoom = 0.9f;
+        private PointF _offset = new(0, 0);
+        private PointF _targetOffset = new(0, 0);
+        private bool _panning;
+        private Point _lastMouse;
+        private readonly System.Windows.Forms.Timer _zoomTimer;
+
+        public Image? Image
+        {
+            get => _image;
+            set
+            {
+                _image = value;
+                ResetView();
+                Invalidate();
+            }
+        }
+
+        public ZoomableImageBox()
+        {
+            TabStop = true;
+            DoubleBuffered = true;
+            SetStyle(ControlStyles.AllPaintingInWmPaint
+                     | ControlStyles.OptimizedDoubleBuffer
+                     | ControlStyles.UserPaint
+                     | ControlStyles.ResizeRedraw, true);
+
+            _zoomTimer = new System.Windows.Forms.Timer { Interval = 16 };
+            _zoomTimer.Tick += (s, e) =>
+            {
+                float delta = _targetZoom - _zoom;
+                if (Math.Abs(delta) < 0.001f)
+                {
+                    _zoom = _targetZoom;
+                }
+                else
+                {
+                    _zoom += delta * 0.2f;
+                }
+
+                float offsetDeltaX = _targetOffset.X - _offset.X;
+                float offsetDeltaY = _targetOffset.Y - _offset.Y;
+                if (Math.Abs(offsetDeltaX) < 0.5f && Math.Abs(offsetDeltaY) < 0.5f)
+                {
+                    _offset = _targetOffset;
+                }
+                else
+                {
+                    _offset = new PointF(
+                        _offset.X + offsetDeltaX * 0.2f,
+                        _offset.Y + offsetDeltaY * 0.2f);
+                }
+
+                ClampOffsets();
+
+                if (_zoom == _targetZoom && _offset == _targetOffset)
+                    _zoomTimer.Stop();
+
+                Invalidate();
+            };
+
+            MouseWheel += OnMouseWheelZoom;
+            MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                {
+                    _panning = true;
+                    _lastMouse = e.Location;
+                    Cursor = Cursors.Hand;
+                }
+
+                Focus();
+            };
+
+            MouseUp += (s, e) =>
+            {
+                _panning = false;
+                Cursor = Cursors.Default;
+            };
+
+            MouseMove += (s, e) =>
+            {
+                if (_panning)
+                {
+                    _offset.X += e.X - _lastMouse.X;
+                    _offset.Y += e.Y - _lastMouse.Y;
+                    _targetOffset = _offset;
+                    ClampOffsets();
+                    _lastMouse = e.Location;
+                    Invalidate();
+                }
+            };
+
+            Resize += (s, e) => CenterImage();
+        }
+
+        protected override void OnKeyDown(KeyEventArgs e)
+        {
+            if (TryPan(e.KeyCode))
+                e.Handled = true;
+
+            base.OnKeyDown(e);
+        }
+
+        protected override bool IsInputKey(Keys keyData)
+        {
+            return keyData switch
+            {
+                Keys.Left => true,
+                Keys.Right => true,
+                Keys.Up => true,
+                Keys.Down => true,
+                _ => base.IsInputKey(keyData)
+            };
+        }
+
+        public bool TryPan(Keys keyCode)
+        {
+            const float panStep = 20f;
+            switch (keyCode)
+            {
+                case Keys.Left:
+                    _offset.X += panStep;
+                    break;
+                case Keys.Right:
+                    _offset.X -= panStep;
+                    break;
+                case Keys.Up:
+                    _offset.Y += panStep;
+                    break;
+                case Keys.Down:
+                    _offset.Y -= panStep;
+                    break;
+                default:
+                    return false;
+            }
+
+            _targetOffset = _offset;
+            ClampOffsets();
+            Invalidate();
+            return true;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _zoomTimer.Stop();
+                _zoomTimer.Dispose();
+            }
+
+            base.Dispose(disposing);
+        }
+
+        private void ResetView()
+        {
+            _zoom = 1f;
+            _targetZoom = 1f;
+            CenterImage();
+        }
+
+        private void CenterImage()
+        {
+            if (_image == null) return;
+
+            float scale = Math.Min(
+                Width / (float)_image.Width,
+                Height / (float)_image.Height);
+
+            _zoom = scale;
+            _targetZoom = scale;
+
+            float imgW = _image.Width * _zoom;
+            float imgH = _image.Height * _zoom;
+
+            _offset = new PointF(
+                (Width - imgW) / 2f,
+                (Height - imgH) / 2f);
+            _targetOffset = _offset;
+
+            Invalidate();
+        }
+
+        private void OnMouseWheelZoom(object? sender, MouseEventArgs e)
+        {
+            if (_image == null) return;
+
+            float zoomStep = e.Delta > 0 ? 1.1f : 0.9f;
+            float scale = Math.Min(
+            Width / (float)_image.Width,
+            Height / (float)_image.Height);
+
+            float newTarget = Math.Clamp(_targetZoom * zoomStep, _minZoom*scale, 20f);
+
+            float imageX = (e.X - _offset.X) / _zoom;
+            float imageY = (e.Y - _offset.Y) / _zoom;
+
+            _targetZoom = newTarget;
+            _targetOffset = new PointF(
+                e.X - imageX * _targetZoom,
+                e.Y - imageY * _targetZoom);
+
+            ClampOffsets();
+
+            if (!_zoomTimer.Enabled)
+                _zoomTimer.Start();
+        }
+
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if (_image == null)
+                return;
+
+            var g = e.Graphics;
+
+            g.Clear(BackColor);
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.CompositingQuality = CompositingQuality.HighQuality;
+            g.SmoothingMode = SmoothingMode.HighQuality;
+
+            g.TranslateTransform(_offset.X, _offset.Y);
+            g.ScaleTransform(_zoom, _zoom);
+
+            g.DrawImage(_image, Point.Empty);
+        }
+
+        private void ClampOffsets()
+        {
+            if (_image == null || Width <= 0 || Height <= 0)
+                return;
+
+            float imgW = _image.Width * _zoom;
+            float imgH = _image.Height * _zoom;
+
+            float minX;
+            float maxX;
+            if (imgW <= Width)
+            {
+                minX = maxX = (Width - imgW) / 2f;
+            }
+            else
+            {
+                minX = Width - imgW;
+                maxX = 0f;
+            }
+
+            float minY;
+            float maxY;
+            if (imgH <= Height)
+            {
+                minY = maxY = (Height - imgH) / 2f;
+            }
+            else
+            {
+                minY = Height - imgH;
+                maxY = 0f;
+            }
+
+            _offset = new PointF(
+                Math.Clamp(_offset.X, minX, maxX),
+                Math.Clamp(_offset.Y, minY, maxY));
+
+            _targetOffset = new PointF(
+                Math.Clamp(_targetOffset.X, minX, maxX),
+                Math.Clamp(_targetOffset.Y, minY, maxY));
+        }
     }
 
     private SplitContainer? GetSplitterByName(string name) => name switch
