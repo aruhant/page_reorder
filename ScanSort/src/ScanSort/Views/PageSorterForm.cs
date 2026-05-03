@@ -503,15 +503,63 @@ public class PageSorterForm : Form, IPageSorterView
             KeyPreview = true
         };
 
-        var pictureBox = new PictureBox
+        var panel = new Panel
         {
             Dock = DockStyle.Fill,
-            SizeMode = PictureBoxSizeMode.Zoom,
+            AutoScroll = true,
+            BackColor = Color.Black
+        };
+
+        var pictureBox = new PictureBox
+        {
+            SizeMode = PictureBoxSizeMode.StretchImage,
             BackColor = Color.Black,
             Image = image
         };
 
-        previewForm.Controls.Add(pictureBox);
+        panel.Controls.Add(pictureBox);
+        previewForm.Controls.Add(panel);
+
+        var imageSize = image.Size;
+        float zoomFactor = 1f;
+
+        void UpdateZoom()
+        {
+            var clientSize = panel.ClientSize;
+            if (clientSize.Width <= 0 || clientSize.Height <= 0)
+                return;
+
+            float baseScale = Math.Min(
+                (float)clientSize.Width / imageSize.Width,
+                (float)clientSize.Height / imageSize.Height);
+            baseScale = Math.Max(baseScale, 0.01f);
+            float scale = baseScale * zoomFactor;
+
+            var size = new Size(
+                Math.Max(1, (int)Math.Round(imageSize.Width * scale)),
+                Math.Max(1, (int)Math.Round(imageSize.Height * scale)));
+
+            pictureBox.Size = size;
+            pictureBox.Location = new Point(
+                Math.Max((clientSize.Width - size.Width) / 2, 0),
+                Math.Max((clientSize.Height - size.Height) / 2, 0));
+        }
+
+        void ApplyZoomDelta(int delta)
+        {
+            zoomFactor = Math.Clamp(zoomFactor * (float)Math.Pow(1.0015, delta), 0.1f, 10f);
+            UpdateZoom();
+        }
+
+        panel.MouseWheel += (s, e) => ApplyZoomDelta(e.Delta);
+        pictureBox.MouseWheel += (s, e) => ApplyZoomDelta(e.Delta);
+        previewForm.MouseWheel += (s, e) => ApplyZoomDelta(e.Delta);
+        panel.Resize += (s, e) => UpdateZoom();
+        previewForm.Shown += (s, e) =>
+        {
+            panel.Focus();
+            UpdateZoom();
+        };
         previewForm.KeyDown += (s, e) =>
         {
             if (e.KeyCode == Keys.Escape)
