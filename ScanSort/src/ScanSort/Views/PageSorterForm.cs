@@ -146,6 +146,26 @@ public class PageSorterForm : Form, IPageSorterView
         container.TopToolStripPanel.Controls.Add(_menuStrip);
         container.ContentPanel.Controls.Add(MainSplitContainer);
         container.BottomToolStripPanel.Controls.Add(_statusStrip);
+        container.ContentPanel.MouseDown += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                ActiveControl = null;
+        };
+        MainSplitContainer.MouseDown += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                ActiveControl = null;
+        };
+        MainSplitContainer.Panel1.MouseDown += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                ActiveControl = null;
+        };
+        MainSplitContainer.Panel2.MouseDown += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                ActiveControl = null;
+        };
         Controls.Add(container);
 
         this.Resize += (s, e) =>
@@ -515,7 +535,7 @@ public class PageSorterForm : Form, IPageSorterView
         {
             if (e.KeyCode == Keys.Escape)
                 previewForm.Close();
-            else if (viewer.TryPan(e.KeyCode))
+            else if (viewer.HandlePreviewKey(e.KeyCode))
                 e.Handled = true;
         };
         previewForm.Shown += (s, e) => viewer.Focus();
@@ -529,6 +549,15 @@ public class PageSorterForm : Form, IPageSorterView
         private float _zoom = 1f;
         private float _targetZoom = 1f;
         private const float _minZoom = 0.9f;
+        private bool _cropMode;
+        private bool _cropAnchorSet;
+        private bool _cropFixed;
+        private bool _cropFocused;
+        private PointF _cropAnchorImage;
+        private PointF _cropCurrentImage;
+        private PointF _cropEndImage;
+        private bool _cropDragging;
+        private Point _cropDragStartScreen;
         private PointF _offset = new(0, 0);
         private PointF _targetOffset = new(0, 0);
         private bool _panning;
@@ -593,24 +622,63 @@ public class PageSorterForm : Form, IPageSorterView
             MouseDown += (s, e) =>
             {
                 if (e.Button == MouseButtons.Left)
+                    Focus();
+
+                if (e.Button == MouseButtons.Left && _cropMode && !_cropFixed)
+                {
+                    HandleCropClick(e.Location);
+                    return;
+                }
+
+                if (e.Button == MouseButtons.Left && _cropMode && _cropFixed && IsPointInCrop(e.Location))
+                {
+                    _cropFocused = true;
+                    _cropDragging = true;
+                    _cropDragStartScreen = e.Location;
+                    Invalidate();
+                    return;
+                }
+
+                if (e.Button == MouseButtons.Left && _cropMode && _cropFixed)
+                {
+                    _cropFocused = false;
+                    Invalidate();
+                }
+
+                if (e.Button == MouseButtons.Left)
                 {
                     _panning = true;
                     _lastMouse = e.Location;
                     Cursor = Cursors.Hand;
                 }
 
-                Focus();
             };
 
             MouseUp += (s, e) =>
             {
                 _panning = false;
+                _cropDragging = false;
                 Cursor = Cursors.Default;
             };
 
             MouseMove += (s, e) =>
             {
-                if (_panning)
+                if (_cropMode && _cropAnchorSet && !_cropFixed)
+                {
+                    _cropCurrentImage = ClampToImage(ScreenToImage(e.Location));
+                    Invalidate();
+                }
+                else if (_cropDragging)
+                {
+                    var deltaX = (e.X - _cropDragStartScreen.X) / _zoom;
+                    var deltaY = (e.Y - _cropDragStartScreen.Y) / _zoom;
+                    if (Math.Abs(deltaX) > 0f || Math.Abs(deltaY) > 0f)
+                    {
+                        MoveCrop(deltaX, deltaY);
+                        _cropDragStartScreen = e.Location;
+                    }
+                }
+                else if (_panning)
                 {
                     _offset.X += e.X - _lastMouse.X;
                     _offset.Y += e.Y - _lastMouse.Y;
@@ -626,8 +694,11 @@ public class PageSorterForm : Form, IPageSorterView
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (TryPan(e.KeyCode))
+            if (HandlePreviewKey(e.KeyCode))
+            {
                 e.Handled = true;
+                return;
+            }
 
             base.OnKeyDown(e);
         }
@@ -646,6 +717,9 @@ public class PageSorterForm : Form, IPageSorterView
 
         public bool TryPan(Keys keyCode)
         {
+            if (_cropMode && !_cropFixed)
+                return false;
+
             const float panStep = 20f;
             switch (keyCode)
             {
@@ -668,6 +742,58 @@ public class PageSorterForm : Form, IPageSorterView
             _targetOffset = _offset;
             ClampOffsets();
             Invalidate();
+            return true;
+        }
+
+        public bool HandlePreviewKey(Keys keyCode)
+        {
+            if (keyCode == Keys.C)
+            {
+                ToggleCropMode();
+                return true;
+            }
+
+            if (_cropMode && keyCode == Keys.Enter)
+            {
+                ApplyCrop();
+                return true;
+            }
+
+            if (_cropMode && _cropFixed && _cropFocused && TryMoveCrop(keyCode))
+                return true;
+
+            var panned = TryPan(keyCode);
+            if (panned && _cropMode && _cropFixed)
+                _cropFocused = false;
+
+            return panned;
+        }
+
+        private bool TryMoveCrop(Keys keyCode)
+        {
+            const float step = 5f;
+            float dx = 0f;
+            float dy = 0f;
+
+            switch (keyCode)
+            {
+                case Keys.Left:
+                    dx = -step;
+                    break;
+                case Keys.Right:
+                    dx = step;
+                    break;
+                case Keys.Up:
+                    dy = -step;
+                    break;
+                case Keys.Down:
+                    dy = step;
+                    break;
+                default:
+                    return false;
+            }
+
+            MoveCrop(dx, dy);
             return true;
         }
 
@@ -755,6 +881,187 @@ public class PageSorterForm : Form, IPageSorterView
             g.ScaleTransform(_zoom, _zoom);
 
             g.DrawImage(_image, Point.Empty);
+
+            g.ResetTransform();
+
+            if (_cropMode && _cropAnchorSet)
+                DrawCropOverlay(g);
+        }
+
+        private void ToggleCropMode()
+        {
+            _cropMode = !_cropMode;
+            _cropAnchorSet = false;
+            _cropFixed = false;
+            _cropFocused = false;
+            Cursor = _cropMode ? Cursors.Cross : Cursors.Default;
+            Invalidate();
+        }
+
+        private void HandleCropClick(Point location)
+        {
+            if (_image == null)
+                return;
+
+            var imagePoint = ClampToImage(ScreenToImage(location));
+
+            if (!_cropAnchorSet || _cropFixed)
+            {
+                _cropAnchorSet = true;
+                _cropFixed = false;
+                _cropAnchorImage = imagePoint;
+                _cropCurrentImage = imagePoint;
+                _cropEndImage = imagePoint;
+            }
+            else
+            {
+                _cropEndImage = imagePoint;
+                _cropFixed = true;
+                _cropFocused = true;
+            }
+
+            Invalidate();
+        }
+
+        private void DrawCropOverlay(Graphics g)
+        {
+            using var guidePen = new Pen(Color.FromArgb(230, 0, 0, 0), 2f)
+            {
+                DashStyle = DashStyle.Dot
+            };
+
+            var anchorScreen = ImageToScreen(_cropAnchorImage);
+            g.DrawLine(guidePen, 0, anchorScreen.Y, Width, anchorScreen.Y);
+            g.DrawLine(guidePen, anchorScreen.X, 0, anchorScreen.X, Height);
+
+            if (_cropFixed || (_cropAnchorSet && !_cropFixed))
+            {
+                var endImage = _cropFixed ? _cropEndImage : _cropCurrentImage;
+                var startScreen = ImageToScreen(_cropAnchorImage);
+                var endScreen = ImageToScreen(endImage);
+                var rect = RectangleF.FromLTRB(
+                    Math.Min(startScreen.X, endScreen.X),
+                    Math.Min(startScreen.Y, endScreen.Y),
+                    Math.Max(startScreen.X, endScreen.X),
+                    Math.Max(startScreen.Y, endScreen.Y));
+                using var rectPen = new Pen(_cropFocused ? Color.FromArgb(0, 120, 215) : Color.FromArgb(230, 0, 0, 0), 2f)
+                {
+                    DashStyle = DashStyle.Dot
+                };
+                g.DrawRectangle(rectPen, rect.X, rect.Y, rect.Width, rect.Height);
+            }
+        }
+
+        private bool IsPointInCrop(Point location)
+        {
+            if (!_cropFixed)
+                return false;
+
+            var start = _cropAnchorImage;
+            var end = _cropEndImage;
+
+            var screenRect = RectangleF.FromLTRB(
+                Math.Min(start.X, end.X) * _zoom + _offset.X,
+                Math.Min(start.Y, end.Y) * _zoom + _offset.Y,
+                Math.Max(start.X, end.X) * _zoom + _offset.X,
+                Math.Max(start.Y, end.Y) * _zoom + _offset.Y);
+
+            if (screenRect.Width <= 0f || screenRect.Height <= 0f)
+                return false;
+
+            screenRect.Inflate(4f, 4f);
+            return screenRect.Contains(location);
+        }
+
+        private void ApplyCrop()
+        {
+            if (_image == null || !_cropAnchorSet || !_cropFixed)
+                return;
+
+            var rect = GetCropRectangle();
+            if (rect.Width <= 0 || rect.Height <= 0)
+                return;
+
+            var bmp = new Bitmap(rect.Width, rect.Height);
+            using (var g = Graphics.FromImage(bmp))
+            {
+                g.DrawImage(_image, new Rectangle(0, 0, rect.Width, rect.Height), rect, GraphicsUnit.Pixel);
+            }
+
+            _image.Dispose();
+            _image = bmp;
+
+            _cropMode = false;
+            _cropAnchorSet = false;
+            _cropFixed = false;
+            _cropFocused = false;
+            Cursor = Cursors.Default;
+
+            ResetView();
+        }
+
+        private Rectangle GetCropRectangle()
+        {
+            var start = _cropAnchorImage;
+            var end = _cropEndImage;
+
+            float left = Math.Clamp(Math.Min(start.X, end.X), 0, _image!.Width);
+            float right = Math.Clamp(Math.Max(start.X, end.X), 0, _image!.Width);
+            float top = Math.Clamp(Math.Min(start.Y, end.Y), 0, _image!.Height);
+            float bottom = Math.Clamp(Math.Max(start.Y, end.Y), 0, _image!.Height);
+
+            int x = (int)Math.Round(left);
+            int y = (int)Math.Round(top);
+            int width = (int)Math.Round(right - left);
+            int height = (int)Math.Round(bottom - top);
+
+            return new Rectangle(x, y, width, height);
+        }
+
+        private void MoveCrop(float dx, float dy)
+        {
+            if (_image == null || !_cropFixed)
+                return;
+
+            var rect = GetCropRectangle();
+            if (rect.Width <= 0 || rect.Height <= 0)
+                return;
+
+            float left = rect.Left + dx;
+            float top = rect.Top + dy;
+
+            left = Math.Clamp(left, 0, _image.Width - rect.Width);
+            top = Math.Clamp(top, 0, _image.Height - rect.Height);
+
+            _cropAnchorImage = new PointF(left, top);
+            _cropEndImage = new PointF(left + rect.Width, top + rect.Height);
+            _cropCurrentImage = _cropEndImage;
+
+            Invalidate();
+        }
+
+        private PointF ScreenToImage(Point point)
+        {
+            return new PointF(
+                (point.X - _offset.X) / _zoom,
+                (point.Y - _offset.Y) / _zoom);
+        }
+
+        private PointF ImageToScreen(PointF point)
+        {
+            return new PointF(
+                point.X * _zoom + _offset.X,
+                point.Y * _zoom + _offset.Y);
+        }
+
+        private PointF ClampToImage(PointF point)
+        {
+            if (_image == null)
+                return point;
+
+            return new PointF(
+                Math.Clamp(point.X, 0, _image.Width),
+                Math.Clamp(point.Y, 0, _image.Height));
         }
 
         private void ClampOffsets()
