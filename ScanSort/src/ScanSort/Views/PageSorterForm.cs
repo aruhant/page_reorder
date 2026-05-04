@@ -247,7 +247,7 @@ public class PageSorterForm : Form, IPageSorterView
     private const string IcoCover      = "\uE7BC";
     private const string IcoDeskew     = "\uE90F";
     private const string IcoFullScreen = "\uE740";
-    private const string IcoCrop       = "\uE711";
+    private const string IcoCrop       = "\uE7B8";
     private const string IcoSaveCrop   = "\uE74E";
 
     /// <summary>Render an MDL2 glyph to a bitmap for use as a ToolStripButton image.</summary>
@@ -515,53 +515,125 @@ public class PageSorterForm : Form, IPageSorterView
             Text = title,
             WindowState = FormWindowState.Maximized,
             FormBorderStyle = FormBorderStyle.None,
-            BackColor = Color.White,
+            BackColor = Color.Black,
             StartPosition = FormStartPosition.CenterScreen,
             KeyPreview = true
         };
 
-        var cropButton = new ToolStripButton("Crop", GlyphIcon(IcoCrop, Color.White))
+        var cropButton = new Button
         {
-            DisplayStyle = ToolStripItemDisplayStyle.ImageAndText,
+            Text = "Crop",
+            Image = GlyphIcon(IcoCrop, Color.White),
             TextImageRelation = TextImageRelation.ImageBeforeText,
             ForeColor = Color.White,
-            Font = new Font("Segoe UI", 8.5f),
-            Enabled = true
+            Font = new Font("Segoe UI", 9f, FontStyle.Bold),
+            BackColor = Color.FromArgb(20, 20, 20),
+            FlatStyle = FlatStyle.Flat,
+            AutoSize = true,
+            Padding = new Padding(12, 4, 12, 4),
+            MinimumSize = new Size(90, 32)
         };
+        cropButton.FlatAppearance.BorderSize = 0;
 
-        var applyButton = new ToolStripButton("Apply", GlyphIcon(IcoSaveCrop, Color.White))
+        var applyButton = new Button
         {
-            DisplayStyle = ToolStripItemDisplayStyle.ImageAndText,
+            Text = "Apply",
+            Image = GlyphIcon(IcoSaveCrop, Color.White),
             TextImageRelation = TextImageRelation.ImageBeforeText,
             ForeColor = Color.White,
-            Font = new Font("Segoe UI", 8.5f),
+            Font = new Font("Segoe UI", 9f, FontStyle.Bold),
+            BackColor = Color.FromArgb(20, 20, 20),
+            FlatStyle = FlatStyle.Flat,
+            AutoSize = true,
+            Padding = new Padding(12, 4, 12, 4),
+            MinimumSize = new Size(90, 32),
             Enabled = false
         };
+        applyButton.FlatAppearance.BorderSize = 0;
 
-        var previewToolStrip = new ToolStrip
+        var buttonPanel = new FlowLayoutPanel
         {
-            GripStyle = ToolStripGripStyle.Hidden,
-            BackColor = Color.FromArgb(20, 20, 20),
-            ForeColor = Color.White,
-            ImageScalingSize = new Size(20, 20),
-            Padding = new Padding(6, 4, 6, 4)
-        };
-        previewToolStrip.Items.Add(cropButton);
-        previewToolStrip.Items.Add(applyButton);
-
-        var toolStripContainer = new ToolStripContainer
-        {
+            AutoSize = true,
             Dock = DockStyle.Fill,
-            BackColor = Color.White
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Color.FromArgb(20, 20, 20),
+            Padding = new Padding(0)
         };
-        toolStripContainer.ContentPanel.BackColor = Color.White;
-        toolStripContainer.TopToolStripPanel.BackColor = Color.White;
-        toolStripContainer.TopToolStripPanel.Controls.Add(previewToolStrip);
+        buttonPanel.Controls.Add(cropButton);
+        buttonPanel.Controls.Add(applyButton);
+
+        var zoomOutButton = new Button
+        {
+            Text = "-",
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 10f, FontStyle.Bold),
+            BackColor = Color.FromArgb(20, 20, 20),
+            FlatStyle = FlatStyle.Flat,
+            AutoSize = true,
+            Padding = new Padding(8, 2, 8, 2),
+            MinimumSize = new Size(32, 32)
+        };
+        zoomOutButton.FlatAppearance.BorderSize = 0;
+
+        var zoomSlider = new TrackBar
+        {
+            Minimum = 10,
+            Maximum = 400,
+            TickFrequency = 50,
+            SmallChange = 10,
+            LargeChange = 50,
+            AutoSize = false,
+            Width = 160,
+            Height = 28
+        };
+
+        var zoomInButton = new Button
+        {
+            Text = "+",
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 10f, FontStyle.Bold),
+            BackColor = Color.FromArgb(20, 20, 20),
+            FlatStyle = FlatStyle.Flat,
+            AutoSize = true,
+            Padding = new Padding(8, 2, 8, 2),
+            MinimumSize = new Size(32, 32)
+        };
+        zoomInButton.FlatAppearance.BorderSize = 0;
+
+        var zoomPanel = new FlowLayoutPanel
+        {
+            AutoSize = true,
+            Dock = DockStyle.Fill,
+            FlowDirection = FlowDirection.LeftToRight,
+            WrapContents = false,
+            BackColor = Color.FromArgb(20, 20, 20),
+            Padding = new Padding(0)
+        };
+        zoomPanel.Controls.Add(zoomOutButton);
+        zoomPanel.Controls.Add(zoomSlider);
+        zoomPanel.Controls.Add(zoomInButton);
+
+        var toolbarLayout = new TableLayoutPanel
+        {
+            Dock = DockStyle.Top,
+            Height = 40,
+            ColumnCount = 2,
+            BackColor = Color.FromArgb(20, 20, 20)
+        };
+        toolbarLayout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+        toolbarLayout.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100f));
+        toolbarLayout.Controls.Add(buttonPanel, 0, 0);
+        toolbarLayout.Controls.Add(zoomPanel, 1, 0);
+        toolbarLayout.Padding = new Padding(8, 4, 8, 4);
+
+        var toolStripContainer = new ToolStripContainer { Dock = DockStyle.Fill };
+        toolStripContainer.ContentPanel.Controls.Add(toolbarLayout);
 
         var viewer = new ZoomableImageBox
         {
             Dock = DockStyle.Fill,
-            BackColor = Color.White,
+            BackColor = Color.Black,
             Image = image,
             SourceTitle = title,
             SourcePath = image.Tag as string
@@ -579,6 +651,46 @@ public class PageSorterForm : Form, IPageSorterView
 
             if (e.KeyCode == Keys.Escape)
                 previewForm.Close();
+        };
+        var isZoomDragging = false;
+        zoomSlider.Minimum = viewer.GetMinZoomPercent();
+        zoomSlider.Maximum = viewer.GetMaxZoomPercent();
+        zoomSlider.Value = Math.Clamp(viewer.GetZoomPercent(), zoomSlider.Minimum, zoomSlider.Maximum);
+        zoomSlider.MouseDown += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                isZoomDragging = true;
+        };
+        zoomSlider.MouseUp += (s, e) =>
+        {
+            if (e.Button == MouseButtons.Left)
+                isZoomDragging = false;
+
+            var clamped = Math.Clamp(viewer.GetZoomPercent(), zoomSlider.Minimum, zoomSlider.Maximum);
+            if (zoomSlider.Value != clamped)
+                zoomSlider.Value = clamped;
+        };
+        zoomSlider.Scroll += (s, e) => viewer.SetZoomPercent(zoomSlider.Value);
+        zoomOutButton.Click += (s, e) =>
+        {
+            zoomSlider.Value = Math.Max(zoomSlider.Minimum, zoomSlider.Value - zoomSlider.SmallChange);
+            viewer.SetZoomPercent(zoomSlider.Value);
+        };
+        zoomInButton.Click += (s, e) =>
+        {
+            zoomSlider.Value = Math.Min(zoomSlider.Maximum, zoomSlider.Value + zoomSlider.SmallChange);
+            viewer.SetZoomPercent(zoomSlider.Value);
+        };
+        viewer.ZoomChanged += (s, e) =>
+        {
+            zoomSlider.Minimum = e.Min;
+            zoomSlider.Maximum = e.Max;
+            if (isZoomDragging)
+                return;
+
+            var clamped = Math.Clamp(e.Percent, zoomSlider.Minimum, zoomSlider.Maximum);
+            if (zoomSlider.Value != clamped)
+                zoomSlider.Value = clamped;
         };
         cropButton.Click += (s, e) =>
         {
@@ -626,12 +738,14 @@ public class PageSorterForm : Form, IPageSorterView
     {
         public event EventHandler<CropStateChangedEventArgs>? CropStateChanged;
         public event EventHandler<CropAppliedEventArgs>? CropApplied;
+        public event EventHandler<ZoomChangedEventArgs>? ZoomChanged;
 
         private Image? _image;
         // Zoom state (animated to target values).
         private float _zoom = 1f;
         private float _targetZoom = 1f;
-        private const float _minZoom = 0.9f;
+        private float _baseScale = 1f;
+        private const float _minZoom = 0.9f; // Keeping alignment for subsequent patch context
         // Crop selection state.
         private bool _cropMode;
         private bool _cropAnchorSet;
@@ -674,6 +788,33 @@ public class PageSorterForm : Form, IPageSorterView
                 ApplyCrop();
         }
 
+        public int GetZoomPercent()
+        {
+            return GetZoomPercent(useTarget: false);
+        }
+
+        public int GetMinZoomPercent()
+        {
+            return (int)Math.Round(_minZoom * 100f);
+        }
+
+        public int GetMaxZoomPercent()
+        {
+            if (_baseScale <= 0f)
+                return 400;
+
+            return (int)Math.Round(20f / _baseScale * 100f);
+        }
+
+        public void SetZoomPercent(int percent)
+        {
+            if (_image == null || Width <= 0 || Height <= 0)
+                return;
+
+            var clampedPercent = ClampZoomPercent(percent);
+            SetZoomPercentInternal(clampedPercent, Width / 2f, Height / 2f, animate: true);
+        }
+
         public string? SourceTitle { get; set; }
         public string? SourcePath { get; set; }
 
@@ -713,6 +854,7 @@ public class PageSorterForm : Form, IPageSorterView
                 }
 
                 ClampOffsets();
+                RaiseZoomChanged();
 
                 if (_zoom == _targetZoom && _offset == _targetOffset)
                     _zoomTimer.Stop();
@@ -936,6 +1078,8 @@ public class PageSorterForm : Form, IPageSorterView
                 Width / (float)_image.Width,
                 Height / (float)_image.Height);
 
+            _baseScale = scale;
+
             _zoom = scale;
             _targetZoom = scale;
 
@@ -948,32 +1092,17 @@ public class PageSorterForm : Form, IPageSorterView
             _targetOffset = _offset;
 
             Invalidate();
+            RaiseZoomChanged();
         }
 
         private void OnMouseWheelZoom(object? sender, MouseEventArgs e)
         {
             if (_image == null) return;
 
-            // Zoom toward mouse position, clamped to a minimum size.
             float zoomStep = e.Delta > 0 ? 1.1f : 0.9f;
-            float scale = Math.Min(
-            Width / (float)_image.Width,
-            Height / (float)_image.Height);
-
-            float newTarget = Math.Clamp(_targetZoom * zoomStep, _minZoom*scale, 20f);
-
-            float imageX = (e.X - _offset.X) / _zoom;
-            float imageY = (e.Y - _offset.Y) / _zoom;
-
-            _targetZoom = newTarget;
-            _targetOffset = new PointF(
-                e.X - imageX * _targetZoom,
-                e.Y - imageY * _targetZoom);
-
-            ClampOffsets();
-
-            if (!_zoomTimer.Enabled)
-                _zoomTimer.Start();
+            var currentPercent = GetZoomPercent(useTarget: true);
+            var targetPercent = ClampZoomPercent((int)Math.Round(currentPercent * zoomStep));
+            SetZoomPercentInternal(targetPercent, e.X, e.Y, animate: true);
         }
 
         protected override void OnPaint(PaintEventArgs e)
@@ -1144,6 +1273,62 @@ public class PageSorterForm : Form, IPageSorterView
             CropStateChanged?.Invoke(this, new CropStateChangedEventArgs(_cropMode, _cropAnchorSet && _cropFixed));
         }
 
+        private void RaiseZoomChanged()
+        {
+            if (_suppressCropChange)
+                return;
+
+            ZoomChanged?.Invoke(this, new ZoomChangedEventArgs(GetZoomPercent(useTarget: true), GetMinZoomPercent(), GetMaxZoomPercent()));
+        }
+
+        private int GetZoomPercent(bool useTarget)
+        {
+            if (_image == null || _baseScale <= 0f)
+                return 100;
+
+            var zoomValue = useTarget ? _targetZoom : _zoom;
+            return (int)Math.Round(zoomValue / _baseScale * 100f);
+        }
+
+        private int ClampZoomPercent(int percent)
+        {
+            var min = GetMinZoomPercent();
+            var max = GetMaxZoomPercent();
+            return Math.Clamp(percent, min, max);
+        }
+
+        private void SetZoomPercentInternal(int percent, float screenX, float screenY, bool animate)
+        {
+            if (_image == null || Width <= 0 || Height <= 0)
+                return;
+
+            var clampedPercent = ClampZoomPercent(percent);
+            float targetZoom = clampedPercent / 100f * _baseScale;
+
+            float centerX = (screenX - _offset.X) / _zoom;
+            float centerY = (screenY - _offset.Y) / _zoom;
+
+            _targetZoom = targetZoom;
+            _targetOffset = new PointF(
+                screenX - centerX * _targetZoom,
+                screenY - centerY * _targetZoom);
+
+            ClampOffsets();
+
+            if (!animate)
+            {
+                _zoom = _targetZoom;
+                _offset = _targetOffset;
+                Invalidate();
+                RaiseZoomChanged();
+                return;
+            }
+
+            RaiseZoomChanged();
+            if (!_zoomTimer.Enabled)
+                _zoomTimer.Start();
+        }
+
         private void SaveCroppedImage()
         {
             if (_image == null || string.IsNullOrWhiteSpace(SourcePath))
@@ -1191,6 +1376,7 @@ public class PageSorterForm : Form, IPageSorterView
 
     internal sealed record CropStateChangedEventArgs(bool IsCropping, bool HasCrop);
     internal sealed record CropAppliedEventArgs(string? Title);
+    internal sealed record ZoomChangedEventArgs(int Percent, int Min, int Max);
 
         private void MoveCrop(float dx, float dy)
         {
