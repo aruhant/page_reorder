@@ -205,6 +205,11 @@ public class ThumbnailPanel : UserControl
         return items;
     }
 
+    public void RefreshCountBadge()
+    {
+        UpdateCountBadge();
+    }
+
     private void UpdateCountBadge()
     {
         int count = ListView.Items.Count;

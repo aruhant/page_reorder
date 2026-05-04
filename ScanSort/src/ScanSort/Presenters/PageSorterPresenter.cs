@@ -70,8 +70,8 @@ public class PageSorterPresenter
         _view.OutputPanel.ItemHovered += (s, item) => _view.OutputPanel.UpdatePreview(item);
         _view.InputPanel.SelectionChanged += (s, e) => OnSelectionChanged(_view.InputPanel);
         _view.OutputPanel.SelectionChanged += (s, e) => OnSelectionChanged(_view.OutputPanel);
-        _view.InputPanel.DropComplete += (s, e) => OnDropComplete();
-        _view.OutputPanel.DropComplete += (s, e) => OnDropComplete();
+        _view.InputPanel.DropComplete += (s, e) => OnDropComplete(_view.InputPanel, e);
+        _view.OutputPanel.DropComplete += (s, e) => OnDropComplete(_view.OutputPanel, e);
 
         // Subscribe to command history for dirty tracking
         _commandHistory.StateChanged += (s, e) => UpdateTitle();
@@ -380,11 +380,37 @@ public class PageSorterPresenter
 
     #region Drag-Drop
 
-    private void OnDropComplete()
+    private void OnDropComplete(ThumbnailPanel panel, DropCompleteEventArgs e)
     {
         if (_document == null) return;
+        if (!e.InternalDrag && ReferenceEquals(panel, _view.OutputPanel))
+        {
+            RemoveItemsFromInput(e.Items);
+        }
+
         var titles = _view.OutputPanel.GetOrderedTitles();
         _document.PageMetadataMap.SyncPageNumbers(titles);
+    }
+
+    private void RemoveItemsFromInput(IReadOnlyList<ImageListViewItem> items)
+    {
+        if (items.Count == 0)
+            return;
+
+        var inputItems = _view.InputPanel.ListView.Items;
+        foreach (var item in items)
+        {
+            for (int i = inputItems.Count - 1; i >= 0; i--)
+            {
+                if (string.Equals(inputItems[i].Text, item.Text, StringComparison.OrdinalIgnoreCase))
+                {
+                    inputItems.RemoveAt(i);
+                    break;
+                }
+            }
+        }
+
+        _view.InputPanel.RefreshCountBadge();
     }
 
     #endregion
