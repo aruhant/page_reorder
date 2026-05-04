@@ -1,5 +1,8 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+using System.IO;
+using Manina.Windows.Forms;
 using ScanSort.Controls;
 using ScanSort.Infrastructure;
 using ScanSort.Presenters;
@@ -146,26 +149,19 @@ public class PageSorterForm : Form, IPageSorterView
         container.TopToolStripPanel.Controls.Add(_menuStrip);
         container.ContentPanel.Controls.Add(MainSplitContainer);
         container.BottomToolStripPanel.Controls.Add(_statusStrip);
-        container.ContentPanel.MouseDown += (s, e) =>
+        void ClearFocusOnClick(Control control)
         {
-            if (e.Button == MouseButtons.Left)
-                ActiveControl = null;
-        };
-        MainSplitContainer.MouseDown += (s, e) =>
-        {
-            if (e.Button == MouseButtons.Left)
-                ActiveControl = null;
-        };
-        MainSplitContainer.Panel1.MouseDown += (s, e) =>
-        {
-            if (e.Button == MouseButtons.Left)
-                ActiveControl = null;
-        };
-        MainSplitContainer.Panel2.MouseDown += (s, e) =>
-        {
-            if (e.Button == MouseButtons.Left)
-                ActiveControl = null;
-        };
+            control.MouseDown += (s, e) =>
+            {
+                if (e.Button == MouseButtons.Left)
+                    ActiveControl = null;
+            };
+        }
+
+        ClearFocusOnClick(container.ContentPanel);
+        ClearFocusOnClick(MainSplitContainer);
+        ClearFocusOnClick(MainSplitContainer.Panel1);
+        ClearFocusOnClick(MainSplitContainer.Panel2);
         Controls.Add(container);
 
         this.Resize += (s, e) =>
@@ -234,7 +230,6 @@ public class PageSorterForm : Form, IPageSorterView
     private static readonly Color TbBorder = Color.FromArgb(212, 216, 224);
     private static readonly Color TbTextSecondary = Color.FromArgb(74, 80, 96);
     private static readonly Color TbTextMuted = Color.FromArgb(136, 144, 160);
-    private static readonly Color TbAccent = Color.FromArgb(74, 114, 232);
 
     // Segoe MDL2 Assets glyph codepoints (works on Win10+)
     private const string IcoOpenFile   = "\uE8E5";
@@ -252,6 +247,8 @@ public class PageSorterForm : Form, IPageSorterView
     private const string IcoCover      = "\uE7BC";
     private const string IcoDeskew     = "\uE90F";
     private const string IcoFullScreen = "\uE740";
+    private const string IcoCrop       = "\uE711";
+    private const string IcoSaveCrop   = "\uE74E";
 
     /// <summary>Render an MDL2 glyph to a bitmap for use as a ToolStripButton image.</summary>
     private static Image GlyphIcon(string glyph, Color color, int size = 20)
@@ -518,37 +515,124 @@ public class PageSorterForm : Form, IPageSorterView
             Text = title,
             WindowState = FormWindowState.Maximized,
             FormBorderStyle = FormBorderStyle.None,
-            BackColor = Color.Black,
+            BackColor = Color.White,
             StartPosition = FormStartPosition.CenterScreen,
             KeyPreview = true
         };
 
+        var cropButton = new ToolStripButton("Crop", GlyphIcon(IcoCrop, Color.White))
+        {
+            DisplayStyle = ToolStripItemDisplayStyle.ImageAndText,
+            TextImageRelation = TextImageRelation.ImageBeforeText,
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 8.5f),
+            Enabled = true
+        };
+
+        var applyButton = new ToolStripButton("Apply", GlyphIcon(IcoSaveCrop, Color.White))
+        {
+            DisplayStyle = ToolStripItemDisplayStyle.ImageAndText,
+            TextImageRelation = TextImageRelation.ImageBeforeText,
+            ForeColor = Color.White,
+            Font = new Font("Segoe UI", 8.5f),
+            Enabled = false
+        };
+
+        var previewToolStrip = new ToolStrip
+        {
+            GripStyle = ToolStripGripStyle.Hidden,
+            BackColor = Color.FromArgb(20, 20, 20),
+            ForeColor = Color.White,
+            ImageScalingSize = new Size(20, 20),
+            Padding = new Padding(6, 4, 6, 4)
+        };
+        previewToolStrip.Items.Add(cropButton);
+        previewToolStrip.Items.Add(applyButton);
+
+        var toolStripContainer = new ToolStripContainer
+        {
+            Dock = DockStyle.Fill,
+            BackColor = Color.White
+        };
+        toolStripContainer.ContentPanel.BackColor = Color.White;
+        toolStripContainer.TopToolStripPanel.BackColor = Color.White;
+        toolStripContainer.TopToolStripPanel.Controls.Add(previewToolStrip);
+
         var viewer = new ZoomableImageBox
         {
             Dock = DockStyle.Fill,
-            BackColor = Color.Black,
-            Image = image
+            BackColor = Color.White,
+            Image = image,
+            SourceTitle = title,
+            SourcePath = image.Tag as string
         };
 
-        previewForm.Controls.Add(viewer);
+        toolStripContainer.ContentPanel.Controls.Add(viewer);
+        previewForm.Controls.Add(toolStripContainer);
         previewForm.KeyDown += (s, e) =>
         {
+            if (viewer.HandlePreviewKey(e.KeyCode))
+            {
+                e.Handled = true;
+                return;
+            }
+
             if (e.KeyCode == Keys.Escape)
                 previewForm.Close();
-            else if (viewer.HandlePreviewKey(e.KeyCode))
-                e.Handled = true;
         };
+        cropButton.Click += (s, e) =>
+        {
+            if (!cropButton.Enabled)
+                return;
+
+            viewer.ToggleCropFromToolbar();
+            cropButton.Enabled = false;
+        };
+        applyButton.Click += (s, e) => viewer.ApplyCropFromToolbar();
+        viewer.CropStateChanged += (s, e) =>
+        {
+            cropButton.Enabled = !e.HasCrop && !e.IsCropping;
+            applyButton.Enabled = e.HasCrop;
+        };
+        viewer.CropApplied += (s, e) => RefreshItemsForTitle(e.Title);
         previewForm.Shown += (s, e) => viewer.Focus();
         previewForm.FormClosed += (s, e) => viewer.Image?.Dispose();
         previewForm.Show(this);
     }
 
+    private void RefreshItemsForTitle(string? title)
+    {
+        if (string.IsNullOrWhiteSpace(title))
+            return;
+
+        RefreshItemForTitle(InputPanel, title);
+        RefreshItemForTitle(OutputPanel, title);
+    }
+
+    private void RefreshItemForTitle(ThumbnailPanel panel, string title)
+    {
+        foreach (ImageListViewItem item in panel.ListView.Items)
+        {
+            if (!string.Equals(item.Text, title, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            item.Update();
+            panel.UpdatePreview(item);
+            break;
+        }
+    }
+
     private sealed class ZoomableImageBox : Control
     {
+        public event EventHandler<CropStateChangedEventArgs>? CropStateChanged;
+        public event EventHandler<CropAppliedEventArgs>? CropApplied;
+
         private Image? _image;
+        // Zoom state (animated to target values).
         private float _zoom = 1f;
         private float _targetZoom = 1f;
         private const float _minZoom = 0.9f;
+        // Crop selection state.
         private bool _cropMode;
         private bool _cropAnchorSet;
         private bool _cropFixed;
@@ -558,11 +642,14 @@ public class PageSorterForm : Form, IPageSorterView
         private PointF _cropEndImage;
         private bool _cropDragging;
         private Point _cropDragStartScreen;
+        // Pan offset (animated to target values).
         private PointF _offset = new(0, 0);
         private PointF _targetOffset = new(0, 0);
         private bool _panning;
         private Point _lastMouse;
+        // Smooth zoom/pan timer.
         private readonly System.Windows.Forms.Timer _zoomTimer;
+        private bool _suppressCropChange;
 
         public Image? Image
         {
@@ -574,6 +661,21 @@ public class PageSorterForm : Form, IPageSorterView
                 Invalidate();
             }
         }
+
+        public void ToggleCropFromToolbar()
+        {
+            ToggleCropMode();
+            RaiseCropStateChanged();
+        }
+
+        public void ApplyCropFromToolbar()
+        {
+            if (_cropAnchorSet && _cropFixed)
+                ApplyCrop();
+        }
+
+        public string? SourceTitle { get; set; }
+        public string? SourcePath { get; set; }
 
         public ZoomableImageBox()
         {
@@ -747,6 +849,17 @@ public class PageSorterForm : Form, IPageSorterView
 
         public bool HandlePreviewKey(Keys keyCode)
         {
+            if (keyCode == Keys.Escape)
+            {
+                if (_cropMode || _cropAnchorSet || _cropFixed)
+                {
+                    CancelCrop();
+                    return true;
+                }
+
+                return false;
+            }
+
             if (keyCode == Keys.C)
             {
                 ToggleCropMode();
@@ -841,6 +954,7 @@ public class PageSorterForm : Form, IPageSorterView
         {
             if (_image == null) return;
 
+            // Zoom toward mouse position, clamped to a minimum size.
             float zoomStep = e.Delta > 0 ? 1.1f : 0.9f;
             float scale = Math.Min(
             Width / (float)_image.Width,
@@ -890,12 +1004,27 @@ public class PageSorterForm : Form, IPageSorterView
 
         private void ToggleCropMode()
         {
+            // Toggle crop selection mode (C key).
             _cropMode = !_cropMode;
             _cropAnchorSet = false;
             _cropFixed = false;
             _cropFocused = false;
+            _cropDragging = false;
             Cursor = _cropMode ? Cursors.Cross : Cursors.Default;
             Invalidate();
+            RaiseCropStateChanged();
+        }
+
+        private void CancelCrop()
+        {
+            _cropMode = false;
+            _cropAnchorSet = false;
+            _cropFixed = false;
+            _cropFocused = false;
+            _cropDragging = false;
+            Cursor = Cursors.Default;
+            Invalidate();
+            RaiseCropStateChanged();
         }
 
         private void HandleCropClick(Point location)
@@ -903,6 +1032,7 @@ public class PageSorterForm : Form, IPageSorterView
             if (_image == null)
                 return;
 
+            // First click sets anchor, second click fixes crop rectangle.
             var imagePoint = ClampToImage(ScreenToImage(location));
 
             if (!_cropAnchorSet || _cropFixed)
@@ -921,11 +1051,12 @@ public class PageSorterForm : Form, IPageSorterView
             }
 
             Invalidate();
+            RaiseCropStateChanged();
         }
 
         private void DrawCropOverlay(Graphics g)
         {
-            using var guidePen = new Pen(Color.FromArgb(230, 0, 0, 0), 2f)
+            using var guidePen = new Pen(Color.FromArgb(255, 0, 0, 0), 2.5f)
             {
                 DashStyle = DashStyle.Dot
             };
@@ -944,7 +1075,7 @@ public class PageSorterForm : Form, IPageSorterView
                     Math.Min(startScreen.Y, endScreen.Y),
                     Math.Max(startScreen.X, endScreen.X),
                     Math.Max(startScreen.Y, endScreen.Y));
-                using var rectPen = new Pen(_cropFocused ? Color.FromArgb(0, 120, 215) : Color.FromArgb(230, 0, 0, 0), 2f)
+                using var rectPen = new Pen(_cropFocused ? Color.FromArgb(0, 160, 255) : Color.FromArgb(255, 0, 0, 0), 2.5f)
                 {
                     DashStyle = DashStyle.Dot
                 };
@@ -978,6 +1109,7 @@ public class PageSorterForm : Form, IPageSorterView
             if (_image == null || !_cropAnchorSet || !_cropFixed)
                 return;
 
+            // Replace the image with the cropped region.
             var rect = GetCropRectangle();
             if (rect.Width <= 0 || rect.Height <= 0)
                 return;
@@ -989,6 +1121,7 @@ public class PageSorterForm : Form, IPageSorterView
             }
 
             _image.Dispose();
+            bmp.Tag = SourcePath;
             _image = bmp;
 
             _cropMode = false;
@@ -997,7 +1130,45 @@ public class PageSorterForm : Form, IPageSorterView
             _cropFocused = false;
             Cursor = Cursors.Default;
 
+            SaveCroppedImage();
             ResetView();
+            RaiseCropStateChanged();
+            CropApplied?.Invoke(this, new CropAppliedEventArgs(SourceTitle));
+        }
+
+        private void RaiseCropStateChanged()
+        {
+            if (_suppressCropChange)
+                return;
+
+            CropStateChanged?.Invoke(this, new CropStateChangedEventArgs(_cropMode, _cropAnchorSet && _cropFixed));
+        }
+
+        private void SaveCroppedImage()
+        {
+            if (_image == null || string.IsNullOrWhiteSpace(SourcePath))
+                return;
+
+            try
+            {
+                _image.Save(SourcePath, GetImageFormat(SourcePath));
+            }
+            catch
+            {
+                // Ignore save failures in preview.
+            }
+        }
+
+        private static ImageFormat GetImageFormat(string path)
+        {
+            return Path.GetExtension(path).ToLowerInvariant() switch
+            {
+                ".jpg" or ".jpeg" => ImageFormat.Jpeg,
+                ".bmp" => ImageFormat.Bmp,
+                ".gif" => ImageFormat.Gif,
+                ".tif" or ".tiff" => ImageFormat.Tiff,
+                _ => ImageFormat.Png
+            };
         }
 
         private Rectangle GetCropRectangle()
@@ -1018,11 +1189,15 @@ public class PageSorterForm : Form, IPageSorterView
             return new Rectangle(x, y, width, height);
         }
 
+    internal sealed record CropStateChangedEventArgs(bool IsCropping, bool HasCrop);
+    internal sealed record CropAppliedEventArgs(string? Title);
+
         private void MoveCrop(float dx, float dy)
         {
             if (_image == null || !_cropFixed)
                 return;
 
+            // Move the fixed crop rectangle within image bounds.
             var rect = GetCropRectangle();
             if (rect.Width <= 0 || rect.Height <= 0)
                 return;

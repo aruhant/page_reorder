@@ -428,6 +428,7 @@ public class PageSorterPresenter
             string path = Path.Combine(item.FilePath, item.FileName);
             using var original = Image.FromFile(path);
             var previewImage = _imageService.RotateImage(original, metadata.Orientation, metadata.Rotate);
+            previewImage.Tag = path;
             _view.ShowFullScreenPreview(previewImage, item.Text);
         }
         catch
